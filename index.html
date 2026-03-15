@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vishal Shaw — Data Science & AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #faf8f4;
+      --bg2:      #f4f0e8;
+      --bg3:      #ede8dc;
+      --ink:      #1a1610;
+      --ink2:     #3d3628;
+      --muted:    #8a7f6e;
+      --rule:     #ddd5c0;
+      --orange:   #c8601a;
+      --orange2:  #e07832;
+      --orange3:  #f5e6d8;
+      --orange4:  #fdf2ea;
+      --syne:     'Syne', sans-serif;
+      --corm:     'Cormorant Garamond', serif;
+      --mono:     'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--syne);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── CURSOR ── */
+    body { cursor: default; }
+    a, button { cursor: pointer; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 3rem;
+      height: 56px;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--orange);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--orange); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 56px 0 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-top {
+      flex: 1;
+      padding: 6rem 3rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: end;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .hero-left {}
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--orange);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--orange);
+    }
+
+    h1 {
+      font-family: var(--corm);
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .hero-tagline {
+      font-family: var(--corm);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      font-style: italic;
+      color: var(--ink2);
+      line-height: 1.7;
+      max-width: 560px;
+      border-left: 2px solid var(--orange);
+      padding-left: 1.2rem;
+    }
+
+    .hero-right {
+      padding-bottom: 0.5rem;
+    }
+
+    .info-block {
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg2);
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--rule);
+      align-items: stretch;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 1rem;
+      background: var(--bg3);
+      border-right: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+    }
+
+    .info-val {
+      font-size: 0.84rem;
+      color: var(--ink);
+      padding: 0.9rem 1rem;
+      line-height: 1.4;
+    }
+
+    .info-val a { color: var(--orange); text-decoration: none; }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--orange4);
+    }
+
+    .hero-bottom-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .stat-big {
+      font-family: var(--corm);
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--orange);
+      line-height: 1;
+    }
+
+    .stat-small {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .hero-cta { display: flex; gap: 0.8rem; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.3rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-primary { background: var(--orange); color: white; border: 1.5px solid var(--orange); }
+    .btn-primary:hover { background: #b0551a; border-color: #b0551a; }
+    .btn-ghost { border: 1.5px solid var(--rule); color: var(--ink2); background: white; }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ── SECTION HEADER ── */
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--bg);
+    }
+
+    .sec-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--orange);
+      letter-spacing: 0.2em;
+    }
+
+    .sec-title {
+      font-family: var(--corm);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── EXPERIENCE CARDS ── */
+    .exp-grid {
+      padding: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .exp-card {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--orange);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .exp-card:hover { box-shadow: 0 4px 24px rgba(200,96,26,0.08); border-color: #e0c8b0; }
+    .exp-card:hover::before { opacity: 1; }
+
+    .exp-card.featured {
+      background: var(--orange4);
+      border-color: #e0c0a0;
+    }
+
+    .exp-card.featured::before { opacity: 1; }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.4rem;
+      gap: 1rem;
+    }
+
+    .exp-company {
+      font-family: var(--syne);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .exp-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      margin-top: 0.15rem;
+    }
+
+    .exp-role {
+      font-family: var(--corm);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--orange);
+      margin-bottom: 0.8rem;
+    }
+
+    .exp-context {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+      max-width: 700px;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .exp-bullets li {
+      font-size: 0.84rem;
+      color: var(--ink2);
+      line-height: 1.55;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .exp-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+      font-size: 0.75rem;
+    }
+
+    .exp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .etag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      padding: 0.18rem 0.55rem;
+      border-radius: 4px;
+      background: var(--orange4);
+      color: var(--orange);
+      border: 1px solid #e8c8a8;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-section {
+      padding: 2.5rem 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .flagship-card {
+      background: var(--ink);
+      border-radius: 14px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 1.5rem;
+    }
+
+    .flagship-l {
+      padding: 2.5rem;
+      border-right: 1px solid #2a2018;
+    }
+
+    .flagship-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange2);
+      border: 1px solid var(--orange);
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .flagship-title {
+      font-family: var(--corm);
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: #f5ede0;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .flagship-desc {
+      font-size: 0.85rem;
+      color: #8a7f6e;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .flagship-r {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .pipe-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #1e1a14;
+    }
+
+    .pipe-step:last-child { border-bottom: none; }
+
+    .pipe-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--orange);
+      padding-top: 0.1rem;
+      min-width: 22px;
+    }
+
+    .pipe-t {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: #c8b89a;
+      margin-bottom: 0.2rem;
+    }
+
+    .pipe-d { font-size: 0.78rem; color: #5a5040; line-height: 1.4; }
+
+    .pipe-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid #1e1a14;
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      gap: 0;
+    }
+
+    .pipe-stat { text-align: center; }
+
+    .pipe-stat-n {
+      font-family: var(--corm);
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--orange2);
+      line-height: 1;
+    }
+
+    .pipe-stat-l {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: #5a5040;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .proj-card {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.15s;
+      display: block;
+    }
+
+    .proj-card:hover { border-color: var(--orange); box-shadow: 0 2px 16px rgba(200,96,26,0.07); }
+
+    .proj-n {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--orange);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
+    }
+
+    .proj-t {
+      font-family: var(--syne);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .proj-d { font-size: 0.8rem; color: var(--muted); line-height: 1.55; margin-bottom: 0.8rem; }
+
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+    .ptag {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      padding: 0.14rem 0.45rem;
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      border-radius: 3px;
+    }
+
+    .inprog-note {
+      background: var(--bg2);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .inprog-dot {
+      width: 7px; height: 7px;
+      background: #4caf50;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+
+    /* ── SKILLS ── */
+    .skills-section {
+      padding: 2.5rem 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .skill-col {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 1.3rem 1.5rem;
+    }
+
+    .skill-col-h {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .skill-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .skill-col li { font-size: 0.83rem; color: var(--ink2); }
+
+    /* ── CERTS ── */
+    .certs-section {
+      padding: 2rem 3rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--bg2);
+    }
+
+    .certs-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .cert-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 99px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--ink2);
+    }
+
+    .cert-pill span {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--orange);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .foot-name {
+      font-family: var(--corm);
+      font-size: 1.8rem;
+      font-style: italic;
+      color: #f5ede0;
+    }
+
+    .foot-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      text-align: right;
+    }
+
+    .foot-links a {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: #5a5040;
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.15s;
+    }
+
+    .foot-links a:hover { color: var(--orange2); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow { animation: fadeUp 0.5s 0.1s ease both; }
+    h1            { animation: fadeUp 0.5s 0.2s ease both; }
+    .hero-tagline { animation: fadeUp 0.5s 0.3s ease both; }
+    .info-block   { animation: fadeUp 0.5s 0.25s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { display: none; }
+      .hero-top { grid-template-columns: 1fr; padding: 4rem 1.5rem 2rem; }
+      .hero-bottom { padding: 1rem 1.5rem; flex-wrap: wrap; gap: 1rem; }
+      .sec-head, .exp-grid, .projects-section, .skills-section, .certs-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .flagship-card { grid-template-columns: 1fr; }
+      .flagship-r { display: none; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      footer { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+      .foot-links { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">Vishal Shaw</span>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="mailto:vishshaw6@gmail.com">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Data Science &amp; Generative AI</div>
+      <h1>Vishal<br /><em>Shaw</em></h1>
+      <p class="hero-tagline">
+        I turn data into decisions. Completing a PGP in Data Science &amp; Generative AI from UT Austin (McCombs School of Business) — with a background in sales and account management that means I always ask: is this insight actually actionable?
+      </p>
+    </div>
+
+    <div class="hero-right">
+      <div class="info-block">
+        <div class="info-row">
+          <span class="info-label">Location</span>
+          <span class="info-val">Pune, India</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Program</span>
+          <span class="info-val">PGP Data Science &amp; GenAI<br />McCombs · UT Austin</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phone</span>
+          <span class="info-val"><a href="tel:+919871782496">+91 98717 82496</a></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span class="info-val"><a href="mailto:vishshaw6@gmail.com">vishshaw6@gmail.com</a></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">GitHub</span>
+          <span class="info-val"><a href="https://github.com/shaw-vishal" target="_blank">shaw-vishal</a></span>
+        </div>
+        <div class="info-row" style="border:none;">
+          <span class="info-label"></span>
+          <span class="info-val" style="padding-top:1rem;padding-bottom:1rem;">
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+              <a href="#projects" class="btn btn-primary">Projects</a>
+              <a href="https://github.com/shaw-vishal" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-bottom-stat">
+      <span class="stat-big">5+</span>
+      <span class="stat-small">Years Experience</span>
+    </div>
+    <div class="hero-bottom-stat">
+      <span class="stat-big">4</span>
+      <span class="stat-small">ML Domains Covered</span>
+    </div>
+    <div class="hero-bottom-stat">
+      <span class="stat-big">6</span>
+      <span class="stat-small">DS Projects</span>
+    </div>
+    <div class="hero-bottom-stat">
+      <span class="stat-big">47</span>
+      <span class="stat-small">Certifications</span>
+    </div>
+    <div class="hero-cta">
+      <a href="mailto:vishshaw6@gmail.com" class="btn btn-primary">Get in Touch</a>
+      <a href="tel:+919871782496" class="btn btn-ghost">Call</a>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<div id="experience">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <span class="sec-title">Experience</span>
+  </div>
+
+  <div class="exp-grid">
+
+    <!-- Zomato -->
+    <div class="exp-card featured">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">District by Zomato</div>
+          <div class="exp-role">Key Account Manager — Supply (Dining)</div>
+        </div>
+        <div class="exp-date">Dec 2025 — Present</div>
+      </div>
+      <p class="exp-context">Managing Zomato Dining and District by Zomato key accounts across the city; owning acquisition decisions, Ads performance, and city-level business health through real-time data and full P&amp;L ownership.</p>
+      <ul class="exp-bullets">
+        <li>Evaluated new account viability via P&amp;L and burn analysis; ran cost modelling to determine continuation or exit, maximising ROI on acquisition spend.</li>
+        <li>Managed Ads segment for accounts; conducted multi-level performance analysis and managed client expectations on ROI and ad spend efficiency.</li>
+        <li>Monitored city-level hourly business KPIs in real-time; deployed tactical interventions to correct business trajectory and support account growth.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="etag">P&amp;L Ownership</span>
+        <span class="etag">Account Management</span>
+        <span class="etag">Ad Performance</span>
+        <span class="etag">Real-Time Analytics</span>
+      </div>
+    </div>
+
+    <!-- Anti Logic -->
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">Anti Logic</div>
+          <div class="exp-role">Founder — Streetwear Brand</div>
+        </div>
+        <div class="exp-date">Apr 2025 — Oct 2025</div>
+      </div>
+      <p class="exp-context">Conceptualised and launched a streetwear apparel brand targeting Gen Z; built brand identity, product range, and GTM strategy from the ground up.</p>
+      <ul class="exp-bullets">
+        <li>Managed end-to-end operations: vendor sourcing, product design, social media marketing.</li>
+        <li>Applied consumer behaviour insights to drive brand positioning and audience engagement among Gen Z.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="etag">Brand Building</span>
+        <span class="etag">GTM Strategy</span>
+        <span class="etag">Gen Z</span>
+        <span class="etag">D2C</span>
+      </div>
+    </div>
+
+    <!-- Educational Initiatives -->
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">Educational Initiatives</div>
+          <div class="exp-role">Regional Manager — Strategic Partnerships (B2B)</div>
+        </div>
+        <div class="exp-date">Jul 2024 — Aug 2025</div>
+      </div>
+      <p class="exp-context">Managing SaaS partnerships and CRM renewals for 160+ institutional clients including Adani Group, Apple Global, GIIS Singapore, DPS &amp; APS. Portfolio of ₹12+ Cr. Led a 3-member team.</p>
+      <ul class="exp-bullets">
+        <li>Increased regional share by 35%; used data-driven insights to elevate conversion rates from 3.4% to 5.8%.</li>
+        <li>Built CXO relationships enabling 40% YoY revenue growth; managed monthly budget of ₹20 Lakhs with proposed savings of ₹2.5L/month.</li>
+        <li>Drove 15+ new client onboardings monthly; identified 30% profitability enhancement via portfolio benchmarking.</li>
+        <li>Spearheaded CSR initiatives for Amazon, P&amp;G and Dell — overseeing ₹3 Cr investment and 1,800+ device distribution.</li>
+        <li>Enhanced realization rates from 20% to 70% through structured deescalation and query resolution systems.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="etag">SaaS</span>
+        <span class="etag">CRM</span>
+        <span class="etag">B2B Partnerships</span>
+        <span class="etag">Revenue Growth</span>
+        <span class="etag">Team Leadership</span>
+      </div>
+    </div>
+
+    <!-- PolicyBazaar -->
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">PolicyBazaar</div>
+          <div class="exp-role">Senior Consultant — Health, Strategic Partnerships (B2B)</div>
+        </div>
+        <div class="exp-date">Feb 2019 — Aug 2021</div>
+      </div>
+      <p class="exp-context">Managed strategic partnerships and growth strategy for health insurance partners. 18+ insurance providers, 450+ B2B partnerships, 1,500+ B2C sales. Clients include DLF, Lenovo, Mercedes.</p>
+      <ul class="exp-bullets">
+        <li>Scaled HDFC Ergo portfolio from ₹18 Cr → ₹54 Cr; ICICI Prudential ₹23 Cr → ₹60 Cr; Digit ₹80 Lakhs → ₹4 Cr.</li>
+        <li>Delivered 60% YoY revenue growth and 52% MoM growth through CXO-level strategic engagement.</li>
+        <li>Integrated Salesforce CRM, SQL, Python, and Power BI — streamlining underwriting, finance, and legal coordination.</li>
+        <li>Streamlined claim process TAT by 15% through analytics on emerging client needs.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="etag">Revenue Growth</span>
+        <span class="etag">Salesforce</span>
+        <span class="etag">SQL</span>
+        <span class="etag">Power BI</span>
+        <span class="etag">Python</span>
+        <span class="etag">Insurance</span>
+      </div>
+    </div>
+
+    <!-- IDFC First -->
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">IDFC First Bank</div>
+          <div class="exp-role">Assistant Manager — Partnerships &amp; Solutions (B2B)</div>
+        </div>
+        <div class="exp-date">Jul 2017 — Feb 2018</div>
+      </div>
+      <p class="exp-context">Managed and optimized 2-Wheeler accounts for Pune region; worked with Bajaj, Royal Enfield, Honda, Suzuki, TVS and KTM dealer networks alongside collection agency partnerships.</p>
+      <ul class="exp-bullets">
+        <li>Handled 500,000+ accounts with monthly portfolio of ₹35–50 Lakhs.</li>
+        <li>Collaborated with Credit, Risk, and Sales teams to streamline collections and reduce TAT by 30%.</li>
+        <li>Developed MIS reporting systems enabling real-time tracking of collections, agent performance, and customer compliance.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="etag">MIS Reporting</span>
+        <span class="etag">Collections</span>
+        <span class="etag">Portfolio Management</span>
+        <span class="etag">Dealer Networks</span>
+      </div>
+    </div>
+
+    <!-- BrandEigen -->
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">BrandEigen Insights &amp; Analytics</div>
+          <div class="exp-role">Intern — Reliance Care</div>
+        </div>
+        <div class="exp-date">Apr 2023 — Jun 2023</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Developed competitive positioning matrix via SWOT analysis of 8 market leaders, informing pricing and distribution strategy.</li>
+        <li>Conducted 12 FGDs and analysed 500+ survey responses to identify whitespace opportunities for Reliance Care (Explez).</li>
+        <li>Built audience personas and campaign funnels using Facebook Audience Insights and Google Analytics.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="etag">Market Research</span>
+        <span class="etag">FGDs</span>
+        <span class="etag">SWOT</span>
+        <span class="etag">Google Analytics</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div id="projects">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <span class="sec-title">Projects</span>
+  </div>
+
+  <div class="projects-section">
+    <!-- Flagship -->
+    <div class="flagship-card">
+      <div class="flagship-l">
+        <div class="flagship-badge">✦ Flagship Project</div>
+        <div class="flagship-title">Facial Emotion<br />Music Generator</div>
+        <p class="flagship-desc">End-to-end deep learning pipeline — detect human emotion from a face image, generate original music that matches it. Built a 15-layer CNN on AffectNet (450K+ images), chained into an RNN trained on 1,000 hand-labeled song choruses. Two models from scratch. No pre-trained APIs.</p>
+        <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+          <a href="https://github.com/shaw-vishal/facial-emotion-music" target="_blank" class="btn btn-primary">GitHub ↗</a>
+          <a href="https://github.com/shaw-vishal/facial-emotion-music/blob/master/CNN_Emotion_Modelling.ipynb" target="_blank" class="btn" style="border-color:#3a2e20;color:#8a7060;">CNN Notebook</a>
+        </div>
+      </div>
+      <div class="flagship-r">
+        <div>
+          <div style="font-family:var(--mono);font-size:0.62rem;color:#5a5040;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1rem;">Pipeline</div>
+          <div class="pipe-step">
+            <span class="pipe-num">01</span>
+            <div><div class="pipe-t">Face Detection</div><div class="pipe-d">OpenCV extracts and crops face region from input</div></div>
+          </div>
+          <div class="pipe-step">
+            <span class="pipe-num">02</span>
+            <div><div class="pipe-t">CNN Emotion Classifier</div><div class="pipe-d">15-layer custom CNN — AffectNet, 8 classes, 48×48px</div></div>
+          </div>
+          <div class="pipe-step">
+            <span class="pipe-num">03</span>
+            <div><div class="pipe-t">Emotion → Music Seed</div><div class="pipe-d">Label conditions RNN on key, mode, tempo, density</div></div>
+          </div>
+          <div class="pipe-step">
+            <span class="pipe-num">04</span>
+            <div><div class="pipe-t">RNN Music Generator</div><div class="pipe-d">LSTM generates original MIDI from learned chorus patterns</div></div>
+          </div>
+        </div>
+        <div class="pipe-stats">
+          <div class="pipe-stat"><div class="pipe-stat-n">15</div><div class="pipe-stat-l">CNN Layers</div></div>
+          <div class="pipe-stat"><div class="pipe-stat-n">450K</div><div class="pipe-stat-l">Train Images</div></div>
+          <div class="pipe-stat"><div class="pipe-stat-n">1K</div><div class="pipe-stat-l">Songs</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other projects grid -->
+    <div class="proj-grid">
+      <a class="proj-card" href="https://github.com/shaw-vishal/inn-hotels-classification" target="_blank">
+        <div class="proj-n">02 · Classification</div>
+        <div class="proj-t">INN Hotels — Booking Cancellation</div>
+        <p class="proj-d">Predicting hotel booking cancellations to reduce revenue loss. EDA, feature engineering, logistic regression &amp; decision trees.</p>
+        <div class="proj-tags">
+          <span class="ptag">Classification</span><span class="ptag">Decision Trees</span><span class="ptag">Scikit-learn</span>
+        </div>
+      </a>
+      <a class="proj-card" href="https://github.com/shaw-vishal/showtime-ott-regression" target="_blank">
+        <div class="proj-n">03 · Regression</div>
+        <div class="proj-t">ShowTime OTT — Content Performance</div>
+        <p class="proj-d">Predicting OTT content performance metrics. Multicollinearity handling, feature selection, cross-validated linear regression.</p>
+        <div class="proj-tags">
+          <span class="ptag">Regression</span><span class="ptag">Statsmodels</span><span class="ptag">Feature Engineering</span>
+        </div>
+      </a>
+      <a class="proj-card" href="https://github.com/shaw-vishal/austo-automobile-eda" target="_blank">
+        <div class="proj-n">04 · EDA</div>
+        <div class="proj-t">Austo Automobile — Market Insights</div>
+        <p class="proj-d">Exploratory analysis of automobile market data. Segmentation, sales trends, and visualisation of key purchase drivers.</p>
+        <div class="proj-tags">
+          <span class="ptag">EDA</span><span class="ptag">Seaborn</span><span class="ptag">Matplotlib</span>
+        </div>
+      </a>
+      <a class="proj-card" href="https://github.com/shaw-vishal/business-statistics-dsga" target="_blank">
+        <div class="proj-n">05 · Statistics</div>
+        <div class="proj-t">Business Statistics — DSGA</div>
+        <p class="proj-d">Applied stats for business decisions. Hypothesis testing, confidence intervals, A/B testing, probability distributions.</p>
+        <div class="proj-tags">
+          <span class="ptag">Statistics</span><span class="ptag">Hypothesis Testing</span><span class="ptag">SciPy</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="inprog-note">
+      <div class="inprog-dot"></div>
+      In Progress — EasyVisa Ensemble Classification &nbsp;·&nbsp; Bagging · Boosting · XGBoost · Stacking &nbsp;·&nbsp; Expected this week
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<div id="skills">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <span class="sec-title">Skills</span>
+  </div>
+  <div class="skills-section">
+    <div class="skills-grid">
+      <div class="skill-col">
+        <div class="skill-col-h">Languages</div>
+        <ul>
+          <li>Python</li>
+          <li>SQL</li>
+          <li>HTML / CSS</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <div class="skill-col-h">ML / Deep Learning</div>
+        <ul>
+          <li>TensorFlow / Keras</li>
+          <li>Scikit-learn</li>
+          <li>XGBoost / LightGBM</li>
+          <li>OpenCV · DeepFace</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <div class="skill-col-h">Data &amp; Viz</div>
+        <ul>
+          <li>Pandas / NumPy</li>
+          <li>Matplotlib / Seaborn</li>
+          <li>Power BI</li>
+          <li>Streamlit</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <div class="skill-col-h">Business</div>
+        <ul>
+          <li>P&amp;L Ownership</li>
+          <li>CRM / Salesforce</li>
+          <li>Consultative Sales</li>
+          <li>Lean Six Sigma (GB)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATIONS -->
+<div class="certs-section">
+  <div style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;">
+    Certifications &amp; Awards
+  </div>
+  <div class="certs-row">
+    <div class="cert-pill"><span>KPMG</span> Power BI for Business Analytics</div>
+    <div class="cert-pill"><span>KPMG</span> Lean Six Sigma Green Belt</div>
+    <div class="cert-pill"><span>Google</span> Data-Driven Decision Making</div>
+    <div class="cert-pill"><span>Google</span> Project Management</div>
+    <div class="cert-pill"><span>Salesforce</span> Sales Operations</div>
+    <div class="cert-pill"><span>Award</span> Golden Player — PolicyBazaar 2020 &amp; 2021</div>
+    <div class="cert-pill"><span>Award</span> Director's Award for Excellence 2024 — 47 Certs</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-name">Vishal Shaw</div>
+  <div class="foot-links">
+    <a href="mailto:vishshaw6@gmail.com">vishshaw6@gmail.com</a>
+    <a href="tel:+919871782496">+91 98717 82496</a>
+    <a href="https://github.com/shaw-vishal" target="_blank">github.com/shaw-vishal</a>
+    <a href="https://shaw-vishal.github.io" target="_blank">shaw-vishal.github.io</a>
+  </div>
+</footer>
+
+</body>
+</html>
