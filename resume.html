@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vishal Shaw — Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --orange: #c8601a; --dark: #1a1a1a; --mid: #444; --light: #777; --border: #e0e0e0; }
+
+  body { font-family: 'Inter', sans-serif; font-size: 9pt; color: var(--dark); background: #f0f0f0; line-height: 1.35; }
+
+  .page { width: 210mm; min-height: 297mm; margin: 20px auto; padding: 11mm 13mm 9mm; background: white; box-shadow: 0 2px 20px rgba(0,0,0,0.12); }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1.5px solid var(--border); }
+  .header h1 { font-size: 20pt; font-weight: 700; color: var(--dark); letter-spacing: 0.05em; line-height: 1; margin-bottom: 3px; }
+  .header h1 span { color: var(--orange); }
+  .header .subtitle { font-size: 7.5pt; font-weight: 600; color: var(--light); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 4px; }
+  .header .contacts { font-size: 8pt; color: var(--mid); line-height: 1.7; }
+  .header .contacts a { color: var(--orange); text-decoration: none; }
+
+  /* SECTION */
+  .section { margin-bottom: 8px; }
+  .section-title {
+    font-size: 7pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--dark); border-bottom: 1px solid var(--dark);
+    padding-bottom: 2px; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .section-title::before { content: ''; flex: 1; height: 1px; background: var(--border); display: none; }
+
+  /* PROFILE */
+  .profile-text { font-size: 8.5pt; color: var(--mid); line-height: 1.5; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 14px; }
+  .proj-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .proj-name { font-size: 8.8pt; font-weight: 600; color: var(--dark); }
+  .proj-links { font-size: 7.5pt; }
+  .proj-links a { color: var(--orange); text-decoration: none; }
+  .proj-stack { font-size: 7.5pt; color: var(--light); font-weight: 500; margin: 1px 0 2px; font-style: italic; }
+  .proj-desc { font-size: 8.2pt; color: var(--mid); line-height: 1.4; }
+
+  /* EXPERIENCE */
+  .exp-item { margin-bottom: 5px; }
+  .exp-item:last-child { margin-bottom: 0; }
+  .exp-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .exp-company { font-size: 9pt; font-weight: 700; color: var(--dark); }
+  .exp-date { font-size: 7.8pt; color: var(--light); white-space: nowrap; margin-left: 6px; flex-shrink: 0; }
+  .exp-role-orange { font-size: 8.5pt; font-weight: 500; color: var(--orange); font-style: italic; margin-bottom: 2px; }
+  .exp-role-grey { font-size: 8.5pt; font-weight: 500; color: var(--mid); font-style: italic; margin-bottom: 2px; }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li { font-size: 8.3pt; color: var(--mid); line-height: 1.4; padding-left: 10px; position: relative; margin-bottom: 1.5px; }
+  .exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--orange); font-size: 6.5pt; top: 1px; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: 72px 1fr; gap: 2.5px 8px; }
+  .sk-cat { font-size: 8pt; font-weight: 700; color: var(--dark); }
+  .sk-list { font-size: 8pt; color: var(--mid); }
+
+  /* EDUCATION */
+  .edu-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2.5px; }
+  .edu-name { font-size: 8.8pt; font-weight: 600; color: var(--dark); }
+  .edu-sub { font-size: 8pt; color: var(--mid); }
+  .edu-date { font-size: 7.8pt; color: var(--light); white-space: nowrap; margin-left: 6px; flex-shrink: 0; }
+  .certs-line { font-size: 7.8pt; color: var(--mid); margin-top: 3px; line-height: 1.45; }
+  .award { background: #fff3e8; color: var(--orange); padding: 1px 5px; border-radius: 3px; font-size: 7pt; font-weight: 600; margin-left: 3px; white-space: nowrap; }
+
+  /* EDIT MODE */
+  .banner { position: fixed; top: 0; left: 0; right: 0; background: var(--orange); color: white; text-align: center; padding: 7px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; z-index: 1000; display: none; }
+  .banner.on { display: block; }
+
+  body.edit [contenteditable] { outline: 1.5px dashed rgba(200,96,26,0.4); border-radius: 2px; cursor: text; }
+  body.edit [contenteditable]:hover { background: rgba(200,96,26,0.05); }
+  body.edit [contenteditable]:focus { outline: 1.5px solid var(--orange); background: rgba(200,96,26,0.04); }
+
+  .toolbar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px; z-index: 999; font-family: 'Inter', sans-serif; }
+  .btn { padding: 9px 16px; border-radius: 7px; border: none; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.18s; }
+  .btn-edit { background: #1a1a1a; color: white; }
+  .btn-edit:hover { background: #333; }
+  .btn-edit.on { background: #2a6e2a; }
+  .btn-pdf { background: var(--orange); color: white; }
+  .btn-pdf:hover { background: #a04d14; }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; padding: 9mm 12mm 7mm; width: 100%; box-shadow: none; }
+    @page { size: A4; margin: 0; }
+    .toolbar, .banner { display: none !important; }
+    [contenteditable] { outline: none !important; background: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="banner" id="banner">✏️ Edit Mode — Click any text to edit · Click Done when finished · Then Save PDF</div>
+
+<div class="toolbar">
+  <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">✏️ Edit</button>
+  <button class="btn btn-pdf" onclick="window.print()">⬇ Save PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>VISHAL <span>SHAW</span></h1>
+    <div class="subtitle" contenteditable="false">Data Scientist &nbsp;·&nbsp; Pune, India</div>
+    <div class="contacts">
+      <span contenteditable="false">vishshaw6@gmail.com</span> &nbsp;·&nbsp;
+      <span contenteditable="false">+91 98717 82496</span><br>
+      <a href="https://shaw-vishal.github.io" contenteditable="false">shaw-vishal.github.io</a> &nbsp;·&nbsp;
+      <a href="https://github.com/shaw-vishal" contenteditable="false">github.com/shaw-vishal</a> &nbsp;·&nbsp;
+      <a href="https://huggingface.co/spaces/ShawVishal/facebeats" contenteditable="false">HuggingFace Demo</a> &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/vishal-shaw" contenteditable="false">LinkedIn</a>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section">
+    <div class="section-title">Profile</div>
+    <div class="profile-text" contenteditable="false">Data Scientist completing a PGP in Data Science & Generative AI at McCombs, UT Austin. 5+ years across health insurance, SaaS, and food-tech — now applying ML and deep learning to real business problems. Strong foundation in end-to-end model building, EDA, and translating data insights into actionable strategy.</div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <div class="section-title">Projects</div>
+    <div class="projects-grid">
+
+      <div>
+        <div class="proj-header">
+          <span class="proj-name" contenteditable="false">FaceBeats — Emotion Music Generator</span>
+          <span class="proj-links"><a href="https://huggingface.co/spaces/ShawVishal/facebeats">Live ↗</a> &nbsp;<a href="https://github.com/shaw-vishal/facial-emotion-music">GitHub ↗</a></span>
+        </div>
+        <div class="proj-stack" contenteditable="false">CNN · Bi-LSTM · OpenCV · TensorFlow · Streamlit · MIDI</div>
+        <div class="proj-desc" contenteditable="false">15-layer CNN detects emotion from face (7 classes, FER2013); Bi-LSTM generates emotion-conditioned MIDI. Deployed live on HuggingFace Spaces.</div>
+      </div>
+
+      <div>
+        <div class="proj-header">
+          <span class="proj-name" contenteditable="false">Visa Approval Prediction</span>
+          <span class="proj-links"><a href="https://github.com/shaw-vishal">GitHub ↗</a></span>
+        </div>
+        <div class="proj-stack" contenteditable="false">XGBoost · Bagging · AdaBoost · Gradient Boosting · Stacking</div>
+        <div class="proj-desc" contenteditable="false">Ensemble classification predicting US work visa outcomes; stacking outperforms single learners; feature importance surfaces key approval drivers.</div>
+      </div>
+
+      <div>
+        <div class="proj-header">
+          <span class="proj-name" contenteditable="false">Uber NYC — Ride Demand Analysis</span>
+          <span class="proj-links"><a href="https://github.com/shaw-vishal/uber-demand-eda">GitHub ↗</a></span>
+        </div>
+        <div class="proj-stack" contenteditable="false">EDA · Time Series · Correlation Analysis · Seaborn</div>
+        <div class="proj-desc" contenteditable="false">Analysed 29K+ hourly records across 6 NYC boroughs; time-of-day and temperature as top demand drivers; delivered supply strategy recommendations.</div>
+      </div>
+
+      <div>
+        <div class="proj-header">
+          <span class="proj-name" contenteditable="false">Hotel Booking Cancellation</span>
+          <span class="proj-links"><a href="https://github.com/shaw-vishal/inn-hotels-classification">GitHub ↗</a></span>
+        </div>
+        <div class="proj-stack" contenteditable="false">Logistic Regression · Decision Tree · Recall Optimisation</div>
+        <div class="proj-desc" contenteditable="false">Binary classification predicting cancellations; compared LR vs DT, tuned threshold for recall on cancellation class to reduce revenue loss.</div>
+      </div>
+
+      <div>
+        <div class="proj-header">
+          <span class="proj-name" contenteditable="false">OTT Content Performance</span>
+          <span class="proj-links"><a href="https://github.com/shaw-vishal/showtime-ott-regression">GitHub ↗</a></span>
+        </div>
+        <div class="proj-stack" contenteditable="false">Linear Regression · VIF Treatment · Feature Selection</div>
+        <div class="proj-desc" contenteditable="false">Regression model for OTT content scores; VIF-based multicollinearity treatment and stepwise selection produced an interpretable final model.</div>
+      </div>
+
+      <div>
+        <div class="proj-header">
+          <span class="proj-name" contenteditable="false">Zomato Content Hygiene <span style="color:var(--orange);font-size:7pt;font-weight:700;">[WIP]</span></span>
+        </div>
+        <div class="proj-stack" contenteditable="false">Computer Vision · OpenCV · Blur Detection · NLP · Automation</div>
+        <div class="proj-desc" contenteditable="false">Bulk scoring system for restaurant pages: image quality, human %, food vs ambiance, duplicate detection, menu completeness, attribute coverage.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">Experience</div>
+
+    <div class="exp-item">
+      <div class="exp-top">
+        <span class="exp-company" contenteditable="false">District by Zomato</span>
+        <span class="exp-date" contenteditable="false">Dec 2025 — Present · Nashik</span>
+      </div>
+      <div class="exp-role-orange" contenteditable="false">Key Account Manager — Supply (Dining)</div>
+      <ul class="exp-bullets">
+        <li contenteditable="false">Managed 80+ accounts; evaluated viability via P&L and burn analysis, ran cost modelling to maximise ROI on acquisition and tracked hourly city-level KPIs with tactical interventions.</li>
+        <li contenteditable="false">Handled Ads segment performance — ROI analysis, client expectation management on ad spend efficiency.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-top">
+        <span class="exp-company" contenteditable="false">Anti Logic LLP</span>
+        <span class="exp-date" contenteditable="false">Apr 2025 — Oct 2025</span>
+      </div>
+      <div class="exp-role-orange" contenteditable="false">Co-Founder — Streetwear Brand</div>
+      <ul class="exp-bullets">
+        <li contenteditable="false">Founded Anti Logic Apparel, a streetwear brand centred on bold graphic design and youth culture aesthetics; led apparel design, brand identity, and creative direction from concept to production.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-top">
+        <span class="exp-company" contenteditable="false">Educational Initiatives Pvt Ltd</span>
+        <span class="exp-date" contenteditable="false">Jul 2024 — Aug 2025 · Ahmedabad</span>
+      </div>
+      <div class="exp-role-orange" contenteditable="false">Regional Manager — Strategic Partnerships (B2B)</div>
+      <ul class="exp-bullets">
+        <li contenteditable="false">Grew regional share by 35%; used data-driven insights to lift conversion rates 3.4% → 5.8% and deliver 40% YoY revenue growth.</li>
+        <li contenteditable="false">CSR partnerships for Amazon, P&G, Dell — ₹3 Cr investment, 1,800+ devices distributed.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-top">
+        <span class="exp-company" contenteditable="false">BrandEigen Insights & Analytics</span>
+        <span class="exp-date" contenteditable="false">Apr 2023 — Jun 2023 · Gurgaon</span>
+      </div>
+      <div class="exp-role-grey" contenteditable="false">Intern — Consumer & Market Research</div>
+      <ul class="exp-bullets">
+        <li contenteditable="false">Conducted 12 FGDs and analysed 500+ survey responses using EDA to identify whitespace for Reliance Care (Explez); built competitive positioning matrix across 8 market leaders.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-top">
+        <span class="exp-company" contenteditable="false">PolicyBazaar</span>
+        <span class="exp-date" contenteditable="false">Feb 2019 — Aug 2021 · Gurgaon</span>
+      </div>
+      <div class="exp-role-orange" contenteditable="false">Senior Consultant — Health Insurance, Strategic Partnerships</div>
+      <ul class="exp-bullets">
+        <li contenteditable="false">Scaled HDFC Ergo ₹18 Cr → ₹54 Cr, ICICI Prudential ₹23 Cr → ₹60 Cr; delivered 60% YoY growth through CXO-level engagement.</li>
+        <li contenteditable="false">Integrated Salesforce CRM, Python, Power BI to streamline underwriting and finance coordination across 450+ B2B partnerships.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-top">
+        <span class="exp-company" contenteditable="false">IDFC First Bank &nbsp;<span style="font-weight:400;color:var(--light);font-size:8pt;">· Assistant Manager, Partnerships</span></span>
+        <span class="exp-date" contenteditable="false">Jul 2017 — Feb 2018 · Pune</span>
+      </div>
+      <ul class="exp-bullets">
+        <li contenteditable="false">Managed 500K+ two-wheeler accounts (₹35–50L/month) across Bajaj, Royal Enfield, Honda networks; built MIS reporting for real-time collections and agent performance tracking.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section">
+    <div class="section-title">Skills</div>
+    <div class="skills-grid">
+      <span class="sk-cat">Languages</span><span class="sk-list" contenteditable="false">Python · R · SQL</span>
+      <span class="sk-cat">ML / DL</span><span class="sk-list" contenteditable="false">TensorFlow/Keras · Scikit-learn · XGBoost · LightGBM · OpenCV · DeepFace</span>
+      <span class="sk-cat">Data & Viz</span><span class="sk-list" contenteditable="false">Pandas · NumPy · Matplotlib · Seaborn · Power BI · Streamlit</span>
+      <span class="sk-cat">Business</span><span class="sk-list" contenteditable="false">P&L Ownership · CRM/Salesforce · Consultative Sales · Lean Six Sigma Green Belt</span>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section">
+    <div class="section-title">Education & Certifications</div>
+    <div class="edu-row">
+      <div><span class="edu-name" contenteditable="false">PGP — Data Science & Generative AI</span><span class="edu-sub" contenteditable="false"> &nbsp;·&nbsp; McCombs School of Business, UT Austin</span></div>
+      <span class="edu-date" contenteditable="false">2024 — 2025</span>
+    </div>
+    <div class="edu-row">
+      <div><span class="edu-name" contenteditable="false">MBA — Marketing & Business Analytics</span><span class="edu-sub" contenteditable="false"> &nbsp;·&nbsp; SIMS Pune</span></div>
+      <span class="edu-date" contenteditable="false">2021 — 2023</span>
+    </div>
+    <div class="edu-row" style="margin-bottom:3px;">
+      <div><span class="edu-name" contenteditable="false">B.Com Hons — Statistics</span><span class="edu-sub" contenteditable="false"> &nbsp;·&nbsp; DCAC, Delhi University</span></div>
+      <span class="edu-date" contenteditable="false">2014 — 2017</span>
+    </div>
+    <div class="certs-line">
+      <strong>Certifications (47):</strong> <span contenteditable="false">KPMG Power BI · KPMG Lean Six Sigma Green Belt · Google Data-Driven Decision Making · Google Project Management · Salesforce Sales Operations</span>
+      &nbsp;<span class="award">🏆 Golden Player — PolicyBazaar 2020 & 2021</span>
+      &nbsp;<span class="award">🏆 Director's Award 2024</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let on = false;
+  function toggleEdit() {
+    on = !on;
+    const btn = document.getElementById('editBtn');
+    const banner = document.getElementById('banner');
+    document.querySelectorAll('[contenteditable]').forEach(el => el.setAttribute('contenteditable', on ? 'true' : 'false'));
+    document.body.classList.toggle('edit', on);
+    btn.textContent = on ? '✓ Done' : '✏️ Edit';
+    btn.classList.toggle('on', on);
+    banner.classList.toggle('on', on);
+  }
+</script>
+
+</body>
+</html>
