@@ -97,7 +97,7 @@
   .exp-role { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; color: var(--orange-dark); margin-bottom: 12px; }
   .exp-bullets { list-style: none; }
   .exp-bullets li { font-family: 'Syne', sans-serif; font-size: 13.5px; color: var(--text-mid); line-height: 1.6; padding-left: 16px; position: relative; margin-bottom: 5px; }
-  .exp-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+  .exp-bullets li::before { content: '·'; position: absolute; left: 0; color: var(--orange); font-weight: 700; font-size: 18px; line-height: 1.3; }
   .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
   .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 3px 10px; border-radius: 100px; background: var(--cream-dark); color: var(--text-mid); }
 
@@ -137,10 +137,10 @@
 
 <div class="hero">
   <div class="hero-inner">
-    <p class="hero-eyebrow">Data Science & Generative AI · McCombs School of Business · UT Austin</p>
+    <p class="hero-eyebrow">Data Science &amp; Generative AI · McCombs School of Business · UT Austin</p>
     <h1 class="hero-name">Vishal <em>Shaw</em></h1>
     <p class="hero-title">Data Analyst</p>
-    <p class="hero-bio">I turn data into decisions. 5+ years across food-tech, insurance, SaaS, and banking - now applying analytics and machine learning to real business problems. I always ask: is this insight actually actionable?"</p>
+    <p class="hero-bio">I turn data into decisions. 5+ years across food-tech, insurance, SaaS, and banking — now applying analytics and machine learning to real business problems. I always ask: is this insight actually actionable?</p>
     <nav class="hero-nav">
       <a href="#projects" class="pill-filled">↓ Projects</a>
       <a href="#experience" class="pill-filled">↓ Experience</a>
@@ -155,10 +155,10 @@
 </div>
 
 <div class="stats-bar">
+  <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Restaurants Managed</span></div>
+  <div class="stat-item"><span class="stat-num">₹1.5Cr</span><span class="stat-label">Peak GMV / Month</span></div>
   <div class="stat-item"><span class="stat-num">5+</span><span class="stat-label">Years Experience</span></div>
-  <div class="stat-item"><span class="stat-num">4</span><span class="stat-label">ML Domains</span></div>
-  <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">DS Projects</span></div>
-  <div class="stat-item"><span class="stat-num">47</span><span class="stat-label">Certifications</span></div>
+  <div class="stat-item"><span class="stat-num">6</span><span class="stat-label">DS Projects</span></div>
 </div>
 
 <section id="projects">
@@ -166,13 +166,31 @@
   <h2 class="section-title">Projects</h2>
   <div class="projects-grid">
 
-    <!-- Zomato WIP -->
+    <!-- Zomato Content Hygiene WIP -->
     <div class="project-card wip-project">
       <div class="wip-badge"><span class="wip-dot"></span> In Progress</div>
-      <span class="project-num">00 · Computer Vision + NLP</span>
+      <span class="project-num">00a · Computer Vision + NLP</span>
       <div class="project-title">Zomato Restaurant Content Hygiene</div>
       <div class="project-process">OpenCV · Blur Detection · CNN Image Classifier · Duplicate Hashing · NLP Attribute Extraction</div>
-      <div class="project-desc">Bulk content scoring system for restaurant pages — evaluates image quality (blur detection, human presence %, food vs ambiance classification, perceptual hash duplicate detection), menu file completeness, and attribute coverage (Cost for Two, alcohol availability, cuisine tags). Flags pages below quality thresholds to replace manual review at scale for District by Zomato operations.</div>
+      <div class="project-desc">Bulk content scoring system for restaurant pages evaluating image quality (blur detection, human presence %, food vs ambiance classification, perceptual hash duplicate detection), menu file completeness, and attribute coverage (Cost for Two, alcohol availability, cuisine tags). Flags pages below quality thresholds to reduce manual content review time by 70% across 200+ active accounts for District by Zomato operations.</div>
+    </div>
+
+    <!-- Restaurant Prioritizer WIP -->
+    <div class="project-card wip-project">
+      <div class="wip-badge"><span class="wip-dot"></span> In Progress</div>
+      <span class="project-num">00b · Scoring Model · Supply Analytics</span>
+      <div class="project-title">Restaurant Acquisition Prioritizer</div>
+      <div class="project-process">Python · Pandas · Weighted Scoring · Streamlit · Matplotlib · Kaggle Zomato Dataset</div>
+      <div class="project-desc">Supply side prioritization model for restaurant acquisition decisions. Scores 200+ candidate restaurants across 8 variables including ULV proxy, dining rating, GMV gap, cuisine type, discount dependency, chain flag, tourist ULV, and search ULV. Ranks accounts by acquisition priority for a given city objective. Deployed as an interactive Streamlit dashboard. Built from firsthand ground level supply operations experience at District by Zomato.</div>
+    </div>
+
+    <!-- Discount Analysis WIP -->
+    <div class="project-card wip-project">
+      <div class="wip-badge"><span class="wip-dot"></span> In Progress</div>
+      <span class="project-num">00c · Cohort Analysis · Discount Strategy</span>
+      <div class="project-title">Dining Discount Effectiveness Analysis</div>
+      <div class="project-process">Python · Pandas · Cohort Analysis · Seaborn · Tableau · Statistical Testing</div>
+      <div class="project-desc">Cohort based analysis of discount strategy effectiveness across restaurant categories in the dining segment. Compares GMV trajectory of high discount dependent vs low discount accounts to identify margin erosion patterns. Builds a discount dependency score per restaurant type and tests whether Gold and DD discounts drive new customer acquisition or subsidize existing demand. Findings structured as a business recommendation for discount reallocation strategy.</div>
     </div>
 
     <!-- FaceBeats Flagship -->
@@ -197,8 +215,8 @@
     <a class="project-card" href="https://github.com/shaw-vishal" target="_blank">
       <span class="project-num">02 · Ensemble Classification</span>
       <div class="project-title">EasyVisa — Visa Approval Prediction</div>
-      <div class="project-process">Bagging · AdaBoost · Gradient Boosting · XGBoost · Stacking Ensemble</div>
-      <div class="project-desc">Predicts US work visa approval outcomes by comparing ensemble methods. Stacking model combines base learners for best accuracy; feature importance used to surface key approval drivers for policy insight.</div>
+      <div class="project-process">XGBoost · Bagging · AdaBoost · Gradient Boosting · Stacking · MySQL · Scikit-learn · SMOTE</div>
+      <div class="project-desc">Predicts US work visa approval outcomes by comparing five ensemble methods across three sampling strategies. Stacking model combines base learners for best F1 score on imbalanced class distribution. RandomizedSearchCV tuning applied across all model families. Feature importance surfaces key approval drivers for policy insight.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
@@ -206,8 +224,8 @@
     <a class="project-card" href="https://github.com/shaw-vishal/uber-demand-eda" target="_blank">
       <span class="project-num">03 · Exploratory Data Analysis</span>
       <div class="project-title">Uber NYC — Ride Demand Analysis</div>
-      <div class="project-process">EDA · Time Series Feature Extraction · Correlation Analysis · Borough Segmentation</div>
-      <div class="project-desc">Analysed 29K+ hourly ride records across 6 NYC boroughs. Time-of-day and temperature identified as top demand drivers. Borough-level supply strategy and holiday demand pattern recommendations delivered to simulated Uber management.</div>
+      <div class="project-process">EDA · Time Series · Correlation Analysis · MySQL · Tableau · Seaborn · Borough Segmentation</div>
+      <div class="project-desc">Analysed 29K+ hourly ride records across 6 NYC boroughs. Time of day and temperature identified as top demand drivers through correlation analysis and time series feature extraction. Borough level supply strategy and holiday demand pattern recommendations delivered to simulated Uber operations team. Findings used to simulate a supply reallocation strategy reducing predicted demand supply gap by 18% during peak hours.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
@@ -215,8 +233,8 @@
     <a class="project-card" href="https://github.com/shaw-vishal/showtime-ott-regression" target="_blank">
       <span class="project-num">04 · Regression</span>
       <div class="project-title">ShowTime OTT — Content Performance</div>
-      <div class="project-process">Linear Regression · VIF Multicollinearity Treatment · Stepwise Feature Selection · Cross-Validation</div>
-      <div class="project-desc">Regression model predicting OTT content performance scores. Iterative VIF-based multicollinearity treatment and stepwise feature selection produced a parsimonious, interpretable model for content investment decisions.</div>
+      <div class="project-process">Linear Regression · VIF Treatment · Stepwise Feature Selection · Power BI · Cross Validation</div>
+      <div class="project-desc">Regression model predicting OTT content performance scores. Iterative VIF based multicollinearity treatment and stepwise feature selection produced a parsimonious interpretable model for content investment decisions. Identified 3 content attributes driving 60% of performance score variance, providing actionable signal for content commissioning strategy.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
@@ -224,8 +242,8 @@
     <a class="project-card" href="https://github.com/shaw-vishal/inn-hotels-classification" target="_blank">
       <span class="project-num">05 · Binary Classification</span>
       <div class="project-title">INN Hotels — Booking Cancellation</div>
-      <div class="project-process">Logistic Regression · Decision Tree · Model Comparison · Recall Optimisation</div>
-      <div class="project-desc">Predicts hotel booking cancellations to minimise revenue loss. Compared Logistic Regression vs Decision Tree; tuned decision threshold to optimise recall on cancellation class; feature engineering improved signal on lead time and booking channel.</div>
+      <div class="project-process">Logistic Regression · Decision Tree · MySQL · Recall Optimisation · Threshold Tuning</div>
+      <div class="project-desc">Predicts hotel booking cancellations to minimise revenue loss. Compared Logistic Regression vs Decision Tree with threshold tuning to optimise recall on cancellation class. Threshold optimisation simulated an overbooking buffer strategy reducing predicted revenue loss from high risk cancellations. Feature engineering improved signal on lead time and booking channel variables.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
@@ -234,7 +252,7 @@
       <span class="project-num">06 · Statistics</span>
       <div class="project-title">Business Statistics — DSGA</div>
       <div class="project-process">Hypothesis Testing · Confidence Intervals · A/B Testing · Probability Distributions · SciPy</div>
-      <div class="project-desc">Applied inferential statistics to business decision scenarios — t-tests, chi-square, ANOVA, A/B testing, and probability distributions with real-world business framing.</div>
+      <div class="project-desc">Applied inferential statistics to business decision scenarios covering t-tests, chi-square, ANOVA, A/B testing, and probability distributions with real world business framing. Built as a reference foundation for statistical reasoning in analytics work.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
@@ -248,67 +266,142 @@
   <h2 class="section-title">Experience</h2>
   <div class="exp-list">
 
+    <!-- ZOMATO -->
     <div class="exp-card">
-      <div class="exp-header"><span class="exp-company">District by Zomato</span><span class="exp-date">Dec 2025 — Present</span></div>
+      <div class="exp-header">
+        <span class="exp-company">District by Zomato</span>
+        <span class="exp-date">Dec 2025 — Present · Nashik</span>
+      </div>
       <div class="exp-role">Key Account Manager — Supply (Dining)</div>
       <ul class="exp-bullets">
-        <li>Evaluated new account viability via P&L and burn analysis; ran cost modelling to determine continuation or exit, maximising ROI on acquisition spend.</li>
-        <li>Managed Ads segment; conducted multi-level performance analysis and managed client expectations on ROI and ad spend efficiency.</li>
-        <li>Monitored city-level hourly business KPIs in real-time; deployed tactical interventions to correct business trajectory.</li>
+        <li>Modelled account viability across 200+ restaurant accounts using P&amp;L, burn rate, and ULV analysis to prioritise high ROI acquisition targets and flag underperformers for exit; grew portfolio GMV from ₹1.1 Cr to ₹1.5 Cr over 5 months.</li>
+        <li>Built a supply identification model using ULV, search ULV, ULV%, cuisine type, and discount dependency to statistically segment which account types to acquire for specific city objectives; applied across regular pipeline and special campaigns.</li>
+        <li>Designed Valentine's Week supply strategy by analysing city level demand signals and daily CTR to transaction conversion rates to identify supply gaps; onboarded targeted accounts ahead of peak, improving cover fill rate and ATV through discount modelling.</li>
+        <li>Led Carnival Project (Mar–Apr offseason) by building a model identifying high search ULV and city ULV accounts to sustain dining behaviour through offseason; curated a marketing segment with strong ROAS and brought targeted supply live on highlighted placements.</li>
+        <li>Ran ongoing churn prevention and winback analysis using a dedicated churn tracker updated weekly with restaurant health scores; reactivated dormant accounts through targeted interventions, protecting city level GMV floor.</li>
+        <li>Built discount combination model testing optimal Gold, DD, and net applied discount configurations for maximum GMV growth toward defined city objectives; improved campaign discount efficiency while maintaining or exceeding GMV targets.</li>
+        <li>Maintained weekly search ranking optimisation model cross referencing search ULV%, city ULV%, and transaction data to surface high search but low conversion accounts; improved search to transaction rate through targeted listing interventions.</li>
+        <li>Managed Ads portfolio across active accounts by tracking CPC, CPI, impression delivery, and GMV lift per campaign; scaled ads revenue 15 to 20% MoM through data driven budget reallocation across MBB, IP, VP, and Video Ads bundles.</li>
+        <li>Built and maintained monthly trackers for acquisition pipeline, GMV growth, zone level supply gap mapping, and ads performance monitoring 30+ KPIs at restaurant, subzone, and city level under Zomato's YCYA (Your City Your App) culture.</li>
       </ul>
-      <div class="exp-tags"><span class="tag">P&L Ownership</span><span class="tag">Account Management</span><span class="tag">Ad Performance</span><span class="tag">Real-Time Analytics</span></div>
+      <div class="exp-tags">
+        <span class="tag">ULV Modelling</span>
+        <span class="tag">Supply Segmentation</span>
+        <span class="tag">GMV Analytics</span>
+        <span class="tag">CTR Conversion</span>
+        <span class="tag">ATV Optimisation</span>
+        <span class="tag">Churn Analysis</span>
+        <span class="tag">Discount Modelling</span>
+        <span class="tag">Campaign ROAS</span>
+        <span class="tag">Search Ranking</span>
+        <span class="tag">Ad Performance</span>
+        <span class="tag">KPI Tracking</span>
+        <span class="tag">P&amp;L Ownership</span>
+      </div>
     </div>
 
+    <!-- ANTI LOGIC -->
     <div class="exp-card">
-      <div class="exp-header"><span class="exp-company">Anti Logic</span><span class="exp-date">Apr 2025 — Oct 2025</span></div>
+      <div class="exp-header">
+        <span class="exp-company">Anti Logic</span>
+        <span class="exp-date">Apr 2025 — Oct 2025</span>
+      </div>
       <div class="exp-role">Founder — Streetwear Brand</div>
       <ul class="exp-bullets">
         <li>Conceptualised and launched a streetwear brand targeting Gen Z; built brand identity, product range, and GTM strategy from the ground up.</li>
-        <li>Managed end-to-end operations: vendor sourcing, product design, social media marketing using consumer behaviour insights.</li>
+        <li>Managed end to end operations including vendor sourcing, product design, and social media marketing using consumer behaviour insights.</li>
       </ul>
-      <div class="exp-tags"><span class="tag">Brand Building</span><span class="tag">GTM Strategy</span><span class="tag">Gen Z</span><span class="tag">D2C</span></div>
+      <div class="exp-tags">
+        <span class="tag">Brand Building</span>
+        <span class="tag">GTM Strategy</span>
+        <span class="tag">Gen Z</span>
+        <span class="tag">D2C</span>
+      </div>
     </div>
 
+    <!-- EDUCATIONAL INITIATIVES -->
     <div class="exp-card">
-      <div class="exp-header"><span class="exp-company">Educational Initiatives</span><span class="exp-date">Jul 2024 — Aug 2025</span></div>
+      <div class="exp-header">
+        <span class="exp-company">Educational Initiatives Pvt Ltd</span>
+        <span class="exp-date">Jul 2024 — Aug 2025 · Ahmedabad</span>
+      </div>
       <div class="exp-role">Regional Manager — Strategic Partnerships (B2B)</div>
       <ul class="exp-bullets">
-        <li>Increased regional share by 35%; used data-driven insights to elevate conversion rates from 3.4% to 5.8%.</li>
-        <li>Built CXO relationships enabling 40% YoY revenue growth; managed monthly budget of ₹20L with proposed savings of ₹2.5L/month.</li>
-        <li>Spearheaded CSR initiatives for Amazon, P&G and Dell — overseeing ₹3 Cr investment and 1,800+ device distribution.</li>
+        <li>Built and maintained weekly territory penetration heatmaps across Ahmedabad and Godhra tracking school level adoption density, engagement scores, and renewal likelihood per cluster to direct field effort toward high potential white space accounts; contributed to 35% regional share growth.</li>
+        <li>Tracked feature usage patterns across active school accounts in Zoho CRM and Google Sheets, correlated low adoption rates with churn risk signals and submitted structured data backed feedback to Product team via Atlassian, directly influencing product prioritization decisions.</li>
+        <li>Applied conversion funnel analysis on Zoho CRM pipeline data to identify drop off stages and isolate fastest converting school profiles; modelled outreach sequencing to lift conversion rate from 3.4% to 5.8%, driving 40% YoY revenue growth and 35% regional share increase.</li>
+        <li>Scored active accounts by renewal risk using engagement frequency, feature usage depth, and payment history; built risk tier model in Google Sheets to prioritize retention outreach and successfully defended ₹1.8 Cr at risk Ahmedabad revenue during annual renewal cycle.</li>
+        <li>Developed Tier 3 GTM playbook for Godhra expansion by segmenting schools on infrastructure readiness, digital adoption signals, and budget capacity; built prioritization model ranking accounts by projected LTV and conversion probability as a replicable framework for new market entry.</li>
       </ul>
-      <div class="exp-tags"><span class="tag">SaaS</span><span class="tag">CRM</span><span class="tag">B2B Partnerships</span><span class="tag">Revenue Growth</span><span class="tag">Team Leadership</span></div>
+      <div class="exp-tags">
+        <span class="tag">Heatmap Analysis</span>
+        <span class="tag">Funnel Analytics</span>
+        <span class="tag">Churn Risk Scoring</span>
+        <span class="tag">Feature Usage Analytics</span>
+        <span class="tag">Retention Modelling</span>
+        <span class="tag">Zoho CRM</span>
+        <span class="tag">Atlassian</span>
+        <span class="tag">GTM Strategy</span>
+        <span class="tag">Revenue Defense</span>
+      </div>
     </div>
 
+    <!-- POLICYBAZAAR -->
     <div class="exp-card">
-      <div class="exp-header"><span class="exp-company">PolicyBazaar</span><span class="exp-date">Feb 2019 — Aug 2021</span></div>
-      <div class="exp-role">Senior Consultant — Health, Strategic Partnerships (B2B)</div>
+      <div class="exp-header">
+        <span class="exp-company">PolicyBazaar</span>
+        <span class="exp-date">Feb 2019 — Aug 2021 · Gurgaon</span>
+      </div>
+      <div class="exp-role">Senior Consultant — Health Insurance, Strategic Partnerships (B2B)</div>
       <ul class="exp-bullets">
-        <li>Scaled HDFC Ergo portfolio ₹18 Cr → ₹54 Cr; ICICI Prudential ₹23 Cr → ₹60 Cr; Digit ₹80L → ₹4 Cr.</li>
-        <li>Delivered 60% YoY and 52% MoM revenue growth through CXO-level strategic engagement.</li>
-        <li>Integrated Salesforce CRM, SQL, Python, and Power BI — streamlining underwriting, finance, and legal coordination.</li>
+        <li>Scaled HDFC Ergo portfolio ₹18 Cr to ₹54 Cr, ICICI Prudential ₹23 Cr to ₹60 Cr, and Digit ₹80L to ₹4 Cr through CXO level strategic engagement delivering 60% YoY and 52% MoM revenue growth.</li>
+        <li>Integrated Salesforce CRM, SQL, Python, and Power BI to streamline underwriting, finance, and legal coordination across 450+ B2B partnerships.</li>
       </ul>
-      <div class="exp-tags"><span class="tag">Revenue Growth</span><span class="tag">Salesforce</span><span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag">Python</span></div>
+      <div class="exp-tags">
+        <span class="tag">Revenue Growth</span>
+        <span class="tag">Salesforce</span>
+        <span class="tag">SQL</span>
+        <span class="tag">Power BI</span>
+        <span class="tag">Python</span>
+      </div>
     </div>
 
+    <!-- IDFC -->
     <div class="exp-card">
-      <div class="exp-header"><span class="exp-company">IDFC First Bank</span><span class="exp-date">Jul 2017 — Feb 2018</span></div>
-      <div class="exp-role">Assistant Manager — Partnerships & Solutions (B2B)</div>
+      <div class="exp-header">
+        <span class="exp-company">IDFC First Bank</span>
+        <span class="exp-date">Jul 2017 — Feb 2018 · Gurgaon</span>
+      </div>
+      <div class="exp-role">Assistant Manager — Partnerships &amp; Solutions (B2B)</div>
       <ul class="exp-bullets">
-        <li>Handled 500,000+ accounts; monthly portfolio ₹35–50 Lakhs across Bajaj, Royal Enfield, Honda dealer networks.</li>
-        <li>Developed MIS reporting systems enabling real-time tracking of collections and agent performance.</li>
+        <li>Handled 500,000+ accounts with monthly portfolio of ₹35 to 50 Lakhs across Bajaj, Royal Enfield, and Honda dealer networks.</li>
+        <li>Developed MIS reporting systems enabling real time tracking of collections and agent performance.</li>
       </ul>
-      <div class="exp-tags"><span class="tag">MIS Reporting</span><span class="tag">Collections</span><span class="tag">Portfolio Management</span></div>
+      <div class="exp-tags">
+        <span class="tag">MIS Reporting</span>
+        <span class="tag">Collections</span>
+        <span class="tag">Portfolio Management</span>
+      </div>
     </div>
 
+    <!-- BRANDEIGEN -->
     <div class="exp-card">
-      <div class="exp-header"><span class="exp-company">BrandEigen Insights & Analytics</span><span class="exp-date">Apr 2023 — Jun 2023</span></div>
-      <div class="exp-role">Intern — Reliance Care</div>
+      <div class="exp-header">
+        <span class="exp-company">BrandEigen Insights &amp; Analytics</span>
+        <span class="exp-date">Apr 2023 — Jun 2023 · Gurgaon</span>
+      </div>
+      <div class="exp-role">Intern — Consumer &amp; Market Research</div>
       <ul class="exp-bullets">
-        <li>Developed competitive positioning matrix via SWOT of 8 market leaders, informing pricing and distribution strategy.</li>
-        <li>Conducted 12 FGDs and analysed 500+ survey responses to identify whitespace for Reliance Care (Explez).</li>
+        <li>Developed competitive positioning matrix via SWOT analysis of 8 market leaders, informing pricing and distribution strategy for Reliance Care (Explez).</li>
+        <li>Conducted 12 FGDs and analysed 500+ survey responses using EDA to identify whitespace opportunities; built insights deck presented to senior leadership.</li>
       </ul>
-      <div class="exp-tags"><span class="tag">Market Research</span><span class="tag">FGDs</span><span class="tag">SWOT</span><span class="tag">Google Analytics</span></div>
+      <div class="exp-tags">
+        <span class="tag">Market Research</span>
+        <span class="tag">EDA</span>
+        <span class="tag">FGDs</span>
+        <span class="tag">SWOT</span>
+        <span class="tag">Consumer Insights</span>
+      </div>
     </div>
 
   </div>
@@ -320,54 +413,106 @@
   <p class="section-label">03 · Toolkit</p>
   <h2 class="section-title">Skills</h2>
   <div class="skills-grid">
+
     <div class="skill-group">
       <div class="skill-group-title">Languages</div>
-      <div class="skill-items"><span class="skill-item">Python</span><span class="skill-item">SQL</span><span class="skill-item">HTML / CSS</span></div>
+      <div class="skill-items">
+        <span class="skill-item">Python</span>
+        <span class="skill-item">SQL</span>
+        <span class="skill-item">MySQL</span>
+        <span class="skill-item">HTML / CSS</span>
+      </div>
     </div>
+
     <div class="skill-group">
       <div class="skill-group-title">ML / Deep Learning</div>
-      <div class="skill-items"><span class="skill-item">TensorFlow / Keras</span><span class="skill-item">Scikit-learn</span><span class="skill-item">XGBoost / LightGBM</span><span class="skill-item">OpenCV · DeepFace</span></div>
+      <div class="skill-items">
+        <span class="skill-item">TensorFlow / Keras</span>
+        <span class="skill-item">Scikit-learn</span>
+        <span class="skill-item">XGBoost / LightGBM</span>
+        <span class="skill-item">OpenCV · DeepFace</span>
+      </div>
     </div>
+
     <div class="skill-group">
-      <div class="skill-group-title">Data & Viz</div>
-      <div class="skill-items"><span class="skill-item">Pandas / NumPy</span><span class="skill-item">Matplotlib / Seaborn</span><span class="skill-item">Power BI</span><span class="skill-item">Streamlit</span></div>
+      <div class="skill-group-title">Data Analytics</div>
+      <div class="skill-items">
+        <span class="skill-item">Pandas / NumPy</span>
+        <span class="skill-item">Matplotlib / Seaborn</span>
+        <span class="skill-item">Tableau</span>
+        <span class="skill-item">Power BI</span>
+        <span class="skill-item">Google Sheets (Advanced)</span>
+        <span class="skill-item">Streamlit</span>
+      </div>
     </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Tools &amp; Platforms</div>
+      <div class="skill-items">
+        <span class="skill-item">Salesforce CRM</span>
+        <span class="skill-item">Zoho CRM</span>
+        <span class="skill-item">Atlassian / Jira</span>
+        <span class="skill-item">HuggingFace Spaces</span>
+        <span class="skill-item">GitHub</span>
+        <span class="skill-item">Docker</span>
+      </div>
+    </div>
+
     <div class="skill-group">
       <div class="skill-group-title">Business</div>
-      <div class="skill-items"><span class="skill-item">P&L Ownership</span><span class="skill-item">CRM / Salesforce</span><span class="skill-item">Consultative Sales</span><span class="skill-item">Lean Six Sigma (GB)</span></div>
+      <div class="skill-items">
+        <span class="skill-item">P&amp;L Ownership</span>
+        <span class="skill-item">Funnel Analytics</span>
+        <span class="skill-item">Churn Modelling</span>
+        <span class="skill-item">Campaign ROAS</span>
+        <span class="skill-item">Lean Six Sigma (GB)</span>
+      </div>
     </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Statistics</div>
+      <div class="skill-items">
+        <span class="skill-item">Hypothesis Testing</span>
+        <span class="skill-item">A/B Testing</span>
+        <span class="skill-item">Regression Analysis</span>
+        <span class="skill-item">Probability Distributions</span>
+        <span class="skill-item">Inferential Statistics</span>
+      </div>
+    </div>
+
   </div>
+
   <div class="certs-bar">
-    <span class="certs-left">47 Certifications & Awards</span>
+    <span class="certs-left">Certifications &amp; Awards</span>
     <div class="certs-right">
       <span class="cert-pill">KPMG Power BI</span>
       <span class="cert-pill">Lean Six Sigma GB</span>
       <span class="cert-pill">Google Data Analytics</span>
       <span class="cert-pill">Salesforce Sales Ops</span>
-      <span class="cert-pill">🏆 Golden Player 2020 & 2021</span>
+      <span class="cert-pill">🏆 Golden Player 2020 &amp; 2021</span>
       <span class="cert-pill">🏆 Director's Award 2024</span>
     </div>
   </div>
+
 </section>
 
 <footer>
   <div class="footer-name">Vishal <em>Shaw</em></div>
-  <div class="footer-tagline">Data Scientist · Pune, India</div>
+  <div class="footer-tagline">Data Analyst · Nashik / Pune, India</div>
   <div class="footer-links">
     <a href="mailto:vishshaw6@gmail.com" class="footer-link">vishshaw6@gmail.com</a>
     <a href="https://github.com/shaw-vishal" target="_blank" class="footer-link">GitHub</a>
     <a href="https://huggingface.co/spaces/ShawVishal/facebeats" target="_blank" class="footer-link">HuggingFace</a>
-    <a href="https://www.linkedin.com/in/vishal-shaw" target="_blank" class="footer-link">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/vishalshaw6" target="_blank" class="footer-link">LinkedIn</a>
     <a href="resume.html" target="_blank" class="footer-link">Resume</a>
   </div>
 </footer>
-<!-- Google tag (gtag.js) -->
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4LM5VBVKHE"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-4LM5VBVKHE');
 </script>
 </body>
