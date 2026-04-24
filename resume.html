@@ -84,12 +84,28 @@
   /* EDIT MODE */
   [contenteditable="true"] { outline: 1.5px dashed rgba(200,96,26,0.5); border-radius: 2px; cursor: text; background: rgba(200,96,26,0.03); }
   [contenteditable="true"]:focus { outline: 1.5px solid var(--orange); }
+  .r-summary { font-size: 9.2px; line-height: 1.5; }
+.r-section { margin-top: 10px; }
 
-  @@media print {
+.exp-bullets li {
+  font-size: 9px;
+  margin-bottom: 2px;
+  line-height: 1.4;
+}
+
+.proj-desc { font-size: 8px; }
+.skill-val { font-size: 8.5px; }
+  @media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
   html, body {
     margin: 0 !important;
     padding: 0 !important;
-    height: auto !important;
+    height: 297mm;
+    overflow: hidden;
   }
 
   body {
@@ -102,15 +118,12 @@
   }
 
   .resume {
-    box-shadow: none !important;
-    max-width: 100% !important;
+    width: 210mm;
+    height: 297mm;
     margin: 0 !important;
-    padding: 12mm 14mm !important; /* reduced from 20mm */
-  }
-
-  @page {
-    size: A4;
-    margin: 8mm; /* THIS is key — reduces top whitespace */
+    padding: 10mm 12mm !important;
+    box-shadow: none !important;
+    overflow: hidden;
   }
 }
 </style>
