@@ -86,10 +86,10 @@
   [contenteditable="true"]:focus { outline: 1.5px solid var(--orange); }
 
   @media print {
-    body { background: white; padding: 0; display: block; }
-    .toolbar { display: none !important; }
-    .resume { box-shadow: none; max-width: 100%; margin: 0; }
-    @page { margin: 12mm; size: A4; }
+  body { background: white !important; padding: 0 !important; display: block !important; }
+  .toolbar { display: none !important; }
+  .resume { box-shadow: none !important; max-width: 100% !important; margin: 0 !important; padding: 20mm 18mm !important; }
+  @page { margin: 0; size: A4; }
   }
 </style>
 </head>
@@ -330,28 +330,7 @@
 
   function downloadResume() {
     if (editMode) saveEdits();
-    const resumeEl = document.getElementById('resumePage');
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Vishal Shaw — Data Analyst</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-${document.querySelector('style').innerHTML}
-body { background: white; padding: 0; display: block; }
-.toolbar { display: none !important; }
-.resume { box-shadow: none; max-width: 100%; margin: 0; }
-@page { margin: 10mm; size: A4; }
-</style>
-</head>
-<body>
-${resumeEl.outerHTML}
-<script>window.onload=function(){window.print();window.close();}<\/script>
-</body>
-</html>`);
-    printWindow.document.close();
+    window.print();
   }
 </script>
 </body>
