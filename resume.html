@@ -3,302 +3,356 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vishal Shaw — Resume</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Vishal Shaw — Data Analyst Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --orange: #c8601a;
+    --orange-dark: #a04d14;
+    --text: #1a1a1a;
+    --text-mid: #444444;
+    --text-light: #777777;
+    --border: #e0e0e0;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root { --orange: #c8601a; --dark: #1a1a1a; --mid: #444; --light: #777; --border: #e0e0e0; }
+  body { background: #f0ece6; font-family: 'Syne', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 24px 16px 40px; }
 
-  body { font-family: 'Inter', sans-serif; font-size: 9pt; color: var(--dark); background: #f0f0f0; line-height: 1.35; }
+  /* TOOLBAR */
+  .toolbar { width: 100%; max-width: 760px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .toolbar-left { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #666; letter-spacing: 0.1em; }
+  .toolbar-right { display: flex; gap: 8px; }
+  .btn { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; padding: 7px 16px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+  .btn-edit { background: #1a1a1a; color: white; }
+  .btn-edit:hover { background: var(--orange-dark); }
+  .btn-edit.active { background: var(--orange-dark); }
+  .btn-download { background: var(--orange-dark); color: white; }
+  .btn-download:hover { background: var(--orange); }
+  .btn-save { background: #27AE60; color: white; display: none; }
+  .btn-save:hover { background: #219a52; }
 
-  .page { width: 210mm; min-height: 297mm; margin: 20px auto; padding: 11mm 13mm 9mm; background: white; box-shadow: 0 2px 20px rgba(0,0,0,0.12); }
+  /* RESUME PAGE */
+  .resume { width: 100%; max-width: 760px; background: #ffffff; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 36px 40px 32px; }
 
   /* HEADER */
-  .header { text-align: center; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1.5px solid var(--border); }
-  .header h1 { font-size: 20pt; font-weight: 700; color: var(--dark); letter-spacing: 0.05em; line-height: 1; margin-bottom: 3px; }
-  .header h1 span { color: var(--orange); }
-  .header .subtitle { font-size: 7.5pt; font-weight: 600; color: var(--light); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 4px; }
-  .header .contacts { font-size: 8pt; color: var(--mid); line-height: 1.7; }
-  .header .contacts a { color: var(--orange); text-decoration: none; }
+  .r-name { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1; }
+  .r-name span { color: var(--orange); }
+  .r-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange-dark); margin-top: 4px; margin-bottom: 8px; }
+  .r-contact-row { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-bottom: 4px; }
+  .r-contact-row a, .r-contact-row span { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text-mid); text-decoration: none; }
+  .r-contact-row a:hover { color: var(--orange); }
+  .r-summary { font-family: 'Syne', sans-serif; font-size: 10px; color: var(--text-mid); line-height: 1.6; margin-top: 8px; padding-top: 8px; border-top: 1.5px solid var(--orange); }
 
   /* SECTION */
-  .section { margin-bottom: 8px; }
-  .section-title {
-    font-size: 7pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
-    color: var(--dark); border-bottom: 1px solid var(--dark);
-    padding-bottom: 2px; margin-bottom: 6px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .section-title::before { content: ''; flex: 1; height: 1px; background: var(--border); display: none; }
-
-  /* PROFILE */
-  .profile-text { font-size: 8.5pt; color: var(--mid); line-height: 1.5; }
+  .r-section { margin-top: 13px; }
+  .r-section-title { font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange-dark); margin-bottom: 6px; padding-bottom: 3px; border-bottom: 1px solid var(--border); }
 
   /* PROJECTS */
-  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 14px; }
-  .proj-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .proj-name { font-size: 8.8pt; font-weight: 600; color: var(--dark); }
-  .proj-links { font-size: 7.5pt; }
-  .proj-links a { color: var(--orange); text-decoration: none; }
-  .proj-stack { font-size: 7.5pt; color: var(--light); font-weight: 500; margin: 1px 0 2px; font-style: italic; }
-  .proj-desc { font-size: 8.2pt; color: var(--mid); line-height: 1.4; }
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+  .proj-item { }
+  .proj-name { font-family: 'Syne', sans-serif; font-size: 9.5px; font-weight: 700; color: var(--text); }
+  .proj-name span { color: var(--orange); font-size: 8px; font-weight: 400; }
+  .proj-stack { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--orange-dark); margin: 1px 0 2px; }
+  .proj-desc { font-family: 'Syne', sans-serif; font-size: 8.5px; color: var(--text-mid); line-height: 1.45; }
 
   /* EXPERIENCE */
-  .exp-item { margin-bottom: 5px; }
-  .exp-item:last-child { margin-bottom: 0; }
-  .exp-top { display: flex; justify-content: space-between; align-items: baseline; }
-  .exp-company { font-size: 9pt; font-weight: 700; color: var(--dark); }
-  .exp-date { font-size: 7.8pt; color: var(--light); white-space: nowrap; margin-left: 6px; flex-shrink: 0; }
-  .exp-role-orange { font-size: 8.5pt; font-weight: 500; color: var(--orange); font-style: italic; margin-bottom: 2px; }
-  .exp-role-grey { font-size: 8.5pt; font-weight: 500; color: var(--mid); font-style: italic; margin-bottom: 2px; }
-  .exp-bullets { list-style: none; }
-  .exp-bullets li { font-size: 8.3pt; color: var(--mid); line-height: 1.4; padding-left: 10px; position: relative; margin-bottom: 1.5px; }
-  .exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--orange); font-size: 6.5pt; top: 1px; }
+  .exp-item { margin-bottom: 9px; }
+  .exp-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .exp-company { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--text); }
+  .exp-date { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--text-light); white-space: nowrap; }
+  .exp-role { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 500; color: var(--orange-dark); margin-bottom: 4px; font-style: italic; }
+  .exp-bullets { list-style: none; padding: 0; }
+  .exp-bullets li { font-family: 'Syne', sans-serif; font-size: 9.5px; color: var(--text-mid); line-height: 1.5; padding-left: 12px; position: relative; margin-bottom: 2.5px; }
+  .exp-bullets li::before { content: '·'; position: absolute; left: 0; color: var(--orange); font-size: 16px; line-height: 1; font-weight: 700; }
 
-  /* SKILLS */
-  .skills-grid { display: grid; grid-template-columns: 72px 1fr; gap: 2.5px 8px; }
-  .sk-cat { font-size: 8pt; font-weight: 700; color: var(--dark); }
-  .sk-list { font-size: 8pt; color: var(--mid); }
+  /* TWO COL for skills + education */
+  .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-top: 13px; }
+  .skill-row { display: flex; gap: 6px; margin-bottom: 4px; align-items: flex-start; }
+  .skill-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--orange-dark); font-weight: 500; min-width: 90px; padding-top: 1px; }
+  .skill-val { font-family: 'Syne', sans-serif; font-size: 9px; color: var(--text-mid); line-height: 1.5; }
 
   /* EDUCATION */
-  .edu-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2.5px; }
-  .edu-name { font-size: 8.8pt; font-weight: 600; color: var(--dark); }
-  .edu-sub { font-size: 8pt; color: var(--mid); }
-  .edu-date { font-size: 7.8pt; color: var(--light); white-space: nowrap; margin-left: 6px; flex-shrink: 0; }
-  .certs-line { font-size: 7.8pt; color: var(--mid); margin-top: 3px; line-height: 1.45; }
-  .award { background: #fff3e8; color: var(--orange); padding: 1px 5px; border-radius: 3px; font-size: 7pt; font-weight: 600; margin-left: 3px; white-space: nowrap; }
+  .edu-item { margin-bottom: 7px; }
+  .edu-degree { font-family: 'Syne', sans-serif; font-size: 9.5px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .edu-school { font-family: 'Syne', sans-serif; font-size: 9px; color: var(--text-mid); }
+  .edu-year { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--text-light); }
+
+  /* CERTS */
+  .certs-row { font-family: 'Syne', sans-serif; font-size: 9px; color: var(--text-mid); line-height: 1.6; margin-top: 13px; }
+  .certs-row span { color: var(--orange-dark); font-weight: 600; margin-right: 4px; }
 
   /* EDIT MODE */
-  .banner { position: fixed; top: 0; left: 0; right: 0; background: var(--orange); color: white; text-align: center; padding: 7px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; z-index: 1000; display: none; }
-  .banner.on { display: block; }
-
-  body.edit [contenteditable] { outline: 1.5px dashed rgba(200,96,26,0.4); border-radius: 2px; cursor: text; }
-  body.edit [contenteditable]:hover { background: rgba(200,96,26,0.05); }
-  body.edit [contenteditable]:focus { outline: 1.5px solid var(--orange); background: rgba(200,96,26,0.04); }
-
-  .toolbar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px; z-index: 999; font-family: 'Inter', sans-serif; }
-  .btn { padding: 9px 16px; border-radius: 7px; border: none; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.18s; }
-  .btn-edit { background: #1a1a1a; color: white; }
-  .btn-edit:hover { background: #333; }
-  .btn-edit.on { background: #2a6e2a; }
-  .btn-pdf { background: var(--orange); color: white; }
-  .btn-pdf:hover { background: #a04d14; }
+  [contenteditable="true"] { outline: 1.5px dashed rgba(200,96,26,0.5); border-radius: 2px; cursor: text; background: rgba(200,96,26,0.03); }
+  [contenteditable="true"]:focus { outline: 1.5px solid var(--orange); }
 
   @media print {
-    body { background: white; }
-    .page { margin: 0; padding: 9mm 12mm 7mm; width: 100%; box-shadow: none; }
-    @page { size: A4; margin: 0; }
-    .toolbar, .banner { display: none !important; }
-    [contenteditable] { outline: none !important; background: none !important; }
+    body { background: white; padding: 0; display: block; }
+    .toolbar { display: none !important; }
+    .resume { box-shadow: none; max-width: 100%; margin: 0; }
+    @page { margin: 12mm; size: A4; }
   }
 </style>
 </head>
 <body>
 
-<div class="banner" id="banner">✏️ Edit Mode — Click any text to edit · Click Done when finished · Then Save PDF</div>
-
+<!-- TOOLBAR -->
 <div class="toolbar">
-  <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">✏️ Edit</button>
-  <button class="btn btn-pdf" onclick="window.print()">⬇ Save PDF</button>
+  <span class="toolbar-left">resume.html · ATS Optimised · shaw-vishal.github.io</span>
+  <div class="toolbar-right">
+    <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">✎ Edit</button>
+    <button class="btn btn-save" id="saveBtn" onclick="saveEdits()">✓ Done</button>
+    <button class="btn btn-download" onclick="downloadResume()">↓ Download PDF</button>
+  </div>
 </div>
 
-<div class="page">
+<!-- RESUME -->
+<div class="resume" id="resumePage">
 
   <!-- HEADER -->
-  <div class="header">
-    <h1>VISHAL <span>SHAW</span></h1>
-    <div class="subtitle" contenteditable="false">Data Scientist &nbsp;·&nbsp; Pune, India</div>
-    <div class="contacts">
-      <span contenteditable="false">vishshaw6&#64;gmail&#46;com</span> &nbsp;·&nbsp;
-      <span contenteditable="false">+91 98717 82496</span><br>
-      <a href="https://shaw-vishal.github.io" target="_blank" target="_blank" contenteditable="false">shaw-vishal.github.io</a> &nbsp;·&nbsp;
-      <a href="https://github.com/shaw-vishal" target="_blank" target="_blank" contenteditable="false">github.com/shaw-vishal</a> &nbsp;·&nbsp;
-      <a href="https://huggingface.co/spaces/ShawVishal/facebeats" target="_blank" target="_blank" contenteditable="false">HuggingFace Demo</a> &nbsp;·&nbsp;
-      <a href="https://www.linkedin.com/in/vishalshaw6" target="_blank" target="_blank" contenteditable="false">LinkedIn</a>
-    </div>
+  <div class="r-name">Vishal <span>Shaw</span></div>
+  <div class="r-title">Data Analyst</div>
+  <div class="r-contact-row">
+    <a href="mailto:vishshaw6@gmail.com">vishshaw6@gmail.com</a>
+    <a href="https://shaw-vishal.github.io" target="_blank">shaw-vishal.github.io</a>
+    <a href="https://github.com/shaw-vishal" target="_blank">github.com/shaw-vishal</a>
+    <a href="https://linkedin.com/in/vishalshaw6" target="_blank">linkedin.com/in/vishalshaw6</a>
+    <span>Nashik / Pune, India</span>
   </div>
-
-  <!-- PROFILE -->
-  <div class="section">
-    <div class="section-title">Profile</div>
-    <div class="profile-text" contenteditable="false">Data Scientist completing a PGP in Data Science & Generative AI at McCombs, UT Austin. 5+ years across health insurance, SaaS, and food-tech — now applying ML and deep learning to real business problems. Strong foundation in end-to-end model building, EDA, and translating data insights into actionable strategy.</div>
-  </div>
+  <div class="r-summary">Data Analyst completing a PGP in Data Science and Generative AI at McCombs School of Business, UT Austin, and an MBA in Marketing and Business Analytics from SIMS Pune. 5+ years across food-tech, insurance, SaaS, and banking — turning messy data into clear business decisions. Strong in SQL, MySQL, Python, Pandas, R, Tableau, Power BI, EDA, statistical analysis, funnel analytics, cohort analysis, churn modelling, KPI tracking, clustering, and time series analysis.</div>
 
   <!-- PROJECTS -->
-  <div class="section">
-    <div class="section-title">Projects</div>
-    <div class="projects-grid">
-
-      <div>
-        <div class="proj-header">
-          <span class="proj-name" contenteditable="false">FaceBeats — Emotion Music Generator</span>
-          <span class="proj-links"><a href="https://huggingface.co/spaces/ShawVishal/facebeats" target="_blank">Live ↗</a> &nbsp;<a href="https://github.com/shaw-vishal/facial-emotion-music" target="_blank">GitHub ↗</a></span>
-        </div>
-        <div class="proj-stack" contenteditable="false">CNN · Bi-LSTM · OpenCV · TensorFlow · Streamlit · MIDI</div>
-        <div class="proj-desc" contenteditable="false">15-layer CNN detects emotion from face (7 classes, FER2013); Bi-LSTM generates emotion-conditioned MIDI. Deployed live on HuggingFace Spaces.</div>
+  <div class="r-section">
+    <div class="r-section-title">Projects</div>
+    <div class="proj-grid">
+      <div class="proj-item">
+        <div class="proj-name">FaceBeats — Emotion Music Generator</div>
+        <div class="proj-stack">CNN · Bi-LSTM · OpenCV · TensorFlow · Scikit-learn · HuggingFace</div>
+        <div class="proj-desc">15-layer CNN classifies 7 emotions from facial input; Bi-LSTM generates emotion-conditioned MIDI sequences. End-to-end pipeline deployed live on HuggingFace Spaces.</div>
       </div>
-
-      <div>
-        <div class="proj-header">
-          <span class="proj-name" contenteditable="false">Visa Approval Prediction</span>
-          <span class="proj-links"><a href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a></span>
-        </div>
-        <div class="proj-stack" contenteditable="false">XGBoost · Bagging · AdaBoost · Gradient Boosting · Stacking</div>
-        <div class="proj-desc" contenteditable="false">Ensemble classification predicting US work visa outcomes; stacking outperforms single learners; feature importance surfaces key approval drivers.</div>
+      <div class="proj-item">
+        <div class="proj-name">EasyVisa — Visa Approval Prediction</div>
+        <div class="proj-stack">XGBoost · Stacking · SMOTE · MySQL · Scikit-learn · RandomizedSearchCV</div>
+        <div class="proj-desc">Compared 5 ensemble models across 3 sampling strategies; Gradient Boosting selected as final model with best F1 on imbalanced class distribution.</div>
       </div>
-
-      <div>
-        <div class="proj-header">
-          <span class="proj-name" contenteditable="false">Uber NYC — Ride Demand Analysis</span>
-          <span class="proj-links"><a href="https://github.com/shaw-vishal/uber-demand-eda" target="_blank">GitHub ↗</a></span>
-        </div>
-        <div class="proj-stack" contenteditable="false">EDA · Time Series · Correlation Analysis · Seaborn</div>
-        <div class="proj-desc" contenteditable="false">Analysed 29K+ hourly records across 6 NYC boroughs; time-of-day and temperature as top demand drivers; delivered supply strategy recommendations.</div>
+      <div class="proj-item">
+        <div class="proj-name">Restaurant Acquisition Prioritizer <span>[WIP]</span></div>
+        <div class="proj-stack">Python · Pandas · Weighted Scoring · Clustering · Streamlit · Tableau</div>
+        <div class="proj-desc">Scores 200+ restaurant accounts across 8 supply-side variables to rank acquisition priority by city objective. Built from firsthand supply operations experience at District by Zomato.</div>
       </div>
-
-      <div>
-        <div class="proj-header">
-          <span class="proj-name" contenteditable="false">Hotel Booking Cancellation</span>
-          <span class="proj-links"><a href="https://github.com/shaw-vishal/inn-hotels-classification" target="_blank">GitHub ↗</a></span>
-        </div>
-        <div class="proj-stack" contenteditable="false">Logistic Regression · Decision Tree · Recall Optimisation</div>
-        <div class="proj-desc" contenteditable="false">Binary classification predicting cancellations; compared LR vs DT, tuned threshold for recall on cancellation class to reduce revenue loss.</div>
+      <div class="proj-item">
+        <div class="proj-name">Uber NYC — Ride Demand Analysis</div>
+        <div class="proj-stack">EDA · Time Series · MySQL · Tableau · Seaborn · Correlation Analysis</div>
+        <div class="proj-desc">Analysed 29K+ hourly ride records across 6 NYC boroughs; time of day and temperature identified as top demand drivers. Simulated supply reallocation reducing demand gap by 18%.</div>
       </div>
-
-      <div>
-        <div class="proj-header">
-          <span class="proj-name" contenteditable="false">OTT Content Performance</span>
-          <span class="proj-links"><a href="https://github.com/shaw-vishal/showtime-ott-regression" target="_blank">GitHub ↗</a></span>
-        </div>
-        <div class="proj-stack" contenteditable="false">Linear Regression · VIF Treatment · Feature Selection</div>
-        <div class="proj-desc" contenteditable="false">Regression model for OTT content scores; VIF-based multicollinearity treatment and stepwise selection produced an interpretable final model.</div>
-      </div>
-
-      <div>
-        <div class="proj-header">
-          <span class="proj-name" contenteditable="false">Zomato Content Hygiene <span style="color:var(--orange);font-size:7pt;font-weight:700;">[WIP]</span></span>
-        </div>
-        <div class="proj-stack" contenteditable="false">Computer Vision · OpenCV · Blur Detection · NLP · Automation</div>
-        <div class="proj-desc" contenteditable="false">Bulk scoring system for restaurant pages: image quality, human %, food vs ambiance, duplicate detection, menu completeness, attribute coverage.</div>
-      </div>
-
     </div>
   </div>
 
   <!-- EXPERIENCE -->
-  <div class="section">
-    <div class="section-title">Experience</div>
+  <div class="r-section">
+    <div class="r-section-title">Experience</div>
 
+    <!-- ZOMATO -->
     <div class="exp-item">
       <div class="exp-top">
-        <span class="exp-company" contenteditable="false">District by Zomato</span>
-        <span class="exp-date" contenteditable="false">Dec 2025 — Present · Nashik</span>
+        <span class="exp-company">District by Zomato</span>
+        <span class="exp-date">Dec 2025 — Present · Nashik</span>
       </div>
-      <div class="exp-role-orange" contenteditable="false">Key Account Manager — Supply (Dining)</div>
+      <div class="exp-role">Key Account Manager — City Supply (Dining)</div>
       <ul class="exp-bullets">
-        <li contenteditable="false">Managed 80+ accounts; evaluated viability via P&L and burn analysis, ran cost modelling to maximise ROI on acquisition and tracked hourly city-level KPIs with tactical interventions, along with Ads segment performance: ROAS analysis</li>
+        <li>Analysed P&amp;L, burn rate, and demand signals across 200+ restaurant accounts to model acquisition viability; built prioritization framework identifying high-ROI targets, contributing to portfolio GMV growth from ₹1.1 Cr to ₹1.5 Cr over 5 months.</li>
+        <li>Designed a supply segmentation model using Unique Listing Value (a demand-side score), search demand%, cuisine type, and discount dependency to statistically identify which account profiles to acquire for specific city growth objectives; applied across regular pipeline and peak campaigns.</li>
+        <li>Led Valentine's Week and Carnival Project campaigns — performed daily CTR to transaction conversion analysis, built ROAS-driven marketing cohorts from demand signals and search behaviour data, and identified offseason dining segments to sustain city-level transaction volumes through Mar-Apr.</li>
+        <li>Tracked and optimised Ads portfolio performance across 100+ accounts — monitored impression delivery, cost per click, cost per install, and GMV lift; rebalanced budget allocation across product bundles, scaling ads revenue 15 to 20% month on month.</li>
       </ul>
     </div>
 
+    <!-- ANTI LOGIC -->
     <div class="exp-item">
       <div class="exp-top">
-        <span class="exp-company" contenteditable="false">Anti Logic LLP</span>
-        <span class="exp-date" contenteditable="false">Apr 2025 — Oct 2025</span>
+        <span class="exp-company">Anti Logic</span>
+        <span class="exp-date">Apr 2025 — Dec 2025</span>
       </div>
-      <div class="exp-role-orange" contenteditable="false">Co-Founder — Streetwear Brand</div>
+      <div class="exp-role">Founder — Streetwear Brand</div>
       <ul class="exp-bullets">
-        <li contenteditable="false">Founded Anti Logic Apparel, a streetwear brand centred on bold graphic design and youth culture aesthetics; led apparel design, brand identity, and creative direction from concept to production.</li>
+        <li>Built brand identity, GTM strategy, vendor sourcing, and end to end operations for a Gen Z streetwear brand from zero to launch; used consumer behaviour research and market segmentation to drive product decisions across 4 OEM partners.</li>
       </ul>
     </div>
 
+    <!-- EI -->
     <div class="exp-item">
       <div class="exp-top">
-        <span class="exp-company" contenteditable="false">Educational Initiatives Pvt Ltd</span>
-        <span class="exp-date" contenteditable="false">Jul 2024 — Aug 2025 · Ahmedabad</span>
+        <span class="exp-company">Educational Initiatives Pvt Ltd</span>
+        <span class="exp-date">Jul 2024 — Aug 2025 · Ahmedabad</span>
       </div>
-      <div class="exp-role-orange" contenteditable="false">Regional Manager — Strategic Partnerships (B2B)</div>
+      <div class="exp-role">Regional Manager — EdTech SaaS (B2B)</div>
       <ul class="exp-bullets">
-        <li contenteditable="false">Grew regional share by 35%; used data-driven insights to lift conversion rates 3.4% → 5.8% and deliver 40% YoY revenue growth.</li>
-        <li contenteditable="false">CSR partnerships for Amazon, P&G, Dell — ₹3 Cr investment, 1,800+ devices distributed.</li>
+        <li>Built conversion funnel analysis on CRM pipeline data identifying drop-off stages across the school sales cycle; segmented accounts by conversion likelihood and modelled outreach sequencing — lifted conversion rate from 3.4% to 5.8%, driving 40% YoY revenue growth and 35% regional share increase.</li>
+        <li>Maintained weekly territory penetration heatmaps and renewal risk scoring model tracking feature usage depth, engagement frequency, and payment behaviour across active accounts; defended ₹1.8 Cr at-risk Ahmedabad revenue through data driven retention prioritisation.</li>
       </ul>
     </div>
 
+    <!-- POLICYBAZAAR -->
     <div class="exp-item">
       <div class="exp-top">
-        <span class="exp-company" contenteditable="false">BrandEigen Insights & Analytics</span>
-        <span class="exp-date" contenteditable="false">Apr 2023 — Jun 2023 · Gurgaon</span>
+        <span class="exp-company">PolicyBazaar</span>
+        <span class="exp-date">Feb 2019 — Aug 2021 · Gurgaon</span>
       </div>
-      <div class="exp-role-grey" contenteditable="false">Intern — Consumer & Market Research</div>
+      <div class="exp-role">Senior Consultant — Insurance (B2B)</div>
       <ul class="exp-bullets">
-        <li contenteditable="false">Conducted 12 FGDs and analysed 500+ survey responses using EDA to identify whitespace for Reliance Care (Explez); built competitive positioning matrix across 8 market leaders.</li>
+        <li>Scaled HDFC Ergo portfolio ₹18 Cr to ₹54 Cr, ICICI Prudential ₹23 Cr to ₹60 Cr, Digit ₹80L to ₹4 Cr; delivered 60% YoY revenue growth through CXO level engagement.</li>
+        <li>Integrated Salesforce CRM to streamline underwriting, finance, and legal coordination across 450+ B2B partnerships.</li>
       </ul>
     </div>
 
+    <!-- IDFC -->
     <div class="exp-item">
       <div class="exp-top">
-        <span class="exp-company" contenteditable="false">PolicyBazaar</span>
-        <span class="exp-date" contenteditable="false">Feb 2019 — Aug 2021 · Gurgaon</span>
+        <span class="exp-company">IDFC First Bank</span>
+        <span class="exp-date">Jul 2017 — Feb 2018 · Pune</span>
       </div>
-      <div class="exp-role-orange" contenteditable="false">Senior Consultant — Health Insurance, Strategic Partnerships</div>
+      <div class="exp-role">Manager — Collections (B2B)</div>
       <ul class="exp-bullets">
-        <li contenteditable="false">Scaled HDFC Ergo ₹18 Cr → ₹54 Cr, ICICI Prudential ₹23 Cr → ₹60 Cr; delivered 60% YoY growth through CXO-level engagement.</li>
-        <li contenteditable="false">Integrated Salesforce CRM, Python, Power BI to streamline underwriting and finance coordination across 450+ B2B partnerships.</li>
+        <li>Managed 500,000+ accounts across Bajaj, Royal Enfield, and Honda dealer networks; built Excel-based MIS reporting systems for real time collections tracking and agent performance monitoring across 3 OEM partners.</li>
       </ul>
     </div>
 
+    <!-- BRANDEIGEN -->
     <div class="exp-item">
       <div class="exp-top">
-        <span class="exp-company" contenteditable="false">IDFC First Bank &nbsp;<span style="font-weight:400;color:var(--light);font-size:8pt;">· Assistant Manager, Partnerships</span></span>
-        <span class="exp-date" contenteditable="false">Jul 2017 — Feb 2018 · Pune</span>
+        <span class="exp-company">BrandEigen Insights &amp; Analytics</span>
+        <span class="exp-date">Apr 2023 — Jun 2023 · Gurgaon</span>
       </div>
+      <div class="exp-role">Intern — Consumer &amp; Market Research</div>
       <ul class="exp-bullets">
-        <li contenteditable="false">Managed 500K+ two-wheeler accounts (₹35–50L/month) across Bajaj, Royal Enfield, Honda networks; built MIS reporting for real-time collections and agent performance tracking.</li>
+        <li>Analysed 500+ survey responses and 12 FGDs using EDA to surface whitespace opportunities for Reliance Care; built competitive positioning matrix across 8 market leaders to inform pricing and distribution strategy.</li>
       </ul>
     </div>
 
   </div>
 
-  <!-- SKILLS -->
-  <div class="section">
-    <div class="section-title">Skills</div>
-    <div class="skills-grid">
-      <span class="sk-cat">Languages</span><span class="sk-list" contenteditable="false">Python · R · SQL</span>
-      <span class="sk-cat">ML / DL</span><span class="sk-list" contenteditable="false">TensorFlow/Keras · Scikit-learn · XGBoost · LightGBM · OpenCV · DeepFace</span>
-      <span class="sk-cat">Data & Viz</span><span class="sk-list" contenteditable="false">Pandas · NumPy · Matplotlib · Seaborn · Power BI · Streamlit</span>
-      <span class="sk-cat">Business</span><span class="sk-list" contenteditable="false">P&L Ownership · CRM/Salesforce · Consultative Sales · Lean Six Sigma Green Belt</span>
+  <!-- SKILLS + EDUCATION -->
+  <div class="two-col">
+    <div>
+      <div class="r-section-title">Skills</div>
+      <div class="skill-row">
+        <span class="skill-label">Languages</span>
+        <span class="skill-val">Python · SQL · MySQL · R</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Analytics &amp; Viz</span>
+        <span class="skill-val">Pandas · NumPy · Matplotlib · Seaborn · Tableau · Power BI · Google Sheets · Streamlit</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">ML &amp; DL</span>
+        <span class="skill-val">Scikit-learn · XGBoost · LightGBM · TensorFlow · Keras · CNN · Bi-LSTM · OpenCV</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Statistics</span>
+        <span class="skill-val">Hypothesis Testing · A/B Testing · Regression · Time Series · Cohort Analysis · K-Means Clustering · ANOVA · Inferential Statistics · Probability Distributions</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Tools</span>
+        <span class="skill-val">Salesforce · Zoho CRM · Atlassian · GitHub · Docker · HuggingFace</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Business</span>
+        <span class="skill-val">Funnel Analytics · Churn Modelling · KPI Tracking · Campaign ROAS · P&amp;L Analysis · Lean Six Sigma GB</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="r-section-title">Education</div>
+      <div class="edu-item">
+        <div class="edu-degree">PGP — Data Science &amp; Generative AI</div>
+        <div class="edu-school">McCombs School of Business, UT Austin</div>
+        <div class="edu-year">2025 — 2026</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-degree">MBA — Marketing &amp; Business Analytics</div>
+        <div class="edu-school">SIMS, Pune</div>
+        <div class="edu-year">2022 — 2024</div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-degree">B.Com Hons — Statistics</div>
+        <div class="edu-school">DCAC, Delhi University</div>
+        <div class="edu-year">2014 — 2017</div>
+      </div>
     </div>
   </div>
 
-  <!-- EDUCATION -->
-  <div class="section">
-    <div class="section-title">Education & Certifications</div>
-    <div class="edu-row">
-      <div><span class="edu-name" contenteditable="false">PGP — Data Science & Generative AI</span><span class="edu-sub" contenteditable="false"> &nbsp;·&nbsp; McCombs School of Business, UT Austin</span></div>
-      <span class="edu-date" contenteditable="false">2025 — 2026</span>
-    </div>
-    <div class="edu-row">
-      <div><span class="edu-name" contenteditable="false">MBA — Marketing & Business Analytics</span><span class="edu-sub" contenteditable="false"> &nbsp;·&nbsp; SIMS Pune</span></div>
-      <span class="edu-date" contenteditable="false">2022 — 2024</span>
-    </div>
-    <div class="edu-row" style="margin-bottom:3px;">
-      <div><span class="edu-name" contenteditable="false">B.Com Hons — Statistics</span><span class="edu-sub" contenteditable="false"> &nbsp;·&nbsp; DCAC, Delhi University</span></div>
-      <span class="edu-date" contenteditable="false">2014 — 2017</span>
-    </div>
-    <div class="certs-line">
-      <strong>Certifications (47):</strong> <span contenteditable="false">KPMG Power BI · KPMG Lean Six Sigma Green Belt · Google Data-Driven Decision Making · Google Project Management · Salesforce Sales Operations</span>
-      &nbsp;<span class="award">🏆 Golden Player — PolicyBazaar 2020 & 2021</span>
-      &nbsp;<span class="award">🏆 Director's Award 2024</span>
-    </div>
+  <!-- CERTS -->
+  <div class="certs-row">
+    <span>47 Certifications &amp; Awards</span>
+    KPMG Power BI &nbsp;·&nbsp; Lean Six Sigma Green Belt &nbsp;·&nbsp; Google Data Analytics &nbsp;·&nbsp; Salesforce Sales Ops &nbsp;·&nbsp; 🏆 Golden Player 2020 &amp; 2021 &nbsp;·&nbsp; 🏆 Director's Award 2024
   </div>
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  let on = false;
-  // render email to avoid scraping
-  document.getElementById("em").textContent = ["vishshaw6","gmail.com"].join("@");
+<script>
+  let editMode = false;
+
+  const editSelectors = [
+    '.r-name', '.r-title', '.r-summary',
+    '.exp-company', '.exp-date', '.exp-role', '.exp-bullets li',
+    '.proj-name', '.proj-stack', '.proj-desc',
+    '.skill-val', '.skill-label',
+    '.edu-degree', '.edu-school', '.edu-year',
+    '.certs-row'
+  ];
+
   function toggleEdit() {
-    on = !on;
+    editMode = !editMode;
     const btn = document.getElementById('editBtn');
-    const banner = document.getElementById('banner');
-    document.querySelectorAll('[contenteditable]').forEach(el => el.setAttribute('contenteditable', on ?
+    const saveBtn = document.getElementById('saveBtn');
+    if (editMode) {
+      btn.textContent = '✎ Editing...';
+      btn.classList.add('active');
+      saveBtn.style.display = 'inline-block';
+      document.querySelectorAll(editSelectors.join(',')).forEach(el => {
+        el.contentEditable = 'true';
+      });
+    } else {
+      saveEdits();
+    }
+  }
+
+  function saveEdits() {
+    editMode = false;
+    const btn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    btn.textContent = '✎ Edit';
+    btn.classList.remove('active');
+    saveBtn.style.display = 'none';
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      el.contentEditable = 'false';
+    });
+  }
+
+  function downloadResume() {
+    if (editMode) saveEdits();
+    const resumeEl = document.getElementById('resumePage');
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vishal Shaw — Data Analyst</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+${document.querySelector('style').innerHTML}
+body { background: white; padding: 0; display: block; }
+.toolbar { display: none !important; }
+.resume { box-shadow: none; max-width: 100%; margin: 0; }
+@page { margin: 10mm; size: A4; }
+</style>
+</head>
+<body>
+${resumeEl.outerHTML}
+<script>window.onload=function(){window.print();window.close();}<\/script>
+</body>
+</html>`);
+    printWindow.document.close();
+  }
+</script>
+</body>
+</html>
