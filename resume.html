@@ -85,12 +85,34 @@
   [contenteditable="true"] { outline: 1.5px dashed rgba(200,96,26,0.5); border-radius: 2px; cursor: text; background: rgba(200,96,26,0.03); }
   [contenteditable="true"]:focus { outline: 1.5px solid var(--orange); }
 
-  @media print {
-  body { background: white !important; padding: 0 !important; display: block !important; }
-  .toolbar { display: none !important; }
-  .resume { box-shadow: none !important; max-width: 100% !important; margin: 0 !important; padding: 20mm 18mm !important; }
-  @page { margin: 0; size: A4; }
+  @@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
   }
+
+  body {
+    background: white !important;
+    display: block !important;
+  }
+
+  .toolbar {
+    display: none !important;
+  }
+
+  .resume {
+    box-shadow: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 12mm 14mm !important; /* reduced from 20mm */
+  }
+
+  @page {
+    size: A4;
+    margin: 8mm; /* THIS is key — reduces top whitespace */
+  }
+}
 </style>
 </head>
 <body>
