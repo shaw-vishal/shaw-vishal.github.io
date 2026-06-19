@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vishal Shaw — Data Scientist</title>
+<title>Vishal Shaw — Data Analyst</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -22,7 +22,7 @@
   html { scroll-behavior: smooth; }
   body { background: var(--cream); color: var(--text); font-family: 'Syne', sans-serif; overflow-x: hidden; }
 
-  /* HERO */
+  /* ── HERO ── */
   .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px 80px; position: relative; overflow: hidden; background-color: #c8a882; }
   .hero::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E"); background-size: 200px 200px; mix-blend-mode: multiply; pointer-events: none; }
   .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(60,30,10,0.25) 100%); pointer-events: none; }
@@ -41,20 +41,20 @@
   .pill-cta { background: var(--orange-dark); color: var(--cream); }
   .pill-cta:hover { background: var(--orange) !important; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(160,77,20,0.35); }
 
-  /* STATS */
+  /* ── STATS BAR ── */
   .stats-bar { background: var(--orange); padding: 20px 40px; display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
   .stat-item { text-align: center; color: var(--cream); }
   .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; line-height: 1; display: block; }
   .stat-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.85; margin-top: 4px; display: block; }
 
-  /* SECTIONS */
+  /* ── SHARED ── */
   section { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
   .section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
   .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 52px); font-weight: 300; color: var(--text); margin-bottom: 48px; line-height: 1.1; }
   .section-title em { font-style: italic; color: var(--orange); }
   .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--cream-dark), transparent); }
 
-  /* PROJECTS */
+  /* ── PROJECTS ── */
   .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
   .project-card { background: white; padding: 32px; text-decoration: none; color: inherit; transition: all 0.2s ease; position: relative; overflow: hidden; display: block; }
   .project-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--orange); transform: scaleX(0); transition: transform 0.2s ease; transform-origin: left; }
@@ -63,14 +63,12 @@
   .project-card.flagship { grid-column: 1 / -1; background: var(--brown); color: var(--cream); }
   .project-card.flagship::after { background: var(--orange-light); }
   .project-card.flagship:hover { background: #4a321f; }
-  .project-card.wip-project { grid-column: 1 / -1; background: #fffdf5; border: 1.5px dashed rgba(200,96,26,0.3); }
   .project-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; opacity: 0.5; margin-bottom: 12px; display: block; }
   .project-card.flagship .project-num { color: var(--cream); }
   .project-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 2.5vw, 26px); font-weight: 400; line-height: 1.2; margin-bottom: 8px; }
   .project-card.flagship .project-title { color: var(--cream); }
   .project-process { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--orange-dark); letter-spacing: 0.05em; margin-bottom: 10px; font-weight: 500; }
   .project-card.flagship .project-process { color: rgba(224,112,48,0.9); }
-  .project-card.wip-project .project-process { color: var(--orange-dark); }
   .project-desc { font-family: 'Syne', sans-serif; font-size: 13px; line-height: 1.65; color: var(--text-mid); margin-bottom: 16px; }
   .project-card.flagship .project-desc { color: rgba(250,246,239,0.75); }
   .project-stats { display: flex; gap: 24px; margin-bottom: 16px; }
@@ -84,10 +82,8 @@
   .project-link.live:hover { background: var(--orange); }
   .project-link.dark { background: var(--cream-dark); color: var(--text); }
   .project-link.dark:hover { background: var(--orange); color: white; }
-  .wip-badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); background: rgba(200,96,26,0.1); padding: 4px 10px; border-radius: 100px; margin-bottom: 12px; }
-  .wip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: pulse 1.5s infinite; }
 
-  /* EXPERIENCE */
+  /* ── EXPERIENCE ── */
   .exp-list { display: flex; flex-direction: column; gap: 2px; }
   .exp-card { background: white; border-left: 3px solid transparent; padding: 28px 32px; transition: all 0.2s ease; }
   .exp-card:hover { border-left-color: var(--orange); background: #fffaf5; transform: translateX(4px); }
@@ -101,7 +97,7 @@
   .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
   .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 3px 10px; border-radius: 100px; background: var(--cream-dark); color: var(--text-mid); }
 
-  /* SKILLS */
+  /* ── SKILLS ── */
   .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2px; }
   .skill-group { background: white; padding: 28px; }
   .skill-group-title { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
@@ -113,7 +109,214 @@
   .certs-right { display: flex; flex-wrap: wrap; gap: 8px; }
   .cert-pill { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 4px 12px; border-radius: 100px; background: rgba(250,246,239,0.1); color: rgba(250,246,239,0.75); border: 1px solid rgba(250,246,239,0.15); }
 
-  /* FOOTER */
+  /* ── REPOSITORIES SECTION ── */
+  #repositories { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
+
+  .repos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .repo-card {
+    background: white;
+    padding: 24px 28px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+  .repo-card:hover {
+    border-left-color: var(--orange);
+    background: #fffaf5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(160,77,20,0.08);
+  }
+  .repo-card.pinned {
+    background: var(--brown);
+    border-left: 3px solid var(--orange);
+  }
+  .repo-card.pinned:hover { background: #4a321f; transform: translateY(-2px); }
+
+  .repo-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .repo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .repo-card.pinned .repo-name { color: var(--cream); }
+  .repo-name em { font-style: italic; color: var(--orange-dark); }
+  .repo-card.pinned .repo-name em { color: var(--orange-light); }
+
+  .repo-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-light);
+    flex-shrink: 0;
+    transition: transform 0.18s;
+    margin-top: 2px;
+  }
+  .repo-card:hover .repo-arrow { transform: translate(2px, -2px); color: var(--orange); }
+  .repo-card.pinned .repo-arrow { color: rgba(250,246,239,0.4); }
+  .repo-card.pinned:hover .repo-arrow { color: var(--orange-light); }
+
+  .repo-desc {
+    font-family: 'Syne', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-mid);
+    flex: 1;
+  }
+  .repo-card.pinned .repo-desc { color: rgba(250,246,239,0.7); }
+
+  .repo-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .repo-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--orange-dark);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    letter-spacing: 0.05em;
+  }
+  .repo-card.pinned .repo-lang { color: var(--orange-light); }
+  .repo-lang-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+  .repo-card.pinned .repo-lang-dot { background: var(--orange-light); }
+  .repo-stars {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+  }
+  .repo-card.pinned .repo-stars { color: rgba(250,246,239,0.5); }
+  .repo-updated {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-light);
+    letter-spacing: 0.03em;
+  }
+  .repo-card.pinned .repo-updated { color: rgba(250,246,239,0.4); }
+
+  .repo-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .repo-topic {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--cream-dark);
+    color: var(--text-mid);
+    letter-spacing: 0.05em;
+  }
+  .repo-card.pinned .repo-topic {
+    background: rgba(250,246,239,0.1);
+    color: rgba(250,246,239,0.65);
+    border: 1px solid rgba(250,246,239,0.15);
+  }
+
+  /* Loading state */
+  .repos-loading {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+  }
+  .repo-skeleton {
+    background: white;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .skeleton-line {
+    background: linear-gradient(90deg, #f0e8db 25%, #faf6ef 50%, #f0e8db 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 3px;
+  }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Error state */
+  .repos-error {
+    background: white;
+    padding: 32px;
+    text-align: center;
+    border-left: 3px solid var(--orange);
+  }
+  .repos-error p {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 12px;
+  }
+  .repos-error a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--orange-dark);
+    text-decoration: none;
+    border-bottom: 1px solid var(--orange-dark);
+  }
+
+  /* Repos footer */
+  .repos-footer {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .repos-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+  }
+  .repos-github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--brown);
+    background: var(--cream-dark);
+    padding: 8px 16px;
+    border-radius: 100px;
+    transition: all 0.18s;
+    letter-spacing: 0.04em;
+  }
+  .repos-github-link:hover {
+    background: var(--brown);
+    color: var(--cream);
+  }
+
+  /* ── FOOTER ── */
   footer { background: var(--brown); padding: 48px 40px; text-align: center; }
   .footer-name { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: var(--cream); margin-bottom: 6px; }
   .footer-name em { font-style: italic; color: var(--orange-light); }
@@ -123,27 +326,29 @@
   .footer-link:hover { color: var(--orange-light); }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
 
   @media (max-width: 640px) {
-    .projects-grid { grid-template-columns: 1fr; }
-    .project-card.flagship, .project-card.wip-project { grid-column: 1; }
+    .projects-grid, .repos-grid { grid-template-columns: 1fr; }
+    .project-card.flagship { grid-column: 1; }
     .stats-bar { gap: 32px; }
-    section { padding: 60px 16px; }
+    section, #repositories { padding: 60px 16px; }
+    .repos-footer { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
 <body>
 
+<!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
     <p class="hero-eyebrow">Data Science &amp; Generative AI · McCombs School of Business · UT Austin</p>
     <h1 class="hero-name">Vishal <em>Shaw</em></h1>
     <p class="hero-title">Data Analyst</p>
-    <p class="hero-bio">I turn data into decisions. 5+ years across food-tech, insurance, SaaS, and banking - now applying analytics and machine learning to real business problems. I always ask: is this insight actually actionable?</p>
+    <p class="hero-bio">I turn data into decisions. 5+ years across food-tech, insurance, SaaS, and banking — now applying analytics and machine learning to real business problems. I always ask: is this insight actually actionable?</p>
     <nav class="hero-nav">
       <a href="#projects" class="pill-filled">↓ Projects</a>
       <a href="#experience" class="pill-filled">↓ Experience</a>
+      <a href="#repositories" class="pill-filled">↓ GitHub</a>
       <a href="#skills" class="pill-filled">↓ Skills</a>
       <a href="mailto:vishshaw6@gmail.com" class="pill-outline">✉ Contact</a>
       <a href="https://github.com/shaw-vishal" target="_blank" class="pill-outline">⌥ GitHub</a>
@@ -154,6 +359,7 @@
   </div>
 </div>
 
+<!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Restaurants Managed</span></div>
   <div class="stat-item"><span class="stat-num">₹1.5Cr</span><span class="stat-label">Peak GMV / Month</span></div>
@@ -161,12 +367,12 @@
   <div class="stat-item"><span class="stat-num">6</span><span class="stat-label">DS Projects</span></div>
 </div>
 
+<!-- PROJECTS -->
 <section id="projects">
   <p class="section-label">01 · Work</p>
   <h2 class="section-title">Projects</h2>
   <div class="projects-grid">
 
-    <!-- FaceBeats Flagship -->
     <a class="project-card flagship" href="https://github.com/shaw-vishal/facial-emotion-music" target="_blank">
       <span class="project-num">✦ Flagship · 01</span>
       <div class="project-title">FaceBeats — Facial Emotion Music Generator</div>
@@ -184,48 +390,43 @@
       </div>
     </a>
 
-    <!-- EasyVisa -->
     <a class="project-card" href="https://github.com/shaw-vishal" target="_blank">
       <span class="project-num">02 · Ensemble Classification</span>
       <div class="project-title">EasyVisa — Visa Approval Prediction</div>
       <div class="project-process">XGBoost · Bagging · AdaBoost · Gradient Boosting · Stacking · MySQL · Scikit-learn · SMOTE</div>
-      <div class="project-desc">Predicts US work visa approval outcomes by comparing five ensemble methods across three sampling strategies. Stacking model combines base learners for best F1 score on imbalanced class distribution. RandomizedSearchCV tuning applied across all model families. Feature importance surfaces key approval drivers for policy insight.</div>
+      <div class="project-desc">Predicts US work visa approval outcomes by comparing five ensemble methods across three sampling strategies. Stacking model combines base learners for best F1 score on imbalanced class distribution. RandomizedSearchCV tuning applied across all model families.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
-    <!-- Uber -->
     <a class="project-card" href="https://github.com/shaw-vishal/uber-demand-eda" target="_blank">
       <span class="project-num">03 · Exploratory Data Analysis</span>
       <div class="project-title">Uber NYC — Ride Demand Analysis</div>
       <div class="project-process">EDA · Time Series · Correlation Analysis · MySQL · Tableau · Seaborn · Borough Segmentation</div>
-      <div class="project-desc">Analysed 29K+ hourly ride records across 6 NYC boroughs. Time of day and temperature identified as top demand drivers through correlation analysis and time series feature extraction. Borough level supply strategy and holiday demand pattern recommendations delivered to simulated Uber operations team. Findings used to simulate a supply reallocation strategy reducing predicted demand supply gap by 18% during peak hours.</div>
+      <div class="project-desc">Analysed 29K+ hourly ride records across 6 NYC boroughs. Time of day and temperature identified as top demand drivers. Supply reallocation strategy simulated, reducing demand-supply gap by 18% during peak hours.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
-    <!-- ShowTime OTT -->
     <a class="project-card" href="https://github.com/shaw-vishal/showtime-ott-regression" target="_blank">
       <span class="project-num">04 · Regression</span>
       <div class="project-title">ShowTime OTT — Content Performance</div>
       <div class="project-process">Linear Regression · VIF Treatment · Stepwise Feature Selection · Power BI · Cross Validation</div>
-      <div class="project-desc">Regression model predicting OTT content performance scores. Iterative VIF based multicollinearity treatment and stepwise feature selection produced a parsimonious interpretable model for content investment decisions. Identified 3 content attributes driving 60% of performance score variance, providing actionable signal for content commissioning strategy.</div>
+      <div class="project-desc">Regression model predicting OTT content performance scores. Identified 3 content attributes driving 60% of performance score variance, providing actionable signal for content commissioning strategy.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
-    <!-- INN Hotels -->
     <a class="project-card" href="https://github.com/shaw-vishal/inn-hotels-classification" target="_blank">
       <span class="project-num">05 · Binary Classification</span>
       <div class="project-title">INN Hotels — Booking Cancellation</div>
       <div class="project-process">Logistic Regression · Decision Tree · MySQL · Recall Optimisation · Threshold Tuning</div>
-      <div class="project-desc">Predicts hotel booking cancellations to minimise revenue loss. Compared Logistic Regression vs Decision Tree with threshold tuning to optimise recall on cancellation class. Threshold optimisation simulated an overbooking buffer strategy reducing predicted revenue loss from high risk cancellations. Feature engineering improved signal on lead time and booking channel variables.</div>
+      <div class="project-desc">Predicts hotel booking cancellations to minimise revenue loss. Threshold optimisation simulated an overbooking buffer strategy reducing predicted revenue loss from high-risk cancellations.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
-    <!-- Business Stats -->
     <a class="project-card" href="https://github.com/shaw-vishal/business-statistics-dsga" target="_blank">
       <span class="project-num">06 · Statistics</span>
       <div class="project-title">Business Statistics — DSGA</div>
       <div class="project-process">Hypothesis Testing · Confidence Intervals · A/B Testing · Probability Distributions · SciPy</div>
-      <div class="project-desc">Applied inferential statistics to business decision scenarios covering t-tests, chi-square, ANOVA, A/B testing, and probability distributions with real world business framing. Built as a reference foundation for statistical reasoning in analytics work.</div>
+      <div class="project-desc">Applied inferential statistics to business decision scenarios covering t-tests, chi-square, ANOVA, A/B testing, and probability distributions with real world business framing.</div>
       <div class="project-links"><span class="project-link dark">GitHub ↗</span></div>
     </a>
 
@@ -234,46 +435,32 @@
 
 <div class="divider"></div>
 
+<!-- EXPERIENCE -->
 <section id="experience">
   <p class="section-label">02 · Career</p>
   <h2 class="section-title">Experience</h2>
   <div class="exp-list">
 
-    <!-- ZOMATO -->
     <div class="exp-card">
       <div class="exp-header">
         <span class="exp-company">District by Zomato</span>
         <span class="exp-date">Dec 2025 — Present · Nashik</span>
       </div>
-      <div class="exp-role">Supply Operations Associate - (Dining)</div>
+      <div class="exp-role">Supply Operations Associate — Dining</div>
       <ul class="exp-bullets">
         <li>Modelled account viability across 200+ restaurant accounts using P&amp;L, burn rate, and ULV analysis to prioritise high ROI acquisition targets and flag underperformers for exit; grew portfolio GMV from ₹1.1 Cr to ₹1.5 Cr over 5 months.</li>
         <li>Built a supply identification model using ULV, search ULV, ULV%, cuisine type, and discount dependency to statistically segment which account types to acquire for specific city objectives; applied across regular pipeline and special campaigns.</li>
         <li>Designed Valentine's Week supply strategy by analysing city level demand signals and daily CTR to transaction conversion rates to identify supply gaps; onboarded targeted accounts ahead of peak, improving cover fill rate and ATV through discount modelling.</li>
         <li>Led Carnival Project (Mar–Apr offseason) by building a model identifying high search ULV and city ULV accounts to sustain dining behaviour through offseason; curated a marketing segment with strong ROAS and brought targeted supply live on highlighted placements.</li>
         <li>Ran ongoing churn prevention and winback analysis using a dedicated churn tracker updated weekly with restaurant health scores; reactivated dormant accounts through targeted interventions, protecting city level GMV floor.</li>
-        <li>Built discount combination model testing optimal Gold, DD, and net applied discount configurations for maximum GMV growth toward defined city objectives; improved campaign discount efficiency while maintaining or exceeding GMV targets.</li>
-        <li>Maintained weekly search ranking optimisation model cross referencing search ULV%, city ULV%, and transaction data to surface high search but low conversion accounts; improved search to transaction rate through targeted listing interventions.</li>
         <li>Managed Ads portfolio across active accounts by tracking CPC, CPI, impression delivery, and GMV lift per campaign; scaled ads revenue 15 to 20% MoM through data driven budget reallocation across MBB, IP, VP, and Video Ads bundles.</li>
-        <li>Built and maintained monthly trackers for acquisition pipeline, GMV growth, zone level supply gap mapping, and ads performance monitoring 30+ KPIs at restaurant, subzone, and city level under Zomato's YCYA (Your City Your App) culture.</li>
+        <li>Built and maintained monthly trackers for acquisition pipeline, GMV growth, zone level supply gap mapping, and ads performance monitoring 30+ KPIs at restaurant, subzone, and city level.</li>
       </ul>
       <div class="exp-tags">
-        <span class="tag">ULV Modelling</span>
-        <span class="tag">Supply Segmentation</span>
-        <span class="tag">GMV Analytics</span>
-        <span class="tag">CTR Conversion</span>
-        <span class="tag">ATV Optimisation</span>
-        <span class="tag">Churn Analysis</span>
-        <span class="tag">Discount Modelling</span>
-        <span class="tag">Campaign ROAS</span>
-        <span class="tag">Search Ranking</span>
-        <span class="tag">Ad Performance</span>
-        <span class="tag">KPI Tracking</span>
-        <span class="tag">P&amp;L Ownership</span>
+        <span class="tag">ULV Modelling</span><span class="tag">Supply Segmentation</span><span class="tag">GMV Analytics</span><span class="tag">CTR Conversion</span><span class="tag">Churn Analysis</span><span class="tag">Discount Modelling</span><span class="tag">Campaign ROAS</span><span class="tag">KPI Tracking</span><span class="tag">P&amp;L Ownership</span>
       </div>
     </div>
 
-    <!-- ANTI LOGIC -->
     <div class="exp-card">
       <div class="exp-header">
         <span class="exp-company">Anti Logic</span>
@@ -281,18 +468,11 @@
       </div>
       <div class="exp-role">Founder — Streetwear Brand</div>
       <ul class="exp-bullets">
-        <li>Conceptualised and launched a streetwear brand targeting Gen Z; built brand identity, product range, and GTM strategy from the ground up.</li>
-        <li>Managed end to end operations including vendor sourcing, product design, and social media marketing using consumer behaviour insights.</li>
+        <li>Conceptualised and launched a streetwear brand targeting Gen Z; built brand identity, product range, and GTM strategy from the ground up using consumer behaviour research and market segmentation across 4 OEM partners.</li>
       </ul>
-      <div class="exp-tags">
-        <span class="tag">Brand Building</span>
-        <span class="tag">GTM Strategy</span>
-        <span class="tag">Gen Z</span>
-        <span class="tag">D2C</span>
-      </div>
+      <div class="exp-tags"><span class="tag">Brand Building</span><span class="tag">GTM Strategy</span><span class="tag">Gen Z</span><span class="tag">D2C</span></div>
     </div>
 
-    <!-- EDUCATIONAL INITIATIVES -->
     <div class="exp-card">
       <div class="exp-header">
         <span class="exp-company">Educational Initiatives Pvt Ltd</span>
@@ -300,26 +480,13 @@
       </div>
       <div class="exp-role">Regional Operations Manager (B2B)</div>
       <ul class="exp-bullets">
-        <li>Built and maintained weekly territory penetration heatmaps across Ahmedabad and Godhra tracking school level adoption density, engagement scores, and renewal likelihood per cluster to direct field effort toward high potential white space accounts; contributed to 35% regional share growth.</li>
-        <li>Tracked feature usage patterns across active school accounts in Zoho CRM and Google Sheets, correlated low adoption rates with churn risk signals and submitted structured data backed feedback to Product team via Atlassian, directly influencing product prioritization decisions.</li>
-        <li>Applied conversion funnel analysis on Zoho CRM pipeline data to identify drop off stages and isolate fastest converting school profiles; modelled outreach sequencing to lift conversion rate from 3.4% to 5.8%, driving 40% YoY revenue growth and 35% regional share increase.</li>
-        <li>Scored active accounts by renewal risk using engagement frequency, feature usage depth, and payment history; built risk tier model in Google Sheets to prioritize retention outreach and successfully defended ₹1.8 Cr at risk Ahmedabad revenue during annual renewal cycle.</li>
-        <li>Developed Tier 3 GTM playbook for Godhra expansion by segmenting schools on infrastructure readiness, digital adoption signals, and budget capacity; built prioritization model ranking accounts by projected LTV and conversion probability as a replicable framework for new market entry.</li>
+        <li>Built and maintained weekly territory penetration heatmaps tracking school-level adoption density, engagement scores, and renewal likelihood per cluster; contributed to 35% regional share growth.</li>
+        <li>Applied conversion funnel analysis on Zoho CRM pipeline data to identify drop-off stages; modelled outreach sequencing to lift conversion rate from 3.4% to 5.8%, driving 40% YoY revenue growth.</li>
+        <li>Scored active accounts by renewal risk using engagement frequency, feature usage depth, and payment history; built risk tier model in Google Sheets defending ₹1.8 Cr at-risk Ahmedabad revenue during annual renewal cycle.</li>
       </ul>
-      <div class="exp-tags">
-        <span class="tag">Heatmap Analysis</span>
-        <span class="tag">Funnel Analytics</span>
-        <span class="tag">Churn Risk Scoring</span>
-        <span class="tag">Feature Usage Analytics</span>
-        <span class="tag">Retention Modelling</span>
-        <span class="tag">Zoho CRM</span>
-        <span class="tag">Atlassian</span>
-        <span class="tag">GTM Strategy</span>
-        <span class="tag">Revenue Defense</span>
-      </div>
+      <div class="exp-tags"><span class="tag">Heatmap Analysis</span><span class="tag">Funnel Analytics</span><span class="tag">Churn Risk Scoring</span><span class="tag">Retention Modelling</span><span class="tag">Zoho CRM</span><span class="tag">GTM Strategy</span></div>
     </div>
 
-    <!-- POLICYBAZAAR -->
     <div class="exp-card">
       <div class="exp-header">
         <span class="exp-company">PolicyBazaar</span>
@@ -327,19 +494,12 @@
       </div>
       <div class="exp-role">Senior Consultant — Health Insurance, Strategic Partnerships (B2B)</div>
       <ul class="exp-bullets">
-        <li>Scaled HDFC Ergo portfolio ₹18 Cr to ₹54 Cr, ICICI Prudential ₹23 Cr to ₹60 Cr, and Digit ₹80L to ₹4 Cr through CXO level strategic engagement delivering 60% YoY and 52% MoM revenue growth.</li>
+        <li>Scaled HDFC Ergo portfolio ₹18 Cr to ₹54 Cr, ICICI Prudential ₹23 Cr to ₹60 Cr, and Digit ₹80L to ₹4 Cr through CXO level strategic engagement delivering 60% YoY revenue growth.</li>
         <li>Integrated Salesforce CRM, SQL, Python, and Power BI to streamline underwriting, finance, and legal coordination across 450+ B2B partnerships.</li>
       </ul>
-      <div class="exp-tags">
-        <span class="tag">Revenue Growth</span>
-        <span class="tag">Salesforce</span>
-        <span class="tag">SQL</span>
-        <span class="tag">Power BI</span>
-        <span class="tag">Python</span>
-      </div>
+      <div class="exp-tags"><span class="tag">Revenue Growth</span><span class="tag">Salesforce</span><span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag">Python</span></div>
     </div>
 
-    <!-- IDFC -->
     <div class="exp-card">
       <div class="exp-header">
         <span class="exp-company">IDFC First Bank</span>
@@ -347,17 +507,11 @@
       </div>
       <div class="exp-role">Assistant Manager — Partnerships &amp; Solutions (B2B)</div>
       <ul class="exp-bullets">
-        <li>Handled 500,000+ accounts with monthly portfolio of ₹35 to 50 Lakhs across Bajaj, Royal Enfield, and Honda dealer networks.</li>
-        <li>Developed MIS reporting systems enabling real time tracking of collections and agent performance.</li>
+        <li>Handled 500,000+ accounts with monthly portfolio of ₹35–50 Lakhs across Bajaj, Royal Enfield, and Honda dealer networks; developed MIS reporting systems enabling real-time tracking of collections and agent performance.</li>
       </ul>
-      <div class="exp-tags">
-        <span class="tag">MIS Reporting</span>
-        <span class="tag">Collections</span>
-        <span class="tag">Portfolio Management</span>
-      </div>
+      <div class="exp-tags"><span class="tag">MIS Reporting</span><span class="tag">Collections</span><span class="tag">Portfolio Management</span></div>
     </div>
 
-    <!-- BRANDEIGEN -->
     <div class="exp-card">
       <div class="exp-header">
         <span class="exp-company">BrandEigen Insights &amp; Analytics</span>
@@ -365,16 +519,9 @@
       </div>
       <div class="exp-role">Intern — Consumer &amp; Market Research</div>
       <ul class="exp-bullets">
-        <li>Developed competitive positioning matrix via SWOT analysis of 8 market leaders, informing pricing and distribution strategy for Reliance Care (Explez).</li>
-        <li>Conducted 12 FGDs and analysed 500+ survey responses using EDA to identify whitespace opportunities; built insights deck presented to senior leadership.</li>
+        <li>Developed competitive positioning matrix via SWOT analysis of 8 market leaders; conducted 12 FGDs and analysed 500+ survey responses using EDA to identify whitespace opportunities for Reliance Care.</li>
       </ul>
-      <div class="exp-tags">
-        <span class="tag">Market Research</span>
-        <span class="tag">EDA</span>
-        <span class="tag">FGDs</span>
-        <span class="tag">SWOT</span>
-        <span class="tag">Consumer Insights</span>
-      </div>
+      <div class="exp-tags"><span class="tag">Market Research</span><span class="tag">EDA</span><span class="tag">Consumer Insights</span></div>
     </div>
 
   </div>
@@ -382,79 +529,70 @@
 
 <div class="divider"></div>
 
-<section id="skills">
-  <p class="section-label">03 · Toolkit</p>
-  <h2 class="section-title">Skills</h2>
-  <div class="skills-grid">
+<!-- ══════════════════════════════════════════════════════════
+     REPOSITORIES — Auto-updates from GitHub API forever
+     ══════════════════════════════════════════════════════════ -->
+<section id="repositories">
+  <p class="section-label">03 · Code</p>
+  <h2 class="section-title">GitHub <em>Repositories</em></h2>
 
-    <div class="skill-group">
-      <div class="skill-group-title">Languages</div>
-      <div class="skill-items">
-        <span class="skill-item">Python</span>
-        <span class="skill-item">SQL</span>
-        <span class="skill-item">MySQL</span>
-        <span class="skill-item">HTML / CSS</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">ML / Deep Learning</div>
-      <div class="skill-items">
-        <span class="skill-item">TensorFlow / Keras</span>
-        <span class="skill-item">Scikit-learn</span>
-        <span class="skill-item">XGBoost / LightGBM</span>
-        <span class="skill-item">OpenCV · DeepFace</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">Data Analytics</div>
-      <div class="skill-items">
-        <span class="skill-item">Pandas / NumPy</span>
-        <span class="skill-item">Matplotlib / Seaborn</span>
-        <span class="skill-item">Tableau</span>
-        <span class="skill-item">Power BI</span>
-        <span class="skill-item">Google Sheets (Advanced)</span>
-        <span class="skill-item">Streamlit</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">Tools &amp; Platforms</div>
-      <div class="skill-items">
-        <span class="skill-item">Salesforce CRM</span>
-        <span class="skill-item">Zoho CRM</span>
-        <span class="skill-item">Atlassian / Jira</span>
-        <span class="skill-item">HuggingFace Spaces</span>
-        <span class="skill-item">GitHub</span>
-        <span class="skill-item">Docker</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">Business</div>
-      <div class="skill-items">
-        <span class="skill-item">P&amp;L Ownership</span>
-        <span class="skill-item">Funnel Analytics</span>
-        <span class="skill-item">Churn Modelling</span>
-        <span class="skill-item">Campaign ROAS</span>
-        <span class="skill-item">Lean Six Sigma (GB)</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">Statistics</div>
-      <div class="skill-items">
-        <span class="skill-item">Hypothesis Testing</span>
-        <span class="skill-item">A/B Testing</span>
-        <span class="skill-item">Regression Analysis</span>
-        <span class="skill-item">Probability Distributions</span>
-        <span class="skill-item">Inferential Statistics</span>
-      </div>
-    </div>
-
+  <!-- Loading skeleton -->
+  <div class="repos-loading" id="repos-loading">
+    <div class="repo-skeleton"><div class="skeleton-line" style="height:20px;width:60%"></div><div class="skeleton-line" style="height:14px;width:90%"></div><div class="skeleton-line" style="height:14px;width:75%"></div><div class="skeleton-line" style="height:10px;width:40%"></div></div>
+    <div class="repo-skeleton"><div class="skeleton-line" style="height:20px;width:70%"></div><div class="skeleton-line" style="height:14px;width:85%"></div><div class="skeleton-line" style="height:14px;width:65%"></div><div class="skeleton-line" style="height:10px;width:45%"></div></div>
+    <div class="repo-skeleton"><div class="skeleton-line" style="height:20px;width:55%"></div><div class="skeleton-line" style="height:14px;width:80%"></div><div class="skeleton-line" style="height:14px;width:90%"></div><div class="skeleton-line" style="height:10px;width:35%"></div></div>
   </div>
 
+  <!-- Repos grid — injected by JS -->
+  <div class="repos-grid" id="repos-grid" style="display:none"></div>
+
+  <!-- Error state -->
+  <div class="repos-error" id="repos-error" style="display:none">
+    <p>Could not load repositories automatically. View them directly on GitHub.</p>
+    <a href="https://github.com/shaw-vishal?tab=repositories" target="_blank">github.com/shaw-vishal ↗</a>
+  </div>
+
+  <!-- Footer row -->
+  <div class="repos-footer" id="repos-footer" style="display:none">
+    <span class="repos-count" id="repos-count"></span>
+    <a href="https://github.com/shaw-vishal?tab=repositories" target="_blank" class="repos-github-link">
+      ⌥ View all on GitHub ↗
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">04 · Toolkit</p>
+  <h2 class="section-title">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-title">Languages</div>
+      <div class="skill-items"><span class="skill-item">Python</span><span class="skill-item">SQL</span><span class="skill-item">MySQL</span><span class="skill-item">HTML / CSS</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">ML / Deep Learning</div>
+      <div class="skill-items"><span class="skill-item">TensorFlow / Keras</span><span class="skill-item">Scikit-learn</span><span class="skill-item">XGBoost / LightGBM</span><span class="skill-item">OpenCV · DeepFace</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Data Analytics</div>
+      <div class="skill-items"><span class="skill-item">Pandas / NumPy</span><span class="skill-item">Matplotlib / Seaborn</span><span class="skill-item">Tableau</span><span class="skill-item">Power BI</span><span class="skill-item">Google Sheets (Advanced)</span><span class="skill-item">Streamlit</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Tools &amp; Platforms</div>
+      <div class="skill-items"><span class="skill-item">Salesforce CRM</span><span class="skill-item">Zoho CRM</span><span class="skill-item">Atlassian / Jira</span><span class="skill-item">HuggingFace Spaces</span><span class="skill-item">GitHub</span><span class="skill-item">Docker</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Business</div>
+      <div class="skill-items"><span class="skill-item">P&amp;L Ownership</span><span class="skill-item">Funnel Analytics</span><span class="skill-item">Churn Modelling</span><span class="skill-item">Campaign ROAS</span><span class="skill-item">Lean Six Sigma (GB)</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Statistics</div>
+      <div class="skill-items"><span class="skill-item">Hypothesis Testing</span><span class="skill-item">A/B Testing</span><span class="skill-item">Regression Analysis</span><span class="skill-item">Probability Distributions</span><span class="skill-item">Inferential Statistics</span></div>
+    </div>
+  </div>
   <div class="certs-bar">
     <span class="certs-left">Certifications &amp; Awards</span>
     <div class="certs-right">
@@ -464,11 +602,12 @@
       <span class="cert-pill">Salesforce Sales Ops</span>
       <span class="cert-pill">🏆 Golden Player 2020 &amp; 2021</span>
       <span class="cert-pill">🏆 Director's Award 2024</span>
+      <span class="cert-pill">🥈 Hackathon Runner-Up 2026</span>
     </div>
   </div>
-
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="footer-name">Vishal <em>Shaw</em></div>
   <div class="footer-tagline">Data Analyst · Nashik / Pune, India</div>
@@ -481,6 +620,222 @@
   </div>
 </footer>
 
+<!-- ══════════════════════════════════════════════════════════
+     GITHUB AUTO-REPOS SCRIPT
+     ✦ Fetches live from GitHub API on every page load
+     ✦ Pinned repos shown first, then sorted by last push
+     ✦ Skips forks and the github.io site repo
+     ✦ Reads language, stars, last updated, topics
+     ✦ Works forever — no manual updates needed
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+
+  // ── CONFIG ────────────────────────────────────────────────
+  // EDIT THESE when you want to control display:
+
+  const GITHUB_USER = 'shaw-vishal';
+
+  // Repos to always show first (pinned order). Use exact repo names.
+  // Add new repo names here if you want them pinned at top.
+  const PINNED_REPOS = [
+    'facial-emotion-music',
+    'uber-demand-eda',
+    'showtime-ott-regression',
+    'inn-hotels-classification',
+    'business-statistics-dsga',
+    'tableau-business-intelligence-portfolio'
+  ];
+
+  // Repos to never show (forks, noise, site repo)
+  const EXCLUDED_REPOS = [
+    'shaw-vishal.github.io'
+  ];
+
+  // Max repos to show in the grid (after pinned)
+  const MAX_REPOS = 18;
+
+  // Language → dot color mapping (CSS color)
+  const LANG_COLORS = {
+    'Python': '#3572A5',
+    'Jupyter Notebook': '#DA5B0B',
+    'HTML': '#e34c26',
+    'CSS': '#563d7c',
+    'JavaScript': '#f1e05a',
+    'TypeScript': '#2b7489',
+    'R': '#198CE7',
+    'SQL': '#e38c00',
+    'Shell': '#89e051',
+    'default': '#c8601a'
+  };
+
+  // ── HELPERS ───────────────────────────────────────────────
+  function langColor(lang) {
+    return LANG_COLORS[lang] || LANG_COLORS['default'];
+  }
+
+  function relativeTime(dateStr) {
+    const now = new Date();
+    const then = new Date(dateStr);
+    const diff = Math.floor((now - then) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    if (diff < 2592000) return Math.floor(diff / 86400) + 'd ago';
+    if (diff < 31536000) return Math.floor(diff / 2592000) + 'mo ago';
+    return Math.floor(diff / 31536000) + 'yr ago';
+  }
+
+  function sanitize(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function formatName(name) {
+    // Convert kebab-case to Title Case with italic last word
+    const parts = name.split('-');
+    const last = parts.pop();
+    const rest = parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+    const lastFormatted = last.charAt(0).toUpperCase() + last.slice(1);
+    if (rest) {
+      return rest + ' <em>' + lastFormatted + '</em>';
+    }
+    return '<em>' + lastFormatted + '</em>';
+  }
+
+  // ── BUILD CARD ────────────────────────────────────────────
+  function buildCard(repo, isPinned) {
+    const name = repo.name;
+    const url = repo.html_url;
+    const desc = sanitize(repo.description || '');
+    const lang = repo.language || '';
+    const stars = repo.stargazers_count;
+    const updated = relativeTime(repo.pushed_at || repo.updated_at);
+    const topics = (repo.topics || []).slice(0, 4);
+
+    const card = document.createElement('a');
+    card.href = url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.className = 'repo-card' + (isPinned ? ' pinned' : '');
+
+    let topicsHTML = '';
+    if (topics.length > 0) {
+      topicsHTML = '<div class="repo-topics">' +
+        topics.map(t => '<span class="repo-topic">' + sanitize(t) + '</span>').join('') +
+        '</div>';
+    }
+
+    let starsHTML = stars > 0
+      ? '<span class="repo-stars">★ ' + stars + '</span>'
+      : '';
+
+    let langHTML = lang
+      ? '<span class="repo-lang"><span class="repo-lang-dot" style="background:' + langColor(lang) + '"></span>' + sanitize(lang) + '</span>'
+      : '';
+
+    card.innerHTML =
+      '<div class="repo-card-top">' +
+        '<div class="repo-name">' + formatName(name) + '</div>' +
+        '<span class="repo-arrow">↗</span>' +
+      '</div>' +
+      (desc ? '<div class="repo-desc">' + desc + '</div>' : '') +
+      (topicsHTML || '') +
+      '<div class="repo-meta">' +
+        langHTML +
+        starsHTML +
+        '<span class="repo-updated">pushed ' + updated + '</span>' +
+      '</div>';
+
+    return card;
+  }
+
+  // ── FETCH & RENDER ────────────────────────────────────────
+  async function loadRepos() {
+    const loadingEl = document.getElementById('repos-loading');
+    const gridEl    = document.getElementById('repos-grid');
+    const errorEl   = document.getElementById('repos-error');
+    const footerEl  = document.getElementById('repos-footer');
+    const countEl   = document.getElementById('repos-count');
+
+    try {
+      // Fetch all repos (public, sorted by pushed date, up to 100)
+      const res = await fetch(
+        'https://api.github.com/users/' + GITHUB_USER + '/repos?per_page=100&sort=pushed&type=public',
+        { headers: { 'Accept': 'application/vnd.github.mercy-preview+json' } }
+      );
+
+      if (!res.ok) throw new Error('GitHub API error: ' + res.status);
+
+      const allRepos = await res.json();
+
+      // Filter out excluded + forks
+      const eligible = allRepos.filter(r =>
+        !r.fork &&
+        !EXCLUDED_REPOS.includes(r.name)
+      );
+
+      // Separate pinned vs rest
+      const pinnedOrder = {};
+      PINNED_REPOS.forEach((name, i) => { pinnedOrder[name] = i; });
+
+      const pinned = [];
+      const rest = [];
+
+      eligible.forEach(r => {
+        if (pinnedOrder.hasOwnProperty(r.name)) {
+          pinned.push(r);
+        } else {
+          rest.push(r);
+        }
+      });
+
+      // Sort pinned by PINNED_REPOS array order
+      pinned.sort((a, b) => pinnedOrder[a.name] - pinnedOrder[b.name]);
+
+      // Rest already sorted by pushed_at from API
+      const restSlice = rest.slice(0, MAX_REPOS - pinned.length);
+
+      const toShow = [...pinned, ...restSlice];
+
+      // Render
+      gridEl.innerHTML = '';
+
+      if (toShow.length === 0) {
+        throw new Error('No repos found');
+      }
+
+      toShow.forEach((repo, i) => {
+        const isPinned = i < pinned.length;
+        gridEl.appendChild(buildCard(repo, isPinned));
+      });
+
+      // Show grid
+      loadingEl.style.display = 'none';
+      gridEl.style.display = 'grid';
+      footerEl.style.display = 'flex';
+
+      const total = eligible.length;
+      countEl.textContent =
+        'Showing ' + toShow.length + ' of ' + total + ' public repositories · auto-updated';
+
+    } catch (err) {
+      console.error('GitHub repos load error:', err);
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+    }
+  }
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadRepos);
+  } else {
+    loadRepos();
+  }
+
+})();
+</script>
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4LM5VBVKHE"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -488,5 +843,6 @@
   gtag('js', new Date());
   gtag('config', 'G-4LM5VBVKHE');
 </script>
+
 </body>
 </html>
