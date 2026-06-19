@@ -725,7 +725,418 @@ input[type="color"] {
             <div class="r-section-label" contenteditable="true" oninput="scheduleAutoSave()">Certifications &amp; Awards</div>
             <div class="r-certs" contenteditable="true" oninput="scheduleAutoSave()">KPMG Power BI · Lean Six Sigma Green Belt · Google Data Analytics · Salesforce Sales Ops · 47 total certifications &nbsp;&nbsp;|&nbsp;&nbsp; 🏆 Golden Player Award 2020 &amp; 2021 · 🏆 Director's Award 2024 · 🥈 Hackathon Runner-Up 2026</div>
           </div>
+          <hr class="r-hr-light r-divider">
+          <div class="r-section" data-section="ai-advisor" style="margin-bottom:0">
+            <div class="r-section-label">AI Resume Advisor</div>
+            <!--
+════════════════════════════════════════════════════════════
+  AI RESUME ADVISOR WIDGET — Vishal Shaw
+  Powered by Google Gemini 2.0 Flash (free tier)
+  
+  HOW TO ADD TO resume.html:
+  1. Find the last <hr class="r-hr-light r-divider"> near the bottom
+  2. Paste this entire block after it, before </div><!-- end resume-content -->
+  3. Done. No npm, no backend, no build step needed.
+  
+  HOW TO UPDATE THE RESUME TEXT:
+  Edit the RESUME_CONTENT variable inside the <script> below.
+  Keep it as plain text — Gemini reads it directly.
+  
+  HOW TO GET A FREE GEMINI KEY:
+  → https://aistudio.google.com/app/apikey
+  No credit card. Free tier = 15 req/min, 1500 req/day.
+════════════════════════════════════════════════════════════
+-->
 
+<style>
+.adv-outer {
+  margin-top: 16px;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+.adv-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.adv-icon-circle {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(200,96,26,0.12);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.adv-head-title { font-size: 10pt; font-weight: 700; letter-spacing: 0.01em; color: #1a1a1a; margin: 0; }
+.adv-head-sub { font-size: 7.5pt; color: #888; margin: 1px 0 0; }
+
+.adv-box {
+  border: 1px solid #e8e0d8;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: #fdfcfb;
+}
+.adv-box-label {
+  font-size: 7pt; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: #aaa; margin-bottom: 10px;
+}
+.adv-key-row { display: flex; gap: 8px; align-items: center; }
+.adv-key-inp {
+  flex: 1; font-size: 8.5pt; font-family: 'Courier New', monospace;
+  border: 1px solid #ddd; border-radius: 4px;
+  padding: 6px 10px; outline: none; background: #fff;
+}
+.adv-key-inp:focus { border-color: #c8601a; }
+.adv-vis-btn {
+  padding: 5px 8px; border: 1px solid #ddd; border-radius: 4px;
+  background: #fff; cursor: pointer; font-size: 9pt; color: #888;
+  transition: all 0.15s;
+}
+.adv-vis-btn:hover { border-color: #c8601a; color: #c8601a; }
+.adv-key-msg {
+  font-size: 7.5pt; color: #999; margin-top: 5px; line-height: 1.4;
+}
+.adv-key-msg a { color: #a04d14; }
+.adv-key-msg.ok { color: #27ae60; }
+.adv-key-msg.err { color: #c0392b; }
+.adv-privacy-note {
+  font-size: 7pt; color: #bbb; margin-top: 6px; display: flex; gap: 4px; align-items: flex-start;
+}
+
+.adv-roles { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.adv-role-pill {
+  padding: 3px 10px; border-radius: 100px; font-size: 7.5pt; font-weight: 600;
+  cursor: pointer; border: 1px solid #ddd; background: #fff; color: #888;
+  transition: all 0.15s; letter-spacing: 0.02em;
+}
+.adv-role-pill:hover { border-color: #c8601a; color: #c8601a; }
+.adv-role-pill.sel { background: #3d2b1a; color: #faf6ef; border-color: #3d2b1a; }
+
+.adv-divider-light { height: 1px; background: #f0e8db; margin: 10px 0; }
+
+.adv-focuses { display: flex; flex-wrap: wrap; gap: 4px; }
+.adv-focus-pill {
+  padding: 2px 9px; border-radius: 100px; font-size: 7pt; font-weight: 600;
+  cursor: pointer; border: 1px solid #e8e0d8; background: #fff; color: #aaa;
+  transition: all 0.15s; letter-spacing: 0.02em;
+}
+.adv-focus-pill:hover { border-color: #c8601a; }
+.adv-focus-pill.sel { background: rgba(200,96,26,0.1); color: #a04d14; border-color: #c8601a; }
+
+.adv-run {
+  width: 100%; padding: 9px; border-radius: 5px;
+  background: #3d2b1a; color: #faf6ef;
+  font-size: 9pt; font-weight: 700; letter-spacing: 0.04em;
+  cursor: pointer; border: none; transition: all 0.2s;
+}
+.adv-run:hover:not(:disabled) { background: #c8601a; }
+.adv-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.adv-progress {
+  height: 2px; background: #f0e8db; border-radius: 2px;
+  margin: 8px 0; overflow: hidden; display: none;
+}
+.adv-progress-fill {
+  height: 100%; width: 0; background: #c8601a;
+  border-radius: 2px; transition: width 0.3s;
+  animation: adv-progress-anim 1.8s ease-in-out infinite;
+}
+@keyframes adv-progress-anim {
+  0% { width: 0; margin-left: 0; }
+  50% { width: 60%; margin-left: 0; }
+  100% { width: 0; margin-left: 100%; }
+}
+
+.adv-output-wrap { display: none; margin-top: 10px; }
+.adv-output-wrap.show { display: block; }
+.adv-output-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+.adv-output-label {
+  font-size: 7pt; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #c8601a;
+}
+.adv-copy {
+  font-size: 7pt; padding: 2px 8px;
+  border: 1px solid #e0d8d0; border-radius: 4px;
+  background: #fff; color: #888; cursor: pointer;
+  transition: all 0.15s;
+}
+.adv-copy:hover { border-color: #c8601a; color: #c8601a; }
+.adv-output-body {
+  font-size: 8.5pt; line-height: 1.65; color: #3a2a1a;
+  background: #fffaf5; border: 1px solid #f0e8db;
+  border-radius: 5px; padding: 12px 14px;
+  white-space: pre-wrap; word-break: break-word;
+}
+.adv-error-body {
+  font-size: 8pt; color: #c0392b;
+  background: #fdf0ee; border: 1px solid #f5c6c0;
+  border-radius: 5px; padding: 10px 12px;
+}
+</style>
+
+<div class="adv-outer">
+  <div class="adv-header-row">
+    <div class="adv-icon-circle">✦</div>
+    <div>
+      <p class="adv-head-title">AI Resume Advisor</p>
+      <p class="adv-head-sub">Gemini 2.0 Flash · free · runs in your browser · your key, your data</p>
+    </div>
+  </div>
+
+  <!-- Key input -->
+  <div class="adv-box">
+    <div class="adv-box-label">Your Gemini API Key</div>
+    <div class="adv-key-row">
+      <input class="adv-key-inp" type="password" id="ra-key"
+             placeholder="AIza..." autocomplete="off" oninput="raCheckKey()" />
+      <button class="adv-vis-btn" onclick="raToggleVis()" title="Show/hide">👁</button>
+    </div>
+    <div class="adv-key-msg" id="ra-key-msg">
+      Free key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com ↗</a> — no credit card
+    </div>
+    <div class="adv-privacy-note">
+      🔒 Key lives in this tab only (sessionStorage). Sent directly to Google. Never stored anywhere else.
+    </div>
+  </div>
+
+  <!-- Role + Focus -->
+  <div class="adv-box">
+    <div class="adv-box-label">Target Role</div>
+    <div class="adv-roles" id="ra-roles">
+      <button class="adv-role-pill sel" data-r="Data Analyst" onclick="raRole(this)">Data Analyst</button>
+      <button class="adv-role-pill" data-r="MIS Analyst" onclick="raRole(this)">MIS Analyst</button>
+      <button class="adv-role-pill" data-r="Business Analyst" onclick="raRole(this)">Business Analyst</button>
+      <button class="adv-role-pill" data-r="Data Scientist" onclick="raRole(this)">Data Scientist</button>
+      <button class="adv-role-pill" data-r="Reporting Analyst" onclick="raRole(this)">Reporting Analyst</button>
+      <button class="adv-role-pill" data-r="BI Analyst" onclick="raRole(this)">BI Analyst</button>
+    </div>
+    <div class="adv-divider-light"></div>
+    <div class="adv-box-label">Focus Area</div>
+    <div class="adv-focuses" id="ra-focuses">
+      <button class="adv-focus-pill sel" data-f="full" onclick="raFocus(this)">Full review</button>
+      <button class="adv-focus-pill" data-f="summary" onclick="raFocus(this)">Summary line</button>
+      <button class="adv-focus-pill" data-f="bullets" onclick="raFocus(this)">Bullet points</button>
+      <button class="adv-focus-pill" data-f="skills" onclick="raFocus(this)">Skills section</button>
+      <button class="adv-focus-pill" data-f="projects" onclick="raFocus(this)">Projects</button>
+      <button class="adv-focus-pill" data-f="ats" onclick="raFocus(this)">ATS keywords</button>
+      <button class="adv-focus-pill" data-f="gaps" onclick="raFocus(this)">Gaps & weaknesses</button>
+      <button class="adv-focus-pill" data-f="title" onclick="raFocus(this)">Job title line</button>
+    </div>
+  </div>
+
+  <button class="adv-run" id="ra-run" onclick="raRun()" disabled>✦ Analyse My Resume</button>
+
+  <div class="adv-progress" id="ra-progress">
+    <div class="adv-progress-fill"></div>
+  </div>
+
+  <div class="adv-output-wrap" id="ra-output-wrap">
+    <div class="adv-output-header">
+      <span class="adv-output-label" id="ra-output-label">Analysis</span>
+      <button class="adv-copy" onclick="raCopy()">Copy</button>
+    </div>
+    <div class="adv-output-body" id="ra-output-body"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── UPDATE THIS WHENEVER YOU CHANGE YOUR RESUME ──────────────
+  var RESUME_TEXT = [
+    'VISHAL SHAW — DATA ANALYST / MIS ANALYST / BUSINESS ANALYST',
+    '',
+    'SUMMARY: Data Analyst with 5+ years across marketplace operations, sales analytics,',
+    'MIS reporting, and business performance tracking. Skilled in SQL, Python, Excel,',
+    'Google Sheets, Tableau, Power BI, KPI monitoring, forecasting, and business reviews.',
+    '',
+    'PROJECTS:',
+    '• Multi-Outlet Restaurant P&L Dashboard (Streamlit, Python, Pandas, Plotly, Tableau):',
+    '  Built interactive dashboard to analyze outlet-level P&L, food variance, contribution',
+    '  margin, and EBITDA trends across cloud kitchen operations. Replaced manual Excel',
+    '  reporting with real-time monitoring across 350+ outlets, 5 cities, 6 months.',
+    '• Tableau Business Intelligence Portfolio (Parameters, LOD Expressions, Forecast,',
+    '  What-If Analysis, Data Blending, KPI Controls, Dashboard Actions):',
+    '  7-parameter workbook with LOD expressions, what-if scenario analysis, Pareto charts,',
+    '  geographic visualization, dual-axis charts, and data blending across 2 sources.',
+    '• Shinkansen ML Classifier (Python, CatBoost, XGBoost, LightGBM, Scikit-learn):',
+    '  Predicted passenger satisfaction at 95.43% accuracy via 5-fold CV. Hackathon runner-up.',
+    '• Uber NYC Ride Demand Analysis (EDA, Time Series, MySQL, Tableau, Seaborn):',
+    '  Analysed 29K+ hourly records across 6 NYC boroughs. Simulated supply reallocation',
+    '  reducing demand gap by 18%.',
+    '',
+    'EXPERIENCE:',
+    '• District by Zomato (Dec 2025–Present, Nashik) — Supply Operations Analyst:',
+    '  Built MIS reports, descriptive and predictive analysis on GMV deltas, burn rate,',
+    '  and demand signals across 200+ accounts. Portfolio GMV grew ₹1.1 Cr to ₹1.8 Cr in 6 months.',
+    '  Tracked CPC, CPI, impression delivery, GMV lift across 100+ ad accounts;',
+    '  scaled ads revenue 12% to 20% MoM. Built supply segmentation model using ULV,',
+    '  search demand, cuisine type, and discount dependency.',
+    '• Educational Initiatives (Jul 2024–Aug 2025, Ahmedabad) — Regional Operations Manager:',
+    '  Owned P&L and sales operations across mid/north Gujarat. Built MIS dashboards,',
+    '  weekly KPI reports, revenue forecasts, account-level heatmaps across 50+ accounts.',
+    '  Defended ₹3.8 Cr at-risk revenue. Lifted conversion 3.4%→5.8%, 40% YoY growth,',
+    '  35% regional share increase.',
+    '• PolicyBazaar (Feb 2019–Aug 2021, Gurgaon) — Senior Consultant:',
+    '  Scaled HDFC Ergo ₹18 Cr→₹54 Cr, ICICI Prudential ₹23 Cr→₹60 Cr, Digit ₹80L→₹4 Cr.',
+    '  Integrated Salesforce CRM; 60% YoY revenue growth across 450+ B2B partnerships.',
+    '• IDFC First Bank (Jul 2017–Feb 2018) — Manager Collections:',
+    '  Managed 500,000+ accounts across Bajaj, Royal Enfield, Honda dealer networks.',
+    '  Built Excel-based MIS reporting for real-time collections tracking and agent monitoring.',
+    '',
+    'SKILLS:',
+    'Languages: Python, SQL, MySQL, R',
+    'Analytics & Viz: Pandas, NumPy, Matplotlib, Seaborn, Tableau, Power BI, Streamlit',
+    'ML/DL: Scikit-learn, XGBoost, LightGBM, TensorFlow, Keras, CNN, Bi-LSTM',
+    'Statistics: Hypothesis Testing, A/B Testing, Regression, Time Series, Cohort Analysis, ANOVA',
+    'Tools: Git, GitHub, Salesforce, Zoho CRM, Atlassian, Docker, HuggingFace',
+    'Business: Funnel Analytics, Churn Modelling, KPI Tracking, Campaign ROAS, P&L Analysis, Lean Six Sigma GB',
+    '',
+    'EDUCATION:',
+    'PGP Data Science & Generative AI — McCombs School of Business, UT Austin (2025–2026)',
+    'MBA Marketing & Business Analytics — SIMS Pune (2022–2024)',
+    'B.Com Hons Statistics — DCAC, Delhi University (2014–2017)',
+    '',
+    'CERTIFICATIONS & AWARDS:',
+    'KPMG Power BI, Lean Six Sigma Green Belt, Google Data Analytics, Salesforce Sales Ops,',
+    '47 total certifications | Golden Player Award 2020 & 2021, Director\'s Award 2024,',
+    'Hackathon Runner-Up 2026 (95.43% accuracy classification model)'
+  ].join('\n');
+  // ─────────────────────────────────────────────────────────────
+
+  var FOCUS_PROMPTS = {
+    full: 'Give a comprehensive review with these 5 sections:\n1. OVERALL IMPRESSION: One sentence verdict for this role.\n2. TOP 3 STRENGTHS: What genuinely stands out. Be specific — name companies, numbers, projects.\n3. TOP 3 WEAKNESSES: Exact problems with exact fixes. No vague advice.\n4. MISSING ELEMENTS: 2 things a strong competing candidate would have that this resume lacks.\n5. REWRITTEN BULLET: Take the weakest bullet and rewrite it. Show before/after.',
+    summary: 'Focus ONLY on the summary/headline section.\nRate it 1–10 for this specific role with one reason.\nThen rewrite it to be sharper and more targeted.\nExplain in 2 sentences exactly what you changed and why.',
+    bullets: 'Focus ONLY on the experience bullet points.\nIdentify the 2 weakest bullets. For each:\n- Quote the original bullet\n- Explain in one sentence what makes it weak\n- Write a stronger version\nDo not comment on anything else.',
+    skills: 'Focus ONLY on the skills section. Answer these:\n1. MISSING: List 5 skills critical for this role that are absent.\n2. WEAK POSITIONING: Which listed skills are too generic or need specificity?\n3. REMOVE: What should be cut as irrelevant noise?\n4. REWRITE: Show the exact rewritten skills section.',
+    projects: 'Focus ONLY on the projects section.\n1. STRONGEST PROJECT: Which one and why (for this specific role).\n2. WEAKEST PROJECT: Which one and why.\n3. REWRITE: Rewrite the weakest project description. Show before/after.\n4. MISSING: What project type would most strengthen this portfolio for this role?',
+    ats: 'Act as an ATS system scanning this resume for a ' + '<<ROLE>>' + ' job.\nList exactly:\n- 12 HIGH-VALUE MISSING KEYWORDS that recruiters search for this role in India in 2025\n- 5 STRONG KEYWORDS already present\n- 3 OVERUSED GENERIC PHRASES to replace\nFormat as three clean numbered lists. No other commentary.',
+    gaps: 'Be a brutally honest hiring manager. List ONLY the problems — no positives.\nCover:\n1. EXPERIENCE GAPS: What\'s missing from the work history.\n2. WEAK QUANTIFICATION: Which bullets have no numbers or vague numbers.\n3. SKILLS GAPS: Technical skills a strong candidate would have.\n4. RED FLAGS: What would make you hesitate as a hiring manager.\n5. STRONGER CANDIDATE: One thing a competing applicant would have that this person doesn\'t.\nBe specific. Reference actual content from this resume.',
+    title: 'Focus ONLY on the job title/subtitle line at the top of the resume.\nCurrent line: "Data Analyst · MIS Reporting · Business Analytics · SQL"\n\n1. RATING: Score it 1–10 for ATS optimisation and human readability. Give one reason.\n2. THREE ALTERNATIVES: Write 3 different title line versions, each with a different strategic angle for this role.\n3. BEST PICK: Tell me which of the 3 to use and why.',
+  };
+
+  var role = 'Data Analyst';
+  var focus = 'full';
+
+  window.raRole = function(btn) {
+    document.querySelectorAll('.adv-role-pill').forEach(function(b) { b.classList.remove('sel'); });
+    btn.classList.add('sel');
+    role = btn.dataset.r;
+  };
+
+  window.raFocus = function(btn) {
+    document.querySelectorAll('.adv-focus-pill').forEach(function(b) { b.classList.remove('sel'); });
+    btn.classList.add('sel');
+    focus = btn.dataset.f;
+  };
+
+  window.raCheckKey = function() {
+    var key = document.getElementById('ra-key').value.trim();
+    var msg = document.getElementById('ra-key-msg');
+    var btn = document.getElementById('ra-run');
+    if (key.length > 20 && key.startsWith('AIza')) {
+      msg.textContent = '✓ Key looks valid — ready';
+      msg.className = 'adv-key-msg ok';
+      btn.disabled = false;
+      try { sessionStorage.setItem('__gk__', key); } catch(e) {}
+    } else if (key.length > 0) {
+      msg.textContent = 'Gemini keys start with "AIza..." — check yours';
+      msg.className = 'adv-key-msg err';
+      btn.disabled = true;
+    } else {
+      msg.innerHTML = 'Free key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com ↗</a> — no credit card';
+      msg.className = 'adv-key-msg';
+      btn.disabled = true;
+    }
+  };
+
+  window.raToggleVis = function() {
+    var inp = document.getElementById('ra-key');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  };
+
+  window.raRun = async function() {
+    var key = document.getElementById('ra-key').value.trim();
+    if (!key) return;
+
+    var runBtn = document.getElementById('ra-run');
+    var progress = document.getElementById('ra-progress');
+    var outputWrap = document.getElementById('ra-output-wrap');
+    var outputBody = document.getElementById('ra-output-body');
+    var outputLabel = document.getElementById('ra-output-label');
+
+    runBtn.disabled = true;
+    runBtn.textContent = '⟳ Gemini is thinking...';
+    progress.style.display = 'block';
+    outputWrap.className = 'adv-output-wrap';
+
+    var focusText = FOCUS_PROMPTS[focus] || FOCUS_PROMPTS.full;
+    focusText = focusText.replace('<<ROLE>>', role);
+
+    var prompt = 'You are a senior recruiting consultant and data analytics hiring manager reviewing a resume for a ' + role + ' role at a mid-to-large Indian tech or analytics company in 2025.\n\nRESUME:\n' + RESUME_TEXT + '\n\n' + 'YOUR TASK:\n' + focusText + '\n\nIMPORTANT: Be specific. Reference actual content from this resume — company names, numbers, projects. Do not give generic advice. Use clear section headers in ALL CAPS followed by a colon. Keep response under 500 words.';
+
+    try {
+      var res = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { maxOutputTokens: 900, temperature: 0.65 }
+          })
+        }
+      );
+      var data = await res.json();
+
+      if (!res.ok) {
+        var em = (data.error && data.error.message) ? data.error.message : 'API error ' + res.status;
+        if (res.status === 429) em = 'Rate limit hit — free tier allows 15 req/min. Wait 60 seconds and try again.';
+        if (res.status === 403) em = 'Key rejected. Make sure it has Generative Language API access at aistudio.google.com.';
+        if (res.status === 400) em = 'Invalid API key — double-check it starts with AIza and is fully copied.';
+        throw new Error(em);
+      }
+
+      var text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+      if (!text) throw new Error('No response returned. Try again.');
+
+      outputLabel.textContent = role + ' — ' + focus.replace(/_/g,' ');
+      outputBody.className = 'adv-output-body';
+      outputBody.textContent = text;
+      outputWrap.className = 'adv-output-wrap show';
+
+    } catch(err) {
+      outputLabel.textContent = 'Error';
+      outputBody.className = 'adv-error-body';
+      outputBody.textContent = '⚠ ' + err.message;
+      outputWrap.className = 'adv-output-wrap show';
+    }
+
+    progress.style.display = 'none';
+    runBtn.disabled = false;
+    runBtn.textContent = '✦ Analyse Again';
+    window.raCheckKey();
+  };
+
+  window.raCopy = function() {
+    var text = document.getElementById('ra-output-body').textContent;
+    var btn = document.querySelector('.adv-copy');
+    navigator.clipboard && navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'Copied ✓';
+      setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+    });
+  };
+
+  // Restore key from session if returning to tab
+  try {
+    var saved = sessionStorage.getItem('__gk__');
+    if (saved) { document.getElementById('ra-key').value = saved; window.raCheckKey(); }
+  } catch(e) {}
+})();
+</script>
+          </div>
         </div><!-- end resume-content -->
       </div><!-- end resume-paper -->
     </div><!-- end resume-wrapper -->
