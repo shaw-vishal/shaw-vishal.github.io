@@ -133,6 +133,38 @@ input[type="color"] {
 .section-item:last-child { border-bottom: none; }
 .section-item-label { font-size: 12px; color: #333; }
 
+/* Reorder list */
+.reorder-list { padding: 16px; }
+.reorder-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; border: 1px solid #eee; border-radius: 5px;
+  margin-bottom: 6px; background: #fafafa;
+}
+.reorder-item-label { font-size: 12px; color: #333; font-weight: 500; }
+.reorder-arrows { display: flex; gap: 4px; }
+.reorder-arrow-btn {
+  width: 22px; height: 22px; border: 1px solid #ddd; border-radius: 4px;
+  background: #fff; cursor: pointer; font-size: 11px; color: #555;
+  display: flex; align-items: center; justify-content: center;
+}
+.reorder-arrow-btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.reorder-arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* GitHub repo picker */
+.gh-repo-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px; border: 1px solid #eee; border-radius: 5px;
+  margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+}
+.gh-repo-item:hover { border-color: #ccc; background: #fafafa; }
+.gh-repo-item.checked { border-color: #1a1a1a; background: #f5f5f5; }
+.gh-repo-item input[type="checkbox"] { margin-top: 2px; accent-color: #1a1a1a; cursor: pointer; }
+.gh-repo-item.disabled { opacity: 0.4; pointer-events: none; }
+.gh-repo-info { flex: 1; min-width: 0; }
+.gh-repo-name { font-size: 11.5px; font-weight: 600; color: #1a1a1a; word-break: break-word; }
+.gh-repo-desc { font-size: 10px; color: #888; margin-top: 2px; line-height: 1.4; }
+.gh-repo-meta { font-size: 9px; color: #aaa; margin-top: 3px; }
+
 /* Profile buttons */
 .profile-btns { display: flex; flex-wrap: wrap; gap: 6px; padding: 16px; }
 .profile-btn {
@@ -203,6 +235,8 @@ input[type="color"] {
 }
 .r-contact a { text-decoration: none; border-bottom: 1px solid #d0d0d0; }
 .r-contact a:hover { border-bottom-color: currentColor; }
+.r-contact-hint { font-size: 7pt; color: #aaa; margin-top: 3px; font-style: italic; }
+@media print { .r-contact-hint { display: none; } }
 
 /* RULE */
 .r-hr { border: none; border-top: 1.5px solid #0a0a0a; margin: 14px 0; }
@@ -224,6 +258,7 @@ input[type="color"] {
 .r-proj-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
 .r-proj-title { font-size: 9.5pt; font-weight: 600; outline: none; }
 .r-proj-link { font-size: 7.5pt; text-decoration: none; border-bottom: 1px solid #d0d0d0; white-space: nowrap; flex-shrink: 0; }
+.r-proj-link-group { display: flex; gap: 8px; flex-shrink: 0; align-items: baseline; }
 .r-proj-stack { font-size: 7.5pt; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 3px; outline: none; }
 .r-proj-desc { font-size: 9pt; line-height: 1.55; outline: none; }
 
@@ -237,6 +272,22 @@ input[type="color"] {
 .r-exp-bullets { list-style: none; }
 .r-exp-bullets li { font-size: 9pt; line-height: 1.55; padding-left: 13px; position: relative; margin-bottom: 3px; outline: none; }
 .r-exp-bullets li::before { content: '–'; position: absolute; left: 0; font-weight: 500; }
+.r-exp-bullets li { padding-right: 18px; }
+.bullet-del {
+  display: none; position: absolute; right: -2px; top: 0;
+  width: 14px; height: 14px; line-height: 14px; text-align: center;
+  font-size: 10px; color: #e74c3c; cursor: pointer; border-radius: 50%;
+  background: #fdf0ee; user-select: none;
+}
+.r-exp-bullets li:hover .bullet-del { display: inline-block; }
+.add-bullet-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; color: #888; cursor: pointer; margin-top: 4px;
+  border: 1px dashed #ccc; border-radius: 4px; padding: 3px 8px;
+  background: none; font-family: inherit; user-select: none;
+}
+.add-bullet-btn:hover { color: #1a1a1a; border-color: #1a1a1a; }
+@media print { .add-bullet-btn, .bullet-del { display: none !important; } }
 
 /* SKILLS */
 .r-skills-table { width: 100%; border-collapse: collapse; }
@@ -273,6 +324,30 @@ input[type="color"] {
   @page { size: A4; margin: 14mm 16mm; }
 }
 
+/* ── MOBILE ────────────────────────────────────────────────── */
+/* Keep the exact same desktop layout, just scale it down to fit
+   the viewport instead of reflowing into stacked columns. */
+@media (max-width: 900px) {
+  .topbar { font-size: 11px; overflow-x: auto; }
+  .topbar-tabs { overflow-x: auto; }
+  .app { flex-direction: column; }
+  .sidebar {
+    width: 100%; height: auto; max-height: 50vh;
+    position: relative; top: 0; order: 2;
+    border-right: none; border-top: 1px solid #e0e0e0;
+  }
+  .main { order: 1; padding: 16px 8px 32px; overflow-x: auto; }
+  #resume-wrapper {
+    width: 720px;
+    transform: scale(var(--mobile-scale, 0.5));
+    transform-origin: top center;
+    margin-bottom: calc(-1 * (1122px * (1 - var(--mobile-scale, 0.5))));
+  }
+}
+@media (max-width: 480px) {
+  #resume-wrapper { --mobile-scale: 0.42; }
+}
+
 </style>
 </head>
 <body>
@@ -284,7 +359,9 @@ input[type="color"] {
     <div class="topbar-tab active" data-tab="design" onclick="switchTab('design')">Design</div>
     <div class="topbar-tab" data-tab="spacing" onclick="switchTab('spacing')">Spacing</div>
     <div class="topbar-tab" data-tab="sections" onclick="switchTab('sections')">Sections</div>
+    <div class="topbar-tab" data-tab="reorder" onclick="switchTab('reorder')">Reorder</div>
     <div class="topbar-tab" data-tab="profiles" onclick="switchTab('profiles')">Profiles</div>
+    <div class="topbar-tab" data-tab="repo-projects" onclick="switchTab('repo-projects')">Projects</div>
   </div>
   <div class="topbar-spacer"></div>
   <div class="topbar-actions">
@@ -487,6 +564,15 @@ input[type="color"] {
       <div class="section-list" id="section-toggles"></div>
     </div>
 
+    <!-- REORDER TAB -->
+    <div class="sidebar-panel" id="panel-reorder">
+      <div class="panel-section">
+        <div class="panel-section-title">Section Order</div>
+        <div style="font-size:11px;color:#888;margin-bottom:12px;">Use ↑ ↓ to move sections up or down on the page.</div>
+      </div>
+      <div class="reorder-list" id="reorder-list"></div>
+    </div>
+
     <!-- PROFILES TAB -->
     <div class="sidebar-panel" id="panel-profiles">
       <div class="panel-section">
@@ -512,6 +598,31 @@ input[type="color"] {
       </div>
     </div>
 
+    <!-- PROJECTS (GITHUB SYNC) TAB -->
+    <div class="sidebar-panel" id="panel-repo-projects">
+      <div class="panel-section">
+        <div class="panel-section-title">GitHub Project Picker</div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px;">
+          Live-synced from <a href="https://github.com/shaw-vishal?tab=repositories" target="_blank" style="color:#888">github.com/shaw-vishal</a>.
+          Tick up to 4 — they'll replace the Projects section. New repos you push will show up here automatically next time you open this page.
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">GitHub username</span>
+          <input type="text" id="gh-username" value="shaw-vishal" style="width:120px;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-size:11px;" onchange="syncGitHubRepos()">
+        </div>
+        <button class="btn-sm btn-ghost" style="width:100%;margin-top:6px;" onclick="syncGitHubRepos()">↻ Refresh from GitHub</button>
+        <div id="gh-sync-status" style="font-size:10px;color:#999;margin-top:6px;"></div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-title">Selected: <span id="gh-selected-count">0</span> / 4</div>
+        <div id="gh-repo-list" style="max-height:380px;overflow-y:auto;"></div>
+      </div>
+      <div class="panel-section">
+        <button class="btn-sm btn-white" style="width:100%;" onclick="applyGitHubProjects()">Apply Selected to Resume</button>
+        <div style="font-size:10px;color:#999;margin-top:6px;">Uses your saved Gemini key to auto-write the tools-used line and a 1–2 sentence description per project, matching the length of your existing project entries.</div>
+      </div>
+    </div>
+
   </div>
 
   <!-- MAIN CONTENT -->
@@ -528,7 +639,8 @@ input[type="color"] {
           <div class="r-header">
             <div class="r-name" id="r-name" contenteditable="true" oninput="scheduleAutoSave()">Vishal Shaw</div>
             <div class="r-title" id="r-title" contenteditable="true" oninput="scheduleAutoSave()">Data Analyst &nbsp;·&nbsp; MIS Reporting &nbsp;·&nbsp; Business Analytics &nbsp;·&nbsp; SQL</div>
-            <div class="r-contact" id="r-contact" contenteditable="true" oninput="scheduleAutoSave()">vishshaw6@gmail.com &nbsp;·&nbsp; +91 9871782496 &nbsp;·&nbsp; <a href="https://shaw-vishal.github.io" target="_blank">shaw-vishal.github.io</a> &nbsp;·&nbsp; <a href="https://github.com/shaw-vishal" target="_blank">github.com/shaw-vishal</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/vishalshaw6" target="_blank">linkedin.com/in/vishalshaw6</a> &nbsp;·&nbsp; Nashik / Pune, India</div>
+            <div class="r-contact" id="r-contact" contenteditable="true" oninput="scheduleAutoSave()">vishshaw6@gmail.com &nbsp;·&nbsp; +91 9871782496 &nbsp;·&nbsp; <a href="https://shaw-vishal.github.io" target="_blank" onclick="return raLinkClick(event)">shaw-vishal.github.io</a> &nbsp;·&nbsp; <a href="https://github.com/shaw-vishal" target="_blank" onclick="return raLinkClick(event)">github.com/shaw-vishal</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/vishalshaw6" target="_blank" onclick="return raLinkClick(event)">linkedin.com/in/vishalshaw6</a> &nbsp;·&nbsp; Nashik / Pune, India</div>
+            <div class="r-contact-hint">Ctrl/Cmd + Click any link above to open it · click normally to edit text</div>
           </div>
 
           <hr class="r-hr">
@@ -547,7 +659,10 @@ input[type="color"] {
             <div class="r-proj">
               <div class="r-proj-header">
                 <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">Multi-Outlet Restaurant P&L Dashboard</span>
-                <a class="r-proj-link" href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a>
+                <span class="r-proj-link-group">
+                  <a class="r-proj-link" href="https://shaw-vishal-restaurant-dashboard.streamlit.app" target="_blank">Live Demo ↗</a>
+                  <a class="r-proj-link" href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a>
+                </span>
               </div>
               <div class="r-proj-stack" contenteditable="true" oninput="scheduleAutoSave()">Streamlit · Python · Pandas · Plotly · Tableau</div>
               <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">Built an interactive Streamlit dashboard to analyze outlet-level P&L, food variance, contribution margin, and EBITDA trends across cloud kitchen operations. Replaced manual Excel reporting with real-time business performance monitoring across 350+ outlets, 5 cities, 6 months.</div>
@@ -558,7 +673,10 @@ input[type="color"] {
             <div class="r-proj">
               <div class="r-proj-header">
                 <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">Tableau Business Intelligence Portfolio</span>
-                <a class="r-proj-link" href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a>
+                <span class="r-proj-link-group">
+                  <a class="r-proj-link" href="https://public.tableau.com/app/profile/shaw.vishal" target="_blank">Tableau ↗</a>
+                  <a class="r-proj-link" href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a>
+                </span>
               </div>
               <div class="r-proj-stack" contenteditable="true" oninput="scheduleAutoSave()">Parameters · Calculated Fields · Forecasting · What-If Analysis · Dashboard Actions</div>
               <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">Developed interactive Tableau dashboards for sales performance, profitability analysis, geographic insights, forecasting, and what-if scenario planning — enabling data-driven business decision making through KPI tracking and trend analysis.</div>
@@ -882,7 +1000,7 @@ input[type="color"] {
     <div class="adv-icon-circle">✦</div>
     <div>
       <p class="adv-head-title">AI Resume Advisor</p>
-      <p class="adv-head-sub">Gemini 2.0 Flash · free · runs in your browser · your key, your data</p>
+      <p class="adv-head-sub">Gemini 2.5 Flash · free · runs in your browser · your key, your data</p>
     </div>
   </div>
 
@@ -1040,7 +1158,7 @@ input[type="color"] {
       msg.textContent = '✓ Key looks valid — ready';
       msg.className = 'adv-key-msg ok';
       btn.disabled = false;
-      try { sessionStorage.setItem('__gk__', key); } catch(e) {}
+      try { localStorage.setItem('__gk__', key); } catch(e) {}
     } else if (key.length > 0) {
       msg.textContent = 'Gemini keys start with "AIza..." — check yours';
       msg.className = 'adv-key-msg err';
@@ -1079,7 +1197,7 @@ input[type="color"] {
 
     try {
       var res = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key,
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1096,6 +1214,7 @@ input[type="color"] {
         if (res.status === 429) em = 'Rate limit hit — free tier allows 15 req/min. Wait 60 seconds and try again.';
         if (res.status === 403) em = 'Key rejected. Make sure it has Generative Language API access at aistudio.google.com.';
         if (res.status === 400) em = 'Invalid API key — double-check it starts with AIza and is fully copied.';
+        if (res.status === 404) em = 'Model not found — Google may have retired this model version. Check aistudio.google.com for the current model name.';
         throw new Error(em);
       }
 
@@ -1129,9 +1248,9 @@ input[type="color"] {
     });
   };
 
-  // Restore key from session if returning to tab
+  // Restore key permanently — saved once, never asked again
   try {
-    var saved = sessionStorage.getItem('__gk__');
+    var saved = localStorage.getItem('__gk__');
     if (saved) { document.getElementById('ra-key').value = saved; window.raCheckKey(); }
   } catch(e) {}
 })();
@@ -1168,6 +1287,17 @@ const PROFILE_SECTIONS = {
 
 let autoSaveTimer = null;
 let currentProfile = 'da';
+
+// ── CONTENTEDITABLE LINK FIX ──────────────────────────────────
+// Inside contenteditable, a plain click places the cursor instead of
+// navigating. Ctrl/Cmd+Click (or middle-click) opens the link normally.
+function raLinkClick(e) {
+  if (e.ctrlKey || e.metaKey || e.button === 1) {
+    return true; // let browser navigate
+  }
+  e.preventDefault();
+  return false;
+}
 
 // ── TAB SWITCHING ────────────────────────────────────────────
 function switchTab(tab) {
@@ -1576,18 +1706,336 @@ function resetToDefaults() {
 
 // ── EXPORT PDF ───────────────────────────────────────────────
 function exportPDF() {
+  const profileNames = { da: 'Data-Analyst', ds: 'Data-Scientist', ba: 'Business-Analyst', mis: 'MIS-Analyst' };
+  const profileLabel = profileNames[currentProfile] || 'Resume';
+  const now = new Date();
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const monthYear = months[now.getMonth()] + '-' + now.getFullYear();
+  const filename = `Vishal-Shaw-${profileLabel}-${monthYear}`;
+
+  const originalTitle = document.title;
+  document.title = filename;
   window.print();
+  setTimeout(() => { document.title = originalTitle; }, 1000);
 }
+
+// ── GITHUB REPO SYNC ────────────────────────────────────────────
+let ghRepos = [];
+const GH_SELECTED_KEY = 'gh_selected_repos_v1';
+
+async function syncGitHubRepos() {
+  const username = (document.getElementById('gh-username') || {}).value || 'shaw-vishal';
+  const statusEl = document.getElementById('gh-sync-status');
+  const listEl = document.getElementById('gh-repo-list');
+  if (statusEl) statusEl.textContent = 'Fetching from GitHub…';
+
+  try {
+    const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=100`);
+    if (!res.ok) throw new Error('GitHub returned ' + res.status + ' — check the username.');
+    const data = await res.json();
+    // exclude forks and the GitHub Pages site repo itself
+    ghRepos = data.filter(r => !r.fork && !r.name.endsWith('.github.io'));
+    ghRepos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+    if (statusEl) statusEl.textContent = `✓ ${ghRepos.length} repos found · updated ${new Date().toLocaleTimeString()}`;
+    renderRepoList();
+  } catch (err) {
+    if (statusEl) statusEl.textContent = '⚠ ' + err.message;
+    if (listEl) listEl.innerHTML = '';
+  }
+}
+
+function getSelectedRepoNames() {
+  try { return JSON.parse(localStorage.getItem(GH_SELECTED_KEY) || '[]'); } catch(e) { return []; }
+}
+
+function setSelectedRepoNames(arr) {
+  localStorage.setItem(GH_SELECTED_KEY, JSON.stringify(arr));
+}
+
+function renderRepoList() {
+  const listEl = document.getElementById('gh-repo-list');
+  const countEl = document.getElementById('gh-selected-count');
+  if (!listEl) return;
+  const selected = getSelectedRepoNames();
+  countEl.textContent = selected.length;
+
+  listEl.innerHTML = '';
+  ghRepos.forEach(repo => {
+    const isChecked = selected.includes(repo.name);
+    const atLimit = selected.length >= 4 && !isChecked;
+    const item = document.createElement('div');
+    item.className = 'gh-repo-item' + (isChecked ? ' checked' : '') + (atLimit ? ' disabled' : '');
+    item.innerHTML = `
+      <input type="checkbox" ${isChecked ? 'checked' : ''} ${atLimit ? 'disabled' : ''} onclick="event.stopPropagation(); toggleRepoSelect('${repo.name.replace(/'/g,"\\'")}')">
+      <div class="gh-repo-info">
+        <div class="gh-repo-name">${repo.name}</div>
+        <div class="gh-repo-desc">${repo.description ? repo.description : '(no description on GitHub)'}</div>
+        <div class="gh-repo-meta">${repo.language || ''} ${repo.stargazers_count ? '· ★' + repo.stargazers_count : ''} · updated ${new Date(repo.pushed_at).toLocaleDateString()}</div>
+      </div>`;
+    item.onclick = () => toggleRepoSelect(repo.name);
+    listEl.appendChild(item);
+  });
+}
+
+function toggleRepoSelect(name) {
+  let selected = getSelectedRepoNames();
+  if (selected.includes(name)) {
+    selected = selected.filter(n => n !== name);
+  } else {
+    if (selected.length >= 4) { alert('Max 4 projects can be selected. Untick one first.'); return; }
+    selected.push(name);
+  }
+  setSelectedRepoNames(selected);
+  renderRepoList();
+}
+
+async function applyGitHubProjects() {
+  const selected = getSelectedRepoNames();
+  if (selected.length === 0) { alert('Tick at least one repo first.'); return; }
+
+  const key = localStorage.getItem('__gk__');
+  const projSection = document.querySelector('[data-section="projects"]');
+  if (!projSection) { alert('Projects section not found on page.'); return; }
+
+  const btn = event ? event.target : null;
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
+
+  // word-length reference taken from your existing first project description
+  const refDesc = document.querySelector('.r-proj-desc');
+  const refWordCount = refDesc ? refDesc.textContent.trim().split(/\s+/).length : 35;
+
+  const newProjectsHTML = [];
+  for (const repoName of selected) {
+    const repo = ghRepos.find(r => r.name === repoName);
+    if (!repo) continue;
+
+    let toolsLine = repo.language || 'Python';
+    let descLine = repo.description || `${repo.name} — a project on GitHub.`;
+
+    if (key) {
+      try {
+        const prompt = `You are writing one resume project entry. Repo name: "${repo.name}". GitHub description: "${repo.description || 'none given'}". Primary language: ${repo.language || 'unknown'}. Topics: ${(repo.topics || []).join(', ') || 'none'}.
+
+Return EXACTLY two lines, nothing else, no markdown, no labels:
+Line 1: a tools/stack line, 3-6 technologies separated by " · " (middle dot), most relevant tool first.
+Line 2: a 1-2 sentence project description in resume style (third person implied, no "I"), approximately ${refWordCount} words, written like a professional resume bullet, specific and concrete, no fluff.`;
+
+        const res = await fetch(
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { maxOutputTokens: 200, temperature: 0.5 }
+            })
+          }
+        );
+        const data = await res.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          const lines = text.trim().split('\n').filter(l => l.trim());
+          if (lines[0]) toolsLine = lines[0].trim();
+          if (lines[1]) descLine = lines[1].trim();
+        }
+      } catch (e) {
+        console.warn('AI generation failed for', repo.name, e);
+      }
+    }
+
+    newProjectsHTML.push(`
+      <div class="r-proj">
+        <div class="r-proj-header">
+          <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">${repo.name.replace(/-/g, ' ')}</span>
+          <span class="r-proj-link-group">
+            <a class="r-proj-link" href="${repo.html_url}" target="_blank">GitHub ↗</a>
+          </span>
+        </div>
+        <div class="r-proj-stack" contenteditable="true" oninput="scheduleAutoSave()">${toolsLine}</div>
+        <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">${descLine}</div>
+      </div>
+      <hr class="r-hr-light r-divider">`);
+  }
+
+  // remove trailing divider from last item
+  if (newProjectsHTML.length) {
+    newProjectsHTML[newProjectsHTML.length - 1] = newProjectsHTML[newProjectsHTML.length - 1].replace('<hr class="r-hr-light r-divider">', '');
+  }
+
+  const labelEl = projSection.querySelector('.r-section-label');
+  projSection.innerHTML = '';
+  if (labelEl) projSection.appendChild(labelEl);
+  else {
+    const lbl = document.createElement('div');
+    lbl.className = 'r-section-label';
+    lbl.contentEditable = 'true';
+    lbl.setAttribute('oninput', 'scheduleAutoSave()');
+    lbl.textContent = 'Projects';
+    projSection.appendChild(lbl);
+  }
+  projSection.insertAdjacentHTML('beforeend', newProjectsHTML.join(''));
+
+  applyFont(); applyFontSize(); applyColors(); applySpacing();
+  buildReorderList();
+  scheduleAutoSave();
+  updatePageUsage();
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Apply Selected to Resume'; }
+}
+
+// ── REORDER SECTIONS ───────────────────────────────────────────
+const SECTION_DISPLAY_NAMES = {
+  summary: 'Summary', projects: 'Projects', experience: 'Experience',
+  skills: 'Skills', education: 'Education', certifications: 'Certifications & Awards'
+};
+
+function getOrderedSections() {
+  return Array.from(document.querySelectorAll('#resume-content [data-section]'));
+}
+
+function buildReorderList() {
+  const container = document.getElementById('reorder-list');
+  container.innerHTML = '';
+  const sections = getOrderedSections();
+  sections.forEach((sec, i) => {
+    const name = sec.dataset.section;
+    const row = document.createElement('div');
+    row.className = 'reorder-item';
+    row.innerHTML = `
+      <span class="reorder-item-label">${SECTION_DISPLAY_NAMES[name] || name}</span>
+      <span class="reorder-arrows">
+        <button class="reorder-arrow-btn" ${i === 0 ? 'disabled' : ''} onclick="moveSection('${name}', -1)">↑</button>
+        <button class="reorder-arrow-btn" ${i === sections.length - 1 ? 'disabled' : ''} onclick="moveSection('${name}', 1)">↓</button>
+      </span>`;
+    container.appendChild(row);
+  });
+}
+
+function moveSection(name, dir) {
+  const sections = getOrderedSections();
+  const idx = sections.findIndex(s => s.dataset.section === name);
+  const targetIdx = idx + dir;
+  if (targetIdx < 0 || targetIdx >= sections.length) return;
+
+  const current = sections[idx];
+  const target = sections[targetIdx];
+
+  // Each section may be followed by a divider <hr>. Move the section
+  // together with its own trailing divider (if present) as one unit,
+  // so dividers stay correctly placed between sections after reorder.
+  function getUnit(sectionEl) {
+    const nodes = [sectionEl];
+    let next = sectionEl.nextElementSibling;
+    if (next && next.classList.contains('r-divider')) nodes.push(next);
+    return nodes;
+  }
+
+  const currentUnit = getUnit(current);
+  const parent = current.parentElement;
+
+  if (dir === -1) {
+    // moving up: insert current unit before target
+    currentUnit.forEach(n => parent.insertBefore(n, target));
+  } else {
+    // moving down: insert current unit after target's unit
+    const targetUnit = getUnit(target);
+    const insertAfter = targetUnit[targetUnit.length - 1];
+    currentUnit.forEach(n => parent.insertBefore(n, insertAfter.nextSibling));
+  }
+
+  buildReorderList();
+  scheduleAutoSave();
+  updatePageUsage();
+}
+
+// ── BULLET POINT MANAGEMENT ────────────────────────────────────
+function initBulletControls() {
+  document.querySelectorAll('.r-exp-bullets').forEach(ul => {
+    // add delete-x to each existing li (skip if already added)
+    ul.querySelectorAll('li').forEach(li => addBulletDelete(li));
+
+    // add "+ Add bullet" button after the list if not already present
+    if (!ul.nextElementSibling || !ul.nextElementSibling.classList.contains('add-bullet-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'add-bullet-btn';
+      btn.type = 'button';
+      btn.textContent = '+ Add bullet';
+      btn.onclick = () => addBullet(ul);
+      ul.insertAdjacentElement('afterend', btn);
+    }
+  });
+}
+
+function addBulletDelete(li) {
+  if (li.querySelector('.bullet-del')) return;
+  const del = document.createElement('span');
+  del.className = 'bullet-del';
+  del.textContent = '×';
+  del.title = 'Remove bullet';
+  del.onclick = (e) => {
+    e.stopPropagation();
+    if (li.parentElement.children.length <= 1) {
+      alert('Each role needs at least one bullet.');
+      return;
+    }
+    li.remove();
+    scheduleAutoSave();
+    updatePageUsage();
+  };
+  li.appendChild(del);
+}
+
+function addBullet(ul) {
+  const li = document.createElement('li');
+  li.contentEditable = 'true';
+  li.textContent = 'New bullet point — click to edit';
+  li.setAttribute('oninput', 'scheduleAutoSave()');
+  ul.appendChild(li);
+  addBulletDelete(li);
+  li.focus();
+  // select all text so typing replaces placeholder immediately
+  const range = document.createRange();
+  range.selectNodeContents(li);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  scheduleAutoSave();
+  updatePageUsage();
+}
+
+// ── MOBILE SCALING ─────────────────────────────────────────────
+function applyMobileScale() {
+  const wrapper = document.getElementById('resume-wrapper');
+  if (!wrapper) return;
+  const vw = window.innerWidth;
+  if (vw > 900) {
+    wrapper.style.transform = '';
+    wrapper.style.marginBottom = '';
+    return;
+  }
+  // resume paper is fixed at 720px wide; scale to fit viewport with small margin
+  const targetWidth = vw - 24;
+  const scale = Math.min(targetWidth / 720, 0.95);
+  wrapper.style.transformOrigin = 'top center';
+  wrapper.style.transform = `scale(${scale})`;
+  const paperH = document.getElementById('resume-paper').offsetHeight;
+  wrapper.style.marginBottom = (-(paperH * (1 - scale))) + 'px';
+}
+window.addEventListener('resize', applyMobileScale);
 
 // ── INIT ─────────────────────────────────────────────────────
 window.addEventListener('load', () => {
   buildSectionToggles();
+  buildReorderList();
   loadSaved();
   applyFont();
   applyFontSize();
   applyColors();
   applySpacing();
   updatePageUsage();
+  applyMobileScale();
+  initBulletControls();
+  syncGitHubRepos();
   setInterval(updatePageUsage, 2000);
   document.getElementById('save-status').textContent = 'Auto-saved';
 });
