@@ -318,9 +318,23 @@ input[type="color"] {
 @media print {
   body { background: white; }
   .topbar, .sidebar, .main > *:not(#resume-wrapper) { display: none; }
-  .main { padding: 0; }
-  #resume-paper { box-shadow: none; width: 100%; }
+  .main { padding: 0; margin: 0; }
+  /* CRITICAL: kill the mobile scale transform so PDF prints full size */
+  #resume-wrapper {
+    transform: none !important;
+    transform-origin: top left !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+  }
+  #resume-paper {
+    box-shadow: none;
+    width: 100% !important;
+    min-height: auto;
+  }
   #page-break-line { display: none !important; }
+  /* Hide UI elements that should never appear in PDF */
+  [data-section="ai-advisor"], .adv-outer, .contact-links-hint,
+  .add-bullet-btn, .bullet-del, .ai-popup-btn { display: none !important; }
   @page { size: A4; margin: 14mm 16mm; }
 }
 
@@ -843,10 +857,7 @@ input[type="color"] {
             <div class="r-section-label" contenteditable="true" oninput="scheduleAutoSave()">Certifications &amp; Awards</div>
             <div class="r-certs" contenteditable="true" oninput="scheduleAutoSave()">KPMG Power BI · Lean Six Sigma Green Belt · Google Data Analytics · Salesforce Sales Ops · 47 total certifications &nbsp;&nbsp;|&nbsp;&nbsp; 🏆 Golden Player Award 2020 &amp; 2021 · 🏆 Director's Award 2024 · 🥈 Hackathon Runner-Up 2026</div>
           </div>
-          <hr class="r-hr-light r-divider">
-          <div class="r-section" data-section="ai-advisor" style="margin-bottom:0">
-            <div class="r-section-label">AI Resume Advisor</div>
-            <!--
+<!--
 ════════════════════════════════════════════════════════════
   AI RESUME ADVISOR WIDGET — Vishal Shaw
   Powered by Google Gemini 2.0 Flash (free tier)
@@ -1263,6 +1274,444 @@ input[type="color"] {
 
 </div><!-- end app -->
 
+
+<!-- ════════════════════════════════════════════════════════
+     GEMINI AI ADVISOR — Floating popup, outside resume paper
+     Button appears bottom-right. Click to open/close.
+     Key stored in sessionStorage only. Never in PDF.
+     ════════════════════════════════════════════════════════ -->
+
+<style>
+/* ── Floating trigger button ── */
+.ai-popup-btn {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #3d2b1a; color: #faf6ef;
+  border: none; cursor: pointer; font-size: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.ai-popup-btn:hover { background: #c8601a; transform: scale(1.08); }
+.ai-popup-btn.open { background: #c8601a; }
+.ai-popup-badge {
+  position: absolute; top: -2px; right: -2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #27ae60; border: 2px solid #fff;
+  font-size: 8px; display: none; align-items: center; justify-content: center;
+}
+.ai-popup-badge.show { display: flex; }
+
+/* ── Popup panel ── */
+.ai-popup-panel {
+  position: fixed; bottom: 86px; right: 24px; z-index: 998;
+  width: 380px; max-height: 80vh;
+  background: #fff; border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  display: none; flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e8e0d8;
+  font-family: 'Inter', sans-serif;
+}
+.ai-popup-panel.open { display: flex; }
+
+/* Popup header */
+.aip-header {
+  background: #3d2b1a; color: #faf6ef;
+  padding: 14px 16px 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.aip-header-left { display: flex; align-items: center; gap: 10px; }
+.aip-icon { font-size: 18px; }
+.aip-title { font-size: 13px; font-weight: 600; }
+.aip-sub { font-size: 10px; opacity: 0.6; margin-top: 1px; }
+.aip-close {
+  background: none; border: none; color: rgba(250,246,239,0.6);
+  font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1;
+  transition: color 0.15s;
+}
+.aip-close:hover { color: #fff; }
+
+/* Popup body — scrollable */
+.aip-body { overflow-y: auto; flex: 1; padding: 14px; }
+
+/* Key row */
+.aip-key-row { display: flex; gap: 6px; align-items: center; margin-bottom: 5px; }
+.aip-key-inp {
+  flex: 1; font-size: 11px; font-family: 'Courier New', monospace;
+  border: 1px solid #ddd; border-radius: 4px;
+  padding: 5px 8px; outline: none; background: #fafafa;
+}
+.aip-key-inp:focus { border-color: #c8601a; }
+.aip-vis-btn {
+  padding: 4px 7px; border: 1px solid #ddd; border-radius: 4px;
+  background: #fff; cursor: pointer; font-size: 11px; color: #888;
+}
+.aip-vis-btn:hover { border-color: #c8601a; }
+.aip-key-msg { font-size: 10px; color: #aaa; margin-bottom: 10px; }
+.aip-key-msg a { color: #a04d14; }
+.aip-key-msg.ok { color: #27ae60; font-weight: 500; }
+.aip-key-msg.err { color: #c0392b; }
+.aip-privacy { font-size: 9px; color: #ccc; margin-bottom: 12px; }
+
+/* Section label */
+.aip-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #bbb; margin-bottom: 6px;
+}
+
+/* Role pills */
+.aip-roles { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+.aip-role {
+  padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 600;
+  cursor: pointer; border: 1px solid #ddd; background: #fff; color: #888;
+  transition: all 0.12s;
+}
+.aip-role:hover { border-color: #c8601a; color: #c8601a; }
+.aip-role.sel { background: #3d2b1a; color: #faf6ef; border-color: #3d2b1a; }
+
+/* Section focus pills */
+.aip-focuses { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 14px; }
+.aip-focus {
+  padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 500;
+  cursor: pointer; border: 1px solid #e8e0d8; background: #fff; color: #aaa;
+  transition: all 0.12s;
+}
+.aip-focus:hover { border-color: #c8601a; }
+.aip-focus.sel { background: rgba(200,96,26,0.1); color: #a04d14; border-color: #c8601a; }
+
+/* ✦ inline section AI buttons — injected next to each section label */
+.r-section-ai-btn {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 7pt; padding: 1px 7px; border-radius: 100px;
+  border: 1px solid #e8e0d8; background: #fffaf5; color: #c8601a;
+  cursor: pointer; margin-left: 8px; font-family: 'Inter',sans-serif;
+  transition: all 0.15s; vertical-align: middle; font-weight: 500;
+}
+.r-section-ai-btn:hover { background: #c8601a; color: #fff; border-color: #c8601a; }
+
+/* Run button */
+.aip-run {
+  width: 100%; padding: 9px; border-radius: 5px;
+  background: #3d2b1a; color: #faf6ef;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  cursor: pointer; border: none; transition: all 0.2s; margin-bottom: 10px;
+}
+.aip-run:hover:not(:disabled) { background: #c8601a; }
+.aip-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Progress bar */
+.aip-progress { height: 2px; background: #f0e8db; border-radius: 2px; overflow: hidden; display: none; margin-bottom: 10px; }
+.aip-progress-fill { height: 100%; width: 35%; background: #c8601a; border-radius: 2px; animation: aip-slide 1.4s ease-in-out infinite; }
+@keyframes aip-slide { 0%{margin-left:0;width:25%} 50%{margin-left:50%;width:40%} 100%{margin-left:100%;width:10%} }
+
+/* Output */
+.aip-out-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.aip-out-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #c8601a; }
+.aip-copy { font-size: 9px; padding: 2px 7px; border: 1px solid #e0d8d0; border-radius: 3px; background: #fff; color: #888; cursor: pointer; }
+.aip-copy:hover { background: #3d2b1a; color: #fff; border-color: #3d2b1a; }
+.aip-out-body {
+  font-size: 11px; line-height: 1.65; color: #3a2a1a;
+  background: #fffaf5; border: 1px solid #f0e8db;
+  border-radius: 5px; padding: 10px 12px;
+  white-space: pre-wrap; word-break: break-word; display: none;
+}
+.aip-out-body.show { display: block; }
+.aip-err-body {
+  font-size: 10px; color: #c0392b;
+  background: #fdf0ee; border: 1px solid #f5c6c0;
+  border-radius: 5px; padding: 8px 10px; display: none;
+}
+.aip-err-body.show { display: block; }
+
+@media print { .ai-popup-btn, .ai-popup-panel, .r-section-ai-btn { display: none !important; } }
+</style>
+
+<!-- Floating trigger -->
+<button class="ai-popup-btn" id="ai-float-btn" onclick="toggleAIPopup()" title="Gemini AI Resume Advisor">
+  ✦
+  <span class="ai-popup-badge" id="ai-key-badge"></span>
+</button>
+
+<!-- Floating panel -->
+<div class="ai-popup-panel" id="ai-popup-panel">
+
+  <div class="aip-header">
+    <div class="aip-header-left">
+      <span class="aip-icon">✦</span>
+      <div>
+        <div class="aip-title">AI Resume Advisor</div>
+        <div class="aip-sub">Gemini 2.0 Flash · free · browser-only · your key</div>
+      </div>
+    </div>
+    <button class="aip-close" onclick="toggleAIPopup()">×</button>
+  </div>
+
+  <div class="aip-body">
+
+    <!-- API Key -->
+    <div class="aip-label">Gemini API Key</div>
+    <div class="aip-key-row">
+      <input class="aip-key-inp" type="password" id="aip-key"
+             placeholder="AIza..." autocomplete="off" oninput="aipCheckKey()">
+      <button class="aip-vis-btn" onclick="aipToggleVis()">👁</button>
+    </div>
+    <div class="aip-key-msg" id="aip-key-msg">
+      Free key → <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com ↗</a>
+    </div>
+    <div class="aip-privacy">🔒 Stays in tab memory (sessionStorage). Never saved anywhere else.</div>
+
+    <!-- Role -->
+    <div class="aip-label">Target Role</div>
+    <div class="aip-roles" id="aip-roles">
+      <button class="aip-role sel" data-r="Data Analyst" onclick="aipRole(this)">Data Analyst</button>
+      <button class="aip-role" data-r="MIS Analyst" onclick="aipRole(this)">MIS Analyst</button>
+      <button class="aip-role" data-r="Business Analyst" onclick="aipRole(this)">Business Analyst</button>
+      <button class="aip-role" data-r="Reporting Analyst" onclick="aipRole(this)">Reporting Analyst</button>
+      <button class="aip-role" data-r="BI Analyst" onclick="aipRole(this)">BI Analyst</button>
+    </div>
+
+    <!-- Focus -->
+    <div class="aip-label">Analyse</div>
+    <div class="aip-focuses" id="aip-focuses">
+      <button class="aip-focus sel" data-f="full" onclick="aipFocus(this)">Full review</button>
+      <button class="aip-focus" data-f="summary" onclick="aipFocus(this)">Summary</button>
+      <button class="aip-focus" data-f="bullets" onclick="aipFocus(this)">Bullet points</button>
+      <button class="aip-focus" data-f="skills" onclick="aipFocus(this)">Skills</button>
+      <button class="aip-focus" data-f="projects" onclick="aipFocus(this)">Projects</button>
+      <button class="aip-focus" data-f="ats" onclick="aipFocus(this)">ATS keywords</button>
+      <button class="aip-focus" data-f="gaps" onclick="aipFocus(this)">Gaps only</button>
+    </div>
+
+    <button class="aip-run" id="aip-run" onclick="aipRun()" disabled>✦ Analyse My Resume</button>
+    <div class="aip-progress" id="aip-progress"><div class="aip-progress-fill"></div></div>
+
+    <div class="aip-out-header" id="aip-out-header" style="display:none">
+      <span class="aip-out-label" id="aip-out-label">Result</span>
+      <button class="aip-copy" onclick="aipCopy()">Copy</button>
+    </div>
+    <div class="aip-out-body" id="aip-out-body"></div>
+    <div class="aip-err-body" id="aip-err-body"></div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+// ── Resume text (sent to Gemini) ───────────────────────────────
+var RESUME_TEXT = [
+'VISHAL SHAW — DATA ANALYST / MIS ANALYST / BUSINESS ANALYST',
+'',
+'SUMMARY: Data Analyst with 5+ years across marketplace operations, sales analytics,',
+'MIS reporting, and business performance tracking. Skilled in SQL, Python, Excel,',
+'Tableau, Power BI, KPI monitoring, forecasting, and business reviews.',
+'',
+'PROJECTS:',
+'• Multi-Outlet Restaurant P&L Dashboard (Streamlit, Python, Pandas, Plotly, Tableau):',
+'  Built interactive dashboard analysing outlet-level P&L, food variance, contribution margin,',
+'  and EBITDA across cloud kitchen operations. Replaced manual Excel reporting with real-time',
+'  monitoring across 350+ outlets, 5 cities, 6 months.',
+'• Tableau BI Portfolio (Parameters, LOD Expressions, Forecast, What-If, Data Blending):',
+'  7-parameter workbook with LOD, what-if scenario, Pareto, geo-maps, dual-axis, 2 sources.',
+'• Shinkansen ML Classifier (CatBoost, XGBoost, LightGBM): 95.43% accuracy. Hackathon runner-up.',
+'• Uber NYC (EDA, Time Series, MySQL, Tableau): 29K+ records, 18% demand gap reduction.',
+'',
+'EXPERIENCE:',
+'• District by Zomato (Dec 2025–Present) — Supply Operations Analyst:',
+'  GMV grew ₹1.1Cr→₹1.8Cr in 6 months. Ads revenue scaled 12%→20% MoM.',
+'  CTR-to-transaction analysis, ULV segmentation model, churn tracker, 30+ KPI dashboards.',
+'• Educational Initiatives (Jul 2024–Aug 2025) — Regional Operations Manager:',
+'  Defended ₹3.8Cr at-risk revenue. Conversion 3.4%→5.8%, 40% YoY growth, 35% share increase.',
+'• PolicyBazaar (Feb 2019–Aug 2021) — Senior Consultant:',
+'  HDFC Ergo ₹18Cr→₹54Cr, ICICI ₹23Cr→₹60Cr. 60% YoY growth. 450+ B2B partnerships.',
+'• IDFC First Bank (Jul 2017–Feb 2018): 500,000+ accounts. Excel MIS reporting systems.',
+'• BrandEigen (Apr–Jun 2023): 500+ surveys, 12 FGDs, competitive positioning matrix.',
+'',
+'SKILLS: Python, SQL, MySQL, R | Pandas, NumPy, Seaborn, Tableau, Power BI, Streamlit',
+'Scikit-learn, XGBoost, LightGBM, TensorFlow, Keras, CNN, Bi-LSTM',
+'Hypothesis Testing, A/B Testing, Regression, Time Series, Cohort Analysis',
+'Salesforce, Zoho CRM, Atlassian | Funnel Analytics, Churn, KPI, ROAS, P&L, Lean Six Sigma GB',
+'',
+'EDUCATION: PGP Data Science & GenAI — McCombs UT Austin (2025-26)',
+'MBA Marketing & Business Analytics — SIMS Pune (2022-24)',
+'B.Com Hons Statistics — DCAC Delhi University (2014-17)',
+'',
+'CERTS: KPMG Power BI, Lean Six Sigma GB, Google Data Analytics, Salesforce Sales Ops, 47 total',
+'AWARDS: Golden Player 2020 & 2021, Director Award 2024, Hackathon Runner-Up 2026'
+].join('\n');
+
+var FOCUS_PROMPTS = {
+  full:     'Give a comprehensive review with 5 sections:\n1. OVERALL VERDICT (1 sentence for this role)\n2. TOP 3 STRENGTHS (specific, name companies/numbers)\n3. TOP 3 WEAKNESSES (exact problem + exact fix)\n4. MISSING ELEMENTS (2 things a stronger competing candidate would have)\n5. REWRITTEN BULLET (take the weakest bullet, rewrite it. Show before/after)',
+  summary:  'Focus ONLY on the summary. Rate it 1-10 for this role. Rewrite it to be sharper. Show before/after. Explain what changed in 2 sentences.',
+  bullets:  'Focus ONLY on experience bullet points. Find the 2 weakest. Show the original, explain why it is weak in one line, then show the stronger rewritten version.',
+  skills:   'Focus ONLY on skills section.\n1. MISSING: 5 skills critical for this role that are absent.\n2. REPOSITION: 2 skills that need to move or be reworded.\n3. REWRITE: Show the exact rewritten skills section.',
+  projects: 'Focus ONLY on projects.\n1. STRONGEST project for this role and why.\n2. WEAKEST project for this role and why.\n3. REWRITE the weakest description (before/after).\n4. MISSING: What project type is missing from this portfolio?',
+  ats:      'Act as ATS scanner.\nList:\n- 12 HIGH-VALUE MISSING keywords for this role in India 2025\n- 5 STRONG keywords already present\n- 3 GENERIC PHRASES to replace with stronger ones\nFormat as 3 numbered lists. No other text.',
+  gaps:     'Be brutally honest. List ONLY weaknesses. No positives.\n1. EXPERIENCE GAPS\n2. WEAK/MISSING QUANTIFICATION in bullets\n3. SKILLS GAPS vs strong candidates\n4. RED FLAGS a hiring manager would notice\n5. ONE THING a competing candidate has that this person does not'
+};
+
+var aipSelectedRole = 'Data Analyst';
+var aipSelectedFocus = 'full';
+
+// Toggle popup open/close
+window.toggleAIPopup = function() {
+  var panel = document.getElementById('ai-popup-panel');
+  var btn = document.getElementById('ai-float-btn');
+  var isOpen = panel.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.title = isOpen ? 'Close AI Advisor' : 'Gemini AI Resume Advisor';
+};
+
+window.aipRole = function(el) {
+  document.querySelectorAll('.aip-role').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  aipSelectedRole = el.dataset.r;
+};
+
+window.aipFocus = function(el) {
+  document.querySelectorAll('.aip-focus').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  aipSelectedFocus = el.dataset.f;
+};
+
+window.aipCheckKey = function() {
+  var key = document.getElementById('aip-key').value.trim();
+  var msg = document.getElementById('aip-key-msg');
+  var btn = document.getElementById('aip-run');
+  var badge = document.getElementById('ai-key-badge');
+  if (key.length > 20 && key.startsWith('AIza')) {
+    msg.textContent = '✓ Key valid — ready';
+    msg.className = 'aip-key-msg ok';
+    btn.disabled = false;
+    badge.className = 'ai-popup-badge show';
+    try { sessionStorage.setItem('__aipk__', key); } catch(e){}
+  } else if (key.length > 0) {
+    msg.textContent = 'Keys start with "AIza..." — check yours';
+    msg.className = 'aip-key-msg err';
+    btn.disabled = true;
+    badge.className = 'ai-popup-badge';
+  } else {
+    msg.innerHTML = 'Free key → <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com ↗</a>';
+    msg.className = 'aip-key-msg';
+    btn.disabled = true;
+    badge.className = 'ai-popup-badge';
+  }
+};
+
+window.aipToggleVis = function() {
+  var inp = document.getElementById('aip-key');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+};
+
+window.aipRun = async function() {
+  var key = document.getElementById('aip-key').value.trim();
+  if (!key) return;
+  var runBtn = document.getElementById('aip-run');
+  var progress = document.getElementById('aip-progress');
+  var outBody = document.getElementById('aip-out-body');
+  var errBody = document.getElementById('aip-err-body');
+  var outHeader = document.getElementById('aip-out-header');
+  var outLabel = document.getElementById('aip-out-label');
+
+  runBtn.disabled = true;
+  runBtn.textContent = '⟳ Gemini thinking...';
+  progress.style.display = 'block';
+  outBody.className = 'aip-out-body';
+  errBody.className = 'aip-err-body';
+  outHeader.style.display = 'none';
+
+  var focusText = FOCUS_PROMPTS[aipSelectedFocus] || FOCUS_PROMPTS.full;
+  var prompt = 'You are a senior data analytics hiring manager in India reviewing this resume for a '
+    + aipSelectedRole + ' role in 2025.\n\nRESUME:\n' + RESUME_TEXT + '\n\nTASK:\n'
+    + focusText
+    + '\n\nRULES: Be specific. Reference actual company names, numbers, projects from this resume. No generic advice. Headers in ALL CAPS + colon. Max 480 words.';
+
+  try {
+    var res = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 900, temperature: 0.65 }
+        })
+      }
+    );
+    var data = await res.json();
+    if (!res.ok) {
+      var em = (data.error && data.error.message) || ('API error ' + res.status);
+      if (res.status === 429) em = 'Rate limit hit. Free tier = 15 req/min. Wait 60s and retry.';
+      if (res.status === 403) em = 'Key rejected — verify it has Generative Language API access at aistudio.google.com';
+      if (res.status === 400) em = 'Invalid key — make sure it starts with AIza and is fully copied.';
+      throw new Error(em);
+    }
+    var text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Empty response from Gemini. Try again.');
+    outLabel.textContent = aipSelectedRole + ' · ' + aipSelectedFocus;
+    outBody.textContent = text;
+    outBody.className = 'aip-out-body show';
+    outHeader.style.display = 'flex';
+  } catch(err) {
+    errBody.textContent = '⚠ ' + err.message;
+    errBody.className = 'aip-err-body show';
+  }
+  progress.style.display = 'none';
+  runBtn.disabled = false;
+  runBtn.textContent = '✦ Analyse Again';
+  window.aipCheckKey();
+};
+
+window.aipCopy = function() {
+  var text = document.getElementById('aip-out-body').textContent;
+  navigator.clipboard && navigator.clipboard.writeText(text).then(() => {
+    var btn = document.querySelector('.aip-copy');
+    btn.textContent = '✓ Copied';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+};
+
+// Restore key from session
+try {
+  var saved = sessionStorage.getItem('__aipk__');
+  if (saved) { document.getElementById('aip-key').value = saved; window.aipCheckKey(); }
+} catch(e){}
+
+// Inject tiny "✦ Ask AI" buttons next to each section label in the resume
+// so you can click to pre-select that section focus and open the popup
+setTimeout(function() {
+  var focusMap = {
+    summary: 'summary', projects: 'projects', experience: 'bullets',
+    skills: 'skills', education: 'full', certifications: 'full'
+  };
+  document.querySelectorAll('[data-section]').forEach(function(sec) {
+    var name = sec.dataset.section;
+    if (!focusMap[name]) return;
+    var label = sec.querySelector('.r-section-label');
+    if (!label) return;
+    var btn = document.createElement('button');
+    btn.className = 'r-section-ai-btn';
+    btn.textContent = '✦ AI';
+    btn.title = 'Get Gemini suggestions for this section';
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      // Pre-select the matching focus
+      document.querySelectorAll('.aip-focus').forEach(b => b.classList.remove('sel'));
+      var target = document.querySelector('.aip-focus[data-f="' + focusMap[name] + '"]');
+      if (target) { target.classList.add('sel'); aipSelectedFocus = focusMap[name]; }
+      // Open popup if not open
+      var panel = document.getElementById('ai-popup-panel');
+      if (!panel.classList.contains('open')) toggleAIPopup();
+      // Scroll popup to top
+      document.querySelector('.aip-body').scrollTop = 0;
+    };
+    label.appendChild(btn);
+  });
+}, 600);
+
+})();
+</script>
+
+
 <script>
 
 // ── CONSTANTS ───────────────────────────────────────────────
@@ -1540,9 +1989,13 @@ function toggleSectionBg(name, btn) {
 // ── PROFILES ────────────────────────────────────────────────
 function switchProfile(profile) {
   currentProfile = profile;
-  document.querySelectorAll('.profile-btn').forEach(b => b.classList.toggle('active', b.onclick.toString().includes(`'${profile}'`)));
+  document.querySelectorAll('.profile-btn').forEach(b => {
+    const bProfile = b.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    b.classList.toggle('active', bProfile === profile);
+  });
 
-  if (document.getElementById('auto-title').checked) {
+  // ALWAYS update title from PROFILE_TITLES — never leave a stale title
+  if (PROFILE_TITLES[profile]) {
     document.getElementById('r-title').innerHTML = PROFILE_TITLES[profile];
   }
 
@@ -1696,6 +2149,19 @@ function loadSaved() {
       if (content['el_' + i] !== undefined) el.innerHTML = content['el_' + i];
     });
   }
+
+  // FIX: Always force the correct title for the restored profile.
+  // Without this, a previously saved "Data Scientist" title persists
+  // even when currentProfile is 'da'. We always trust PROFILE_TITLES.
+  if (currentProfile && PROFILE_TITLES[currentProfile]) {
+    document.getElementById('r-title').innerHTML = PROFILE_TITLES[currentProfile];
+  }
+
+  // Highlight the correct profile button
+  document.querySelectorAll('.profile-btn').forEach(b => {
+    const bProfile = b.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    b.classList.toggle('active', bProfile === currentProfile);
+  });
 }
 
 function resetToDefaults() {
