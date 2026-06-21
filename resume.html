@@ -327,6 +327,26 @@ input[type="color"] {
 /* BACKGROUND ACCENT OPTION */
 .r-section.bg-accent { padding: 10px; border-radius: 3px; margin-bottom: 14px; }
 
+.exp-picker-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer;
+}
+.exp-picker-item:last-child { border-bottom: none; }
+.exp-picker-item input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; accent-color: #1a1a1a; cursor: pointer; }
+.exp-picker-item.disabled { opacity: 0.4; pointer-events: none; }
+.exp-picker-meta { flex: 1; min-width: 0; }
+.exp-picker-company { font-size: 11px; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.exp-picker-role { font-size: 10px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.exp-picker-date { font-size: 10px; color: #999; }
+.exp-picker-arrows { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+.exp-arrow-btn {
+  background: none; border: 1px solid #e0e0e0; border-radius: 3px;
+  padding: 1px 4px; font-size: 9px; cursor: pointer; color: #888; line-height: 1.4;
+  transition: all 0.1s;
+}
+.exp-arrow-btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.exp-arrow-btn:disabled { opacity: 0.2; cursor: default; }
+
 /* ── PRINT ─────────────────────────────────────────────────── */
 @media print {
   body { background: white; }
@@ -383,6 +403,7 @@ input[type="color"] {
     <div class="topbar-tab" data-tab="reorder" onclick="switchTab('reorder')">Reorder</div>
     <div class="topbar-tab" data-tab="profiles" onclick="switchTab('profiles')">Profiles</div>
     <div class="topbar-tab" data-tab="repo-projects" onclick="switchTab('repo-projects')">Projects</div>
+    <div class="topbar-tab" data-tab="exp-picker" onclick="switchTab('exp-picker')">Experience</div>
   </div>
   <div class="topbar-spacer"></div>
   <div class="topbar-actions">
@@ -643,6 +664,25 @@ input[type="color"] {
       <div class="panel-section">
         <button class="btn-sm btn-white" style="width:100%;" onclick="applyGitHubProjects()">Apply Selected to Resume</button>
         <div style="font-size:10px;color:#999;margin-top:6px;">Pulls each repo's name, primary language, topics, and GitHub description directly — no AI involved. Edit any line afterward.</div>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE PICKER PANEL -->
+    <div class="sidebar-panel" id="panel-exp-picker">
+      <div class="panel-section">
+        <div class="panel-section-title">Experience Picker</div>
+        <div style="font-size:11px;color:#888;margin-bottom:10px;">
+          Tick to show / untick to hide any job. Order matches the list below — use the arrows to reorder. Changes apply instantly.
+        </div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-title">Showing: <span id="exp-selected-count">0</span> of <span id="exp-total-count">0</span></div>
+        <div id="exp-picker-list" style="max-height:440px;overflow-y:auto;"></div>
+      </div>
+      <div class="panel-section">
+        <button class="btn-sm btn-white" style="width:100%;margin-bottom:6px;" onclick="expSelectAll()">Show All</button>
+        <button class="btn-sm btn-ghost" style="width:100%;" onclick="expSelectNone()">Hide All</button>
+        <div style="font-size:10px;color:#999;margin-top:8px;">All content stays editable on the resume. Hiding removes it from the PDF without deleting it.</div>
       </div>
     </div>
 
@@ -1445,6 +1485,227 @@ function exportPDF() {
 let ghRepos = [];
 const GH_SELECTED_KEY = 'gh_selected_repos_v1';
 
+
+// ── EXPERIENCE PICKER ────────────────────────────────────────────
+// Master list of all your jobs. To add a new role, add an object here.
+// id: unique key. bullets: array of strings. shown: default visibility.
+const ALL_EXPERIENCES = [
+  {
+    id: 'zomato',
+    company: 'District by Zomato',
+    role: 'Supply Operations Analyst — Dining',
+    date: 'Dec 2025 — Present · Nashik',
+    shown: true,
+    bullets: [
+      'Built MIS reports, descriptive and predictive analysis on GMV deltas, burn rate, demand signals, and competitive displacement across 200+ accounts to model acquisition viability, rank targets, and build competition playbooks; portfolio GMV grew ₹1.1 Cr to ₹1.8 Cr in 6 months.',
+      'Tracked CPC, CPI, impression delivery, and GMV lift across 100+ ad accounts; ran budget allocation tests across MBB, IP, VP, and Video Ads bundles scaling ads revenue 12% to 20% MoM.',
+      'Designed IPL season, Mother\'s Day, Valentine\'s Week and Carnival Project campaign strategies using daily CTR to transaction conversion analysis, time series demand patterns, and ROAS driven cohort segmentation.',
+      'Built supply segmentation model using Unique Listing Value, search demand%, Z burn, cuisine type, and discount dependency to classify and prioritise acquisition targets by city growth objective.'
+    ]
+  },
+  {
+    id: 'antilogic',
+    company: 'Anti Logic',
+    role: 'Co-Founder — Streetwear Brand',
+    date: 'Apr 2025 — Dec 2025',
+    shown: true,
+    bullets: [
+      'Built brand identity, GTM strategy, vendor sourcing, and end to end operations for a Gen Z streetwear brand from zero to launch using consumer behaviour research and market segmentation across 4 OEM partners.'
+    ]
+  },
+  {
+    id: 'ei',
+    company: 'Educational Initiatives Pvt Ltd',
+    role: 'Regional Operations Manager',
+    date: 'Jul 2024 — Aug 2025 · Ahmedabad',
+    shown: true,
+    bullets: [
+      'Owned P&L and sales operations across mid and north Gujarat; developed MIS dashboards, weekly KPI reports, revenue forecasts, and account-level heatmaps across 50+ institutional accounts tracking pipeline velocity, school penetration, renewal risk; prescriptive model defended ₹3.8 Cr at-risk revenue.',
+      'Mapped CRM funnel drop-off stages through descriptive analysis; modelled outreach sequencing by school segment — lifted conversion rate from 3.4% to 5.8%, delivering 40% YoY growth and 35% regional share increase.'
+    ]
+  },
+  {
+    id: 'policybazaar',
+    company: 'PolicyBazaar',
+    role: 'Senior Consultant — Insurance (B2B)',
+    date: 'Feb 2019 — Aug 2021 · Gurgaon',
+    shown: true,
+    bullets: [
+      'Scaled HDFC Ergo ₹18 Cr to ₹54 Cr, ICICI Prudential ₹23 Cr to ₹60 Cr, Digit ₹80L to ₹4 Cr; delivered 60% YoY revenue growth through CXO level engagement.',
+      'Integrated Salesforce CRM to streamline underwriting, finance, and legal coordination across 450+ B2B partnerships.'
+    ]
+  },
+  {
+    id: 'idfc',
+    company: 'IDFC First Bank',
+    role: 'Manager — Collections (B2B)',
+    date: 'Jul 2017 — Feb 2018 · Pune',
+    shown: true,
+    bullets: [
+      'Managed 500,000+ accounts across Bajaj, Royal Enfield, and Honda dealer networks; built Excel-based MIS reporting systems for real time collections tracking and agent performance monitoring.'
+    ]
+  },
+  {
+    id: 'brandeigen',
+    company: 'BrandEigen Insights &amp; Analytics',
+    role: 'Intern — Consumer &amp; Market Research',
+    date: 'Apr 2023 — Jun 2023 · Gurgaon',
+    shown: true,
+    bullets: [
+      'Analysed 500+ survey responses and 12 FGDs using EDA to surface whitespace opportunities for Reliance Care; built competitive positioning matrix across 8 market leaders.'
+    ]
+  }
+];
+
+const EXP_STATE_KEY = 'vishal_exp_state_v1';
+
+function loadExpState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(EXP_STATE_KEY) || '{}');
+    // Apply saved shown/order state
+    if (saved.order && Array.isArray(saved.order)) {
+      // Re-sort ALL_EXPERIENCES by saved order
+      const orderMap = {};
+      saved.order.forEach((id, i) => { orderMap[id] = i; });
+      ALL_EXPERIENCES.sort((a, b) => {
+        const ia = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
+        const ib = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
+        return ia - ib;
+      });
+    }
+    if (saved.shown && typeof saved.shown === 'object') {
+      ALL_EXPERIENCES.forEach(e => {
+        if (saved.shown[e.id] !== undefined) e.shown = saved.shown[e.id];
+      });
+    }
+  } catch(err) {}
+}
+
+function saveExpState() {
+  const state = {
+    order: ALL_EXPERIENCES.map(e => e.id),
+    shown: {}
+  };
+  ALL_EXPERIENCES.forEach(e => { state.shown[e.id] = e.shown; });
+  localStorage.setItem(EXP_STATE_KEY, JSON.stringify(state));
+}
+
+function buildExpPicker() {
+  const listEl = document.getElementById('exp-picker-list');
+  const countEl = document.getElementById('exp-selected-count');
+  const totalEl = document.getElementById('exp-total-count');
+  if (!listEl) return;
+
+  const shownCount = ALL_EXPERIENCES.filter(e => e.shown).length;
+  if (countEl) countEl.textContent = shownCount;
+  if (totalEl) totalEl.textContent = ALL_EXPERIENCES.length;
+
+  listEl.innerHTML = '';
+  ALL_EXPERIENCES.forEach((exp, idx) => {
+    const item = document.createElement('div');
+    item.className = 'exp-picker-item';
+    item.dataset.expId = exp.id;
+    item.innerHTML = `
+      <input type="checkbox" ${exp.shown ? 'checked' : ''}
+             onchange="toggleExpItem('${exp.id}', this.checked); event.stopPropagation();">
+      <div class="exp-picker-meta" onclick="toggleExpItem('${exp.id}', ${!exp.shown})">
+        <div class="exp-picker-company">${exp.company}</div>
+        <div class="exp-picker-role">${exp.role}</div>
+        <div class="exp-picker-date">${exp.date}</div>
+      </div>
+      <div class="exp-picker-arrows">
+        <button class="exp-arrow-btn" title="Move up"
+                ${idx === 0 ? 'disabled' : ''}
+                onclick="moveExpItem('${exp.id}', -1); event.stopPropagation();">↑</button>
+        <button class="exp-arrow-btn" title="Move down"
+                ${idx === ALL_EXPERIENCES.length - 1 ? 'disabled' : ''}
+                onclick="moveExpItem('${exp.id}', 1); event.stopPropagation();">↓</button>
+      </div>`;
+    listEl.appendChild(item);
+  });
+}
+
+function toggleExpItem(id, show) {
+  const exp = ALL_EXPERIENCES.find(e => e.id === id);
+  if (!exp) return;
+  exp.shown = show;
+  saveExpState();
+  buildExpPicker();
+  renderExperienceSection();
+}
+
+function moveExpItem(id, dir) {
+  const idx = ALL_EXPERIENCES.findIndex(e => e.id === id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= ALL_EXPERIENCES.length) return;
+  // Swap
+  const tmp = ALL_EXPERIENCES[idx];
+  ALL_EXPERIENCES[idx] = ALL_EXPERIENCES[newIdx];
+  ALL_EXPERIENCES[newIdx] = tmp;
+  saveExpState();
+  buildExpPicker();
+  renderExperienceSection();
+}
+
+function expSelectAll() {
+  ALL_EXPERIENCES.forEach(e => { e.shown = true; });
+  saveExpState();
+  buildExpPicker();
+  renderExperienceSection();
+}
+
+function expSelectNone() {
+  ALL_EXPERIENCES.forEach(e => { e.shown = false; });
+  saveExpState();
+  buildExpPicker();
+  renderExperienceSection();
+}
+
+function renderExperienceSection() {
+  const expSection = document.querySelector('[data-section="experience"]');
+  if (!expSection) return;
+
+  // Keep the section label element
+  const labelEl = expSection.querySelector('.r-section-label');
+
+  // Build new HTML from ALL_EXPERIENCES where shown=true
+  const toShow = ALL_EXPERIENCES.filter(e => e.shown);
+  let html = '';
+  toShow.forEach((exp, i) => {
+    if (i > 0) html += '\n            <hr class="r-hr-light r-divider">\n';
+    const bulletsHtml = exp.bullets
+      .map(b => `                <li contenteditable="true" oninput="scheduleAutoSave()">${b}</li>`)
+      .join('\n');
+    html += `
+            <div class="r-exp" data-exp-id="${exp.id}">
+              <div class="r-exp-header">
+                <span class="r-exp-company" contenteditable="true" oninput="scheduleAutoSave()">${exp.company}</span>
+                <span class="r-exp-date" contenteditable="true" oninput="scheduleAutoSave()">${exp.date}</span>
+              </div>
+              <div class="r-exp-role" contenteditable="true" oninput="scheduleAutoSave()">${exp.role}</div>
+              <ul class="r-exp-bullets">
+${bulletsHtml}
+              </ul>
+            </div>`;
+  });
+
+  expSection.innerHTML = '';
+  if (labelEl) expSection.appendChild(labelEl);
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = html;
+  while (wrapper.firstChild) expSection.appendChild(wrapper.firstChild);
+
+  // Re-apply spacing styles
+  applySpacing();
+  applyColors();
+  applyFont();
+  initBulletControls();
+  initExperienceDelete();
+  updatePageUsage();
+  scheduleAutoSave();
+}
+
 async function syncGitHubRepos() {
   const username = (document.getElementById('gh-username') || {}).value || 'shaw-vishal';
   const statusEl = document.getElementById('gh-sync-status');
@@ -1763,6 +2024,9 @@ window.addEventListener('load', () => {
   applyMobileScale();
   initBulletControls();
   initExperienceDelete();
+  loadExpState();
+  buildExpPicker();
+  renderExperienceSection();
   syncGitHubRepos();
   setInterval(updatePageUsage, 2000);
   document.getElementById('save-status').textContent = 'Auto-saved';
