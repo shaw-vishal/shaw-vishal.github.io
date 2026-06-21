@@ -50,57 +50,6 @@ body { background: #f0f0f0; font-family: 'Inter', sans-serif; min-height: 100vh;
 .btn-ghost:hover { color: #fff; border-color: #888; }
 .save-status { font-size: 11px; color: #888; }
 
-/* ── INLINE AI SUGGEST BUTTON ─────────────────────────────────── */
-.ai-suggest-btn {
-  position: absolute; display: none; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 50%; cursor: pointer; z-index: 50;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
-  color: #fff; font-size: 12px; box-shadow: 0 2px 8px rgba(139,92,246,0.4);
-  border: none; transition: transform 0.15s;
-  font-family: 'Inter', sans-serif;
-}
-.ai-suggest-btn:hover { transform: scale(1.15); }
-.ai-suggest-btn.show { display: flex; }
-.ai-suggest-btn.loading { animation: ai-pulse 1s infinite; }
-@keyframes ai-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-.ai-popup {
-  position: absolute; display: none; z-index: 60;
-  width: 320px; max-width: 90vw;
-  background: #fff; border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  border: 1px solid #eee; font-family: 'Inter', sans-serif;
-  overflow: hidden;
-}
-.ai-popup.show { display: block; }
-.ai-popup-head {
-  display: flex; align-items: center; gap: 6px; padding: 10px 12px;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
-  color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
-}
-.ai-popup-body { padding: 12px; font-size: 12px; line-height: 1.5; color: #333; max-height: 220px; overflow-y: auto; }
-.ai-popup-actions { display: flex; gap: 6px; padding: 8px 12px 12px; }
-.ai-popup-btn {
-  flex: 1; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-  cursor: pointer; border: none; font-family: inherit;
-}
-.ai-popup-btn.accept { background: #1a1a1a; color: #fff; }
-.ai-popup-btn.accept:hover { background: #333; }
-.ai-popup-btn.dismiss { background: #f0f0f0; color: #555; }
-.ai-popup-btn.dismiss:hover { background: #e5e5e5; }
-.ai-popup-close { margin-left: auto; cursor: pointer; opacity: 0.8; font-size: 14px; }
-.ai-popup-close:hover { opacity: 1; }
-@media print {
-  .ai-suggest-btn, .ai-popup,
-  .ai-float-btn, .ai-panel,
-  .sec-ai-btn, .r-section-ai-btn,
-  [id="ai-suggest-btn"], [id="ai-popup"],
-  [id="ai-float-btn"], [id="ai-panel"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-  }
-}
 
 /* ── LAYOUT ────────────────────────────────────────────────── */
 .app { display: flex; margin-top: 44px; min-height: calc(100vh - 44px); }
@@ -340,6 +289,18 @@ input[type="color"] {
 }
 .add-bullet-btn:hover { color: #1a1a1a; border-color: #1a1a1a; }
 @media print { .add-bullet-btn, .bullet-del { display: none !important; } }
+
+/* Delete entire experience entry (job/internship) */
+.r-exp { position: relative; }
+.exp-del-btn {
+  display: none; position: absolute; top: -4px; right: -4px;
+  width: 18px; height: 18px; line-height: 18px; text-align: center;
+  font-size: 12px; color: #e74c3c; cursor: pointer; border-radius: 50%;
+  background: #fdf0ee; border: 1px solid #f3c9c4; user-select: none; z-index: 5;
+}
+.r-exp:hover .exp-del-btn { display: block; }
+.exp-del-btn:hover { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+@media print { .exp-del-btn { display: none !important; } }
 
 /* SKILLS */
 .r-skills-table { width: 100%; border-collapse: collapse; }
@@ -681,7 +642,7 @@ input[type="color"] {
       </div>
       <div class="panel-section">
         <button class="btn-sm btn-white" style="width:100%;" onclick="applyGitHubProjects()">Apply Selected to Resume</button>
-        <div style="font-size:10px;color:#999;margin-top:6px;">Uses your saved Gemini key to auto-write the tools-used line and a 1–2 sentence description per project, matching the length of your existing project entries.</div>
+        <div style="font-size:10px;color:#999;margin-top:6px;">Pulls each repo's name, primary language, topics, and GitHub description directly — no AI involved. Edit any line afterward.</div>
       </div>
     </div>
 
@@ -956,174 +917,6 @@ function switchTab(tab) {
 }
 
 // ── PAGE USAGE ───────────────────────────────────────────────
-// ── INLINE AI SUGGEST (per-section, no key prompt ever) ─────────
-// Key is yours, baked in once so this never asks again on this file.
-// ── API KEY: paste yours from aistudio.google.com/app/apikey ──
-// DO NOT paste Google OAuth tokens (AQ.Ab8R...) here — those expire hourly
-// and cause "Expected OAuth 2 access token" errors.
-// Real Gemini API keys come from aistudio.google.com and look different.
-const AI_MODEL = 'gemini-2.0-flash';
-
-function getGeminiKey() {
-  // Check sessionStorage first (set by the key input in the AI panel)
-  try {
-    const stored = sessionStorage.getItem('__gai__') || sessionStorage.getItem('__aipk__');
-    if (stored && stored.length >= 15) return stored;
-  } catch(e) {}
-  return null;
-}
-
-// Shim so existing code using AI_GEMINI_KEY still works
-Object.defineProperty(window, 'AI_GEMINI_KEY', { get: () => getGeminiKey() || '' });
-
-let aiActiveEl = null;
-
-function aiAttachListeners(scope) {
-  const root = scope || document;
-  root.querySelectorAll('[contenteditable]').forEach(el => {
-    if (el.dataset.aiBound) return; // avoid double-binding
-    el.dataset.aiBound = '1';
-    el.addEventListener('focus', () => aiShowButtonFor(el));
-    el.addEventListener('click', () => aiShowButtonFor(el));
-  });
-}
-
-function aiInjectButtons() {
-  if (document.getElementById('ai-suggest-btn')) { aiAttachListeners(); return; }
-
-  const btn = document.createElement('button');
-  btn.id = 'ai-suggest-btn';
-  btn.className = 'ai-suggest-btn';
-  btn.type = 'button';
-  btn.title = 'AI suggestion for this line';
-  btn.textContent = '✦';
-  btn.onclick = (e) => { e.stopPropagation(); aiRunSuggestion(); };
-  document.body.appendChild(btn);
-
-  const popup = document.createElement('div');
-  popup.id = 'ai-popup';
-  popup.className = 'ai-popup';
-  popup.innerHTML = `
-    <div class="ai-popup-head">
-      <span>✦ AI Suggestion</span>
-      <span class="ai-popup-close" onclick="aiClosePopup()">×</span>
-    </div>
-    <div class="ai-popup-body" id="ai-popup-body">Thinking…</div>
-    <div class="ai-popup-actions">
-      <button class="ai-popup-btn dismiss" onclick="aiClosePopup()">Dismiss</button>
-      <button class="ai-popup-btn accept" id="ai-accept-btn" onclick="aiAcceptSuggestion()">Use this</button>
-    </div>`;
-  document.body.appendChild(popup);
-
-  aiAttachListeners();
-
-  // Hide button/popup when clicking elsewhere (but not on the button/popup itself)
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('#ai-suggest-btn') || e.target.closest('#ai-popup') || e.target.closest('[contenteditable]')) return;
-    btn.classList.remove('show');
-    aiClosePopup();
-  });
-}
-
-function aiShowButtonFor(el) {
-  aiActiveEl = el;
-  const btn = document.getElementById('ai-suggest-btn');
-  if (!btn) return;
-  const rect = el.getBoundingClientRect();
-  btn.style.top = (window.scrollY + rect.top - 6) + 'px';
-  btn.style.left = (window.scrollX + rect.right + 8) + 'px';
-  btn.classList.add('show');
-  btn.classList.remove('loading');
-  btn.textContent = '✦';
-}
-
-function aiClosePopup() {
-  const popup = document.getElementById('ai-popup');
-  if (popup) popup.classList.remove('show');
-}
-
-async function aiRunSuggestion() {
-  if (!aiActiveEl) return;
-  const btn = document.getElementById('ai-suggest-btn');
-  const popup = document.getElementById('ai-popup');
-  const body = document.getElementById('ai-popup-body');
-
-  // Check key first — show clear instructions if missing
-  const currentKey = getGeminiKey();
-  if (!currentKey) {
-    const rect = aiActiveEl.getBoundingClientRect();
-    popup.style.top  = (window.scrollY + rect.top) + 'px';
-    popup.style.left = Math.min(window.scrollX + rect.right + 8, window.innerWidth - 340) + 'px';
-    popup.classList.add('show');
-    body.innerHTML = '🔑 <strong>Gemini API key needed.</strong><br><br>'
-      + 'Click the <strong>✦ bottom-right button</strong> → paste your free key from '
-      + '<a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#8b5cf6">aistudio.google.com ↗</a>'
-      + '<br><br><em>Do NOT use Google OAuth tokens (AQ.Ab8R...) — those are different and expire hourly.</em>';
-    body.dataset.suggestion = '';
-    btn.classList.remove('loading');
-    return;
-  }
-
-  const rect = aiActiveEl.getBoundingClientRect();
-  popup.style.top = (window.scrollY + rect.top) + 'px';
-  popup.style.left = Math.min(window.scrollX + rect.right + 8, window.innerWidth - 340) + 'px';
-  popup.classList.add('show');
-  body.textContent = 'Thinking…';
-  btn.classList.add('loading');
-
-  const originalText = aiActiveEl.innerText.trim();
-  const context = aiGetElementContext(aiActiveEl);
-
-  try {
-    const prompt = `You are editing one line of a professional resume. Context: this is a "${context}" field.
-Current text: "${originalText}"
-
-Rewrite it to be sharper, more specific, and more impactful for a resume — same approximate length, same facts, no invented numbers or claims. Return ONLY the improved text, nothing else, no quotes, no markdown, no labels.`;
-
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=${AI_GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 200, temperature: 0.6 }
-        })
-      }
-    );
-    const data = await res.json();
-    const suggestion = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-    if (!suggestion) throw new Error(data?.error?.message || 'No suggestion returned.');
-    body.textContent = suggestion;
-    body.dataset.suggestion = suggestion;
-  } catch (err) {
-    body.textContent = '⚠ ' + err.message;
-    body.dataset.suggestion = '';
-  } finally {
-    btn.classList.remove('loading');
-  }
-}
-
-function aiGetElementContext(el) {
-  if (el.classList.contains('r-summary')) return 'professional summary';
-  if (el.classList.contains('r-proj-desc')) return 'project description';
-  if (el.classList.contains('r-proj-stack')) return 'tech stack line';
-  if (el.closest('.r-exp-bullets')) return 'experience bullet point';
-  if (el.classList.contains('r-section-label')) return 'section heading';
-  if (el.id === 'r-title') return 'resume title line';
-  return 'resume text';
-}
-
-function aiAcceptSuggestion() {
-  const body = document.getElementById('ai-popup-body');
-  const suggestion = body.dataset.suggestion;
-  if (!suggestion || !aiActiveEl) return;
-  aiActiveEl.innerText = suggestion;
-  scheduleAutoSave();
-  updatePageUsage();
-  aiClosePopup();
-}
-
 // ── AUTO-FIT TO ONE PAGE ────────────────────────────────────────
 // Real compression, not just a warning: iteratively steps down font
 // size, line height, and section spacing together until content
@@ -1634,14 +1427,7 @@ function exportPDF() {
   const originalTitle = document.title;
   document.title = filename;
 
-  // Hide AI button + popup before printing so they never appear in PDF
-  const aiBtn = document.getElementById('ai-suggest-btn');
-  const aiPopup = document.getElementById('ai-popup');
-  const aiBtnDisplay = aiBtn ? aiBtn.style.display : '';
-  const aiPopupDisplay = aiPopup ? aiPopup.style.display : '';
-  if (aiBtn) { aiBtn.style.display = 'none'; aiBtn.classList.remove('show'); }
-  if (aiPopup) { aiPopup.style.display = 'none'; aiPopup.classList.remove('show'); }
-  // Also blur any focused element so the button doesn't reappear
+  // Blur any focused editable element so no stray UI state carries into print
   if (document.activeElement) document.activeElement.blur();
 
   window.print();
@@ -1652,9 +1438,6 @@ function exportPDF() {
       wrapper.style.transform = savedTransform;
       wrapper.style.marginBottom = savedMargin;
     }
-    // Restore AI button (hidden by default anyway until user focuses something)
-    if (aiBtn) aiBtn.style.display = '';
-    if (aiPopup) aiPopup.style.display = '';
   }, 1000);
 }
 
@@ -1728,59 +1511,29 @@ function toggleRepoSelect(name) {
   renderRepoList();
 }
 
-async function applyGitHubProjects() {
+function applyGitHubProjects() {
   const selected = getSelectedRepoNames();
   if (selected.length === 0) { alert('Tick at least one repo first.'); return; }
 
-  const key = getGeminiKey();
   const projSection = document.querySelector('[data-section="projects"]');
   if (!projSection) { alert('Projects section not found on page.'); return; }
 
   const btn = event ? event.target : null;
-  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
-
-  // word-length reference taken from your existing first project description
-  const refDesc = document.querySelector('.r-proj-desc');
-  const refWordCount = refDesc ? refDesc.textContent.trim().split(/\s+/).length : 35;
+  if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
 
   const newProjectsHTML = [];
   for (const repoName of selected) {
     const repo = ghRepos.find(r => r.name === repoName);
     if (!repo) continue;
 
-    let toolsLine = repo.language || 'Python';
-    let descLine = repo.description || `${repo.name} — a project on GitHub.`;
-
-    if (key) {
-      try {
-        const prompt = `You are writing one resume project entry. Repo name: "${repo.name}". GitHub description: "${repo.description || 'none given'}". Primary language: ${repo.language || 'unknown'}. Topics: ${(repo.topics || []).join(', ') || 'none'}.
-
-Return EXACTLY two lines, nothing else, no markdown, no labels:
-Line 1: a tools/stack line, 3-6 technologies separated by " · " (middle dot), most relevant tool first.
-Line 2: a 1-2 sentence project description in resume style (third person implied, no "I"), approximately ${refWordCount} words, written like a professional resume bullet, specific and concrete, no fluff.`;
-
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=` + key,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: { maxOutputTokens: 200, temperature: 0.5 }
-            })
-          }
-        );
-        const data = await res.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          const lines = text.trim().split('\n').filter(l => l.trim());
-          if (lines[0]) toolsLine = lines[0].trim();
-          if (lines[1]) descLine = lines[1].trim();
-        }
-      } catch (e) {
-        console.warn('AI generation failed for', repo.name, e);
-      }
-    }
+    // Pulled directly from GitHub — no AI call. Stack line uses the
+    // repo's primary language plus any topics; description uses the
+    // repo's own GitHub description, or a simple fallback if none set.
+    const stackParts = [repo.language, ...(repo.topics || [])].filter(Boolean);
+    const toolsLine = stackParts.length ? stackParts.join(' · ') : 'Python';
+    const descLine = repo.description
+      ? repo.description
+      : `${repo.name.replace(/-/g, ' ')} — see GitHub repo for full details.`;
 
     newProjectsHTML.push(`
       <div class="r-proj">
@@ -1816,7 +1569,6 @@ Line 2: a 1-2 sentence project description in resume style (third person implied
 
   applyFont(); applyFontSize(); applyColors(); applySpacing();
   buildReorderList();
-  aiAttachListeners(projSection); // new elements need their own AI-button listeners
   scheduleAutoSave();
   updatePageUsage();
 
@@ -1943,6 +1695,41 @@ function addBullet(ul) {
   updatePageUsage();
 }
 
+// ── DELETE EXPERIENCE ENTRY (job / internship) ──────────────────
+function initExperienceDelete() {
+  document.querySelectorAll('[data-section="experience"] .r-exp').forEach(exp => addExperienceDelete(exp));
+}
+
+function addExperienceDelete(exp) {
+  if (exp.querySelector('.exp-del-btn')) return; // already added
+  const del = document.createElement('span');
+  del.className = 'exp-del-btn';
+  del.textContent = '×';
+  del.title = 'Delete this job entry';
+  del.onclick = (e) => {
+    e.stopPropagation();
+    const companyName = exp.querySelector('.r-exp-company')?.textContent.trim() || 'this entry';
+    if (!confirm(`Delete "${companyName}" from your Experience section?\n\nThis can't be undone — re-add it manually if needed.`)) return;
+
+    const expSection = document.querySelector('[data-section="experience"]');
+    const remainingExp = expSection ? expSection.querySelectorAll('.r-exp').length : 0;
+    if (remainingExp <= 1) {
+      alert('You need at least one experience entry.');
+      return;
+    }
+
+    // remove the block together with its trailing divider, same pattern
+    // used elsewhere in this file, so no orphan line is left behind
+    const divider = exp.nextElementSibling;
+    if (divider && divider.classList.contains('r-divider')) divider.remove();
+    exp.remove();
+
+    scheduleAutoSave();
+    updatePageUsage();
+  };
+  exp.appendChild(del);
+}
+
 // ── MOBILE SCALING ─────────────────────────────────────────────
 function applyMobileScale() {
   const wrapper = document.getElementById('resume-wrapper');
@@ -1975,8 +1762,8 @@ window.addEventListener('load', () => {
   updatePageUsage();
   applyMobileScale();
   initBulletControls();
+  initExperienceDelete();
   syncGitHubRepos();
-  aiInjectButtons();
   setInterval(updatePageUsage, 2000);
   document.getElementById('save-status').textContent = 'Auto-saved';
 });
