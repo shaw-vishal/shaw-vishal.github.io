@@ -90,7 +90,17 @@ body { background: #f0f0f0; font-family: 'Inter', sans-serif; min-height: 100vh;
 .ai-popup-btn.dismiss:hover { background: #e5e5e5; }
 .ai-popup-close { margin-left: auto; cursor: pointer; opacity: 0.8; font-size: 14px; }
 .ai-popup-close:hover { opacity: 1; }
-@media print { .ai-suggest-btn, .ai-popup { display: none !important; } }
+@media print {
+  .ai-suggest-btn, .ai-popup,
+  .ai-float-btn, .ai-panel,
+  .sec-ai-btn, .r-section-ai-btn,
+  [id="ai-suggest-btn"], [id="ai-popup"],
+  [id="ai-float-btn"], [id="ai-panel"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}
 
 /* ── LAYOUT ────────────────────────────────────────────────── */
 .app { display: flex; margin-top: 44px; min-height: calc(100vh - 44px); }
@@ -948,8 +958,23 @@ function switchTab(tab) {
 // ── PAGE USAGE ───────────────────────────────────────────────
 // ── INLINE AI SUGGEST (per-section, no key prompt ever) ─────────
 // Key is yours, baked in once so this never asks again on this file.
-const AI_GEMINI_KEY = 'AQ.Ab8RN6I3-P3qiuAaG6lzSs50YB9__402yQKyyfJf3QOflr9PAA';
-const AI_MODEL = 'gemini-2.5-flash';
+// ── API KEY: paste yours from aistudio.google.com/app/apikey ──
+// DO NOT paste Google OAuth tokens (AQ.Ab8R...) here — those expire hourly
+// and cause "Expected OAuth 2 access token" errors.
+// Real Gemini API keys come from aistudio.google.com and look different.
+const AI_MODEL = 'gemini-2.0-flash';
+
+function getGeminiKey() {
+  // Check sessionStorage first (set by the key input in the AI panel)
+  try {
+    const stored = sessionStorage.getItem('__gai__') || sessionStorage.getItem('__aipk__');
+    if (stored && stored.length >= 15) return stored;
+  } catch(e) {}
+  return null;
+}
+
+// Shim so existing code using AI_GEMINI_KEY still works
+Object.defineProperty(window, 'AI_GEMINI_KEY', { get: () => getGeminiKey() || '' });
 
 let aiActiveEl = null;
 
@@ -1022,6 +1047,22 @@ async function aiRunSuggestion() {
   const btn = document.getElementById('ai-suggest-btn');
   const popup = document.getElementById('ai-popup');
   const body = document.getElementById('ai-popup-body');
+
+  // Check key first — show clear instructions if missing
+  const currentKey = getGeminiKey();
+  if (!currentKey) {
+    const rect = aiActiveEl.getBoundingClientRect();
+    popup.style.top  = (window.scrollY + rect.top) + 'px';
+    popup.style.left = Math.min(window.scrollX + rect.right + 8, window.innerWidth - 340) + 'px';
+    popup.classList.add('show');
+    body.innerHTML = '🔑 <strong>Gemini API key needed.</strong><br><br>'
+      + 'Click the <strong>✦ bottom-right button</strong> → paste your free key from '
+      + '<a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#8b5cf6">aistudio.google.com ↗</a>'
+      + '<br><br><em>Do NOT use Google OAuth tokens (AQ.Ab8R...) — those are different and expire hourly.</em>';
+    body.dataset.suggestion = '';
+    btn.classList.remove('loading');
+    return;
+  }
 
   const rect = aiActiveEl.getBoundingClientRect();
   popup.style.top = (window.scrollY + rect.top) + 'px';
@@ -1592,13 +1633,28 @@ function exportPDF() {
 
   const originalTitle = document.title;
   document.title = filename;
+
+  // Hide AI button + popup before printing so they never appear in PDF
+  const aiBtn = document.getElementById('ai-suggest-btn');
+  const aiPopup = document.getElementById('ai-popup');
+  const aiBtnDisplay = aiBtn ? aiBtn.style.display : '';
+  const aiPopupDisplay = aiPopup ? aiPopup.style.display : '';
+  if (aiBtn) { aiBtn.style.display = 'none'; aiBtn.classList.remove('show'); }
+  if (aiPopup) { aiPopup.style.display = 'none'; aiPopup.classList.remove('show'); }
+  // Also blur any focused element so the button doesn't reappear
+  if (document.activeElement) document.activeElement.blur();
+
   window.print();
+
   setTimeout(() => {
     document.title = originalTitle;
     if (wrapper) {
       wrapper.style.transform = savedTransform;
       wrapper.style.marginBottom = savedMargin;
     }
+    // Restore AI button (hidden by default anyway until user focuses something)
+    if (aiBtn) aiBtn.style.display = '';
+    if (aiPopup) aiPopup.style.display = '';
   }, 1000);
 }
 
@@ -1676,7 +1732,7 @@ async function applyGitHubProjects() {
   const selected = getSelectedRepoNames();
   if (selected.length === 0) { alert('Tick at least one repo first.'); return; }
 
-  const key = AI_GEMINI_KEY;
+  const key = getGeminiKey();
   const projSection = document.querySelector('[data-section="projects"]');
   if (!projSection) { alert('Projects section not found on page.'); return; }
 
