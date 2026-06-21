@@ -50,6 +50,48 @@ body { background: #f0f0f0; font-family: 'Inter', sans-serif; min-height: 100vh;
 .btn-ghost:hover { color: #fff; border-color: #888; }
 .save-status { font-size: 11px; color: #888; }
 
+/* ── INLINE AI SUGGEST BUTTON ─────────────────────────────────── */
+.ai-suggest-btn {
+  position: absolute; display: none; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%; cursor: pointer; z-index: 50;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
+  color: #fff; font-size: 12px; box-shadow: 0 2px 8px rgba(139,92,246,0.4);
+  border: none; transition: transform 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.ai-suggest-btn:hover { transform: scale(1.15); }
+.ai-suggest-btn.show { display: flex; }
+.ai-suggest-btn.loading { animation: ai-pulse 1s infinite; }
+@keyframes ai-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.ai-popup {
+  position: absolute; display: none; z-index: 60;
+  width: 320px; max-width: 90vw;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  border: 1px solid #eee; font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+.ai-popup.show { display: block; }
+.ai-popup-head {
+  display: flex; align-items: center; gap: 6px; padding: 10px 12px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
+  color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
+}
+.ai-popup-body { padding: 12px; font-size: 12px; line-height: 1.5; color: #333; max-height: 220px; overflow-y: auto; }
+.ai-popup-actions { display: flex; gap: 6px; padding: 8px 12px 12px; }
+.ai-popup-btn {
+  flex: 1; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  cursor: pointer; border: none; font-family: inherit;
+}
+.ai-popup-btn.accept { background: #1a1a1a; color: #fff; }
+.ai-popup-btn.accept:hover { background: #333; }
+.ai-popup-btn.dismiss { background: #f0f0f0; color: #555; }
+.ai-popup-btn.dismiss:hover { background: #e5e5e5; }
+.ai-popup-close { margin-left: auto; cursor: pointer; opacity: 0.8; font-size: 14px; }
+.ai-popup-close:hover { opacity: 1; }
+@media print { .ai-suggest-btn, .ai-popup { display: none !important; } }
+
 /* ── LAYOUT ────────────────────────────────────────────────── */
 .app { display: flex; margin-top: 44px; min-height: calc(100vh - 44px); }
 
@@ -904,6 +946,143 @@ function switchTab(tab) {
 }
 
 // ── PAGE USAGE ───────────────────────────────────────────────
+// ── INLINE AI SUGGEST (per-section, no key prompt ever) ─────────
+// Key is yours, baked in once so this never asks again on this file.
+const AI_GEMINI_KEY = 'AQ.Ab8RN6I3-P3qiuAaG6lzSs50YB9__402yQKyyfJf3QOflr9PAA';
+const AI_MODEL = 'gemini-2.5-flash';
+
+let aiActiveEl = null;
+
+function aiAttachListeners(scope) {
+  const root = scope || document;
+  root.querySelectorAll('[contenteditable]').forEach(el => {
+    if (el.dataset.aiBound) return; // avoid double-binding
+    el.dataset.aiBound = '1';
+    el.addEventListener('focus', () => aiShowButtonFor(el));
+    el.addEventListener('click', () => aiShowButtonFor(el));
+  });
+}
+
+function aiInjectButtons() {
+  if (document.getElementById('ai-suggest-btn')) { aiAttachListeners(); return; }
+
+  const btn = document.createElement('button');
+  btn.id = 'ai-suggest-btn';
+  btn.className = 'ai-suggest-btn';
+  btn.type = 'button';
+  btn.title = 'AI suggestion for this line';
+  btn.textContent = '✦';
+  btn.onclick = (e) => { e.stopPropagation(); aiRunSuggestion(); };
+  document.body.appendChild(btn);
+
+  const popup = document.createElement('div');
+  popup.id = 'ai-popup';
+  popup.className = 'ai-popup';
+  popup.innerHTML = `
+    <div class="ai-popup-head">
+      <span>✦ AI Suggestion</span>
+      <span class="ai-popup-close" onclick="aiClosePopup()">×</span>
+    </div>
+    <div class="ai-popup-body" id="ai-popup-body">Thinking…</div>
+    <div class="ai-popup-actions">
+      <button class="ai-popup-btn dismiss" onclick="aiClosePopup()">Dismiss</button>
+      <button class="ai-popup-btn accept" id="ai-accept-btn" onclick="aiAcceptSuggestion()">Use this</button>
+    </div>`;
+  document.body.appendChild(popup);
+
+  aiAttachListeners();
+
+  // Hide button/popup when clicking elsewhere (but not on the button/popup itself)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#ai-suggest-btn') || e.target.closest('#ai-popup') || e.target.closest('[contenteditable]')) return;
+    btn.classList.remove('show');
+    aiClosePopup();
+  });
+}
+
+function aiShowButtonFor(el) {
+  aiActiveEl = el;
+  const btn = document.getElementById('ai-suggest-btn');
+  if (!btn) return;
+  const rect = el.getBoundingClientRect();
+  btn.style.top = (window.scrollY + rect.top - 6) + 'px';
+  btn.style.left = (window.scrollX + rect.right + 8) + 'px';
+  btn.classList.add('show');
+  btn.classList.remove('loading');
+  btn.textContent = '✦';
+}
+
+function aiClosePopup() {
+  const popup = document.getElementById('ai-popup');
+  if (popup) popup.classList.remove('show');
+}
+
+async function aiRunSuggestion() {
+  if (!aiActiveEl) return;
+  const btn = document.getElementById('ai-suggest-btn');
+  const popup = document.getElementById('ai-popup');
+  const body = document.getElementById('ai-popup-body');
+
+  const rect = aiActiveEl.getBoundingClientRect();
+  popup.style.top = (window.scrollY + rect.top) + 'px';
+  popup.style.left = Math.min(window.scrollX + rect.right + 8, window.innerWidth - 340) + 'px';
+  popup.classList.add('show');
+  body.textContent = 'Thinking…';
+  btn.classList.add('loading');
+
+  const originalText = aiActiveEl.innerText.trim();
+  const context = aiGetElementContext(aiActiveEl);
+
+  try {
+    const prompt = `You are editing one line of a professional resume. Context: this is a "${context}" field.
+Current text: "${originalText}"
+
+Rewrite it to be sharper, more specific, and more impactful for a resume — same approximate length, same facts, no invented numbers or claims. Return ONLY the improved text, nothing else, no quotes, no markdown, no labels.`;
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=${AI_GEMINI_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 200, temperature: 0.6 }
+        })
+      }
+    );
+    const data = await res.json();
+    const suggestion = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    if (!suggestion) throw new Error(data?.error?.message || 'No suggestion returned.');
+    body.textContent = suggestion;
+    body.dataset.suggestion = suggestion;
+  } catch (err) {
+    body.textContent = '⚠ ' + err.message;
+    body.dataset.suggestion = '';
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
+function aiGetElementContext(el) {
+  if (el.classList.contains('r-summary')) return 'professional summary';
+  if (el.classList.contains('r-proj-desc')) return 'project description';
+  if (el.classList.contains('r-proj-stack')) return 'tech stack line';
+  if (el.closest('.r-exp-bullets')) return 'experience bullet point';
+  if (el.classList.contains('r-section-label')) return 'section heading';
+  if (el.id === 'r-title') return 'resume title line';
+  return 'resume text';
+}
+
+function aiAcceptSuggestion() {
+  const body = document.getElementById('ai-popup-body');
+  const suggestion = body.dataset.suggestion;
+  if (!suggestion || !aiActiveEl) return;
+  aiActiveEl.innerText = suggestion;
+  scheduleAutoSave();
+  updatePageUsage();
+  aiClosePopup();
+}
+
 // ── AUTO-FIT TO ONE PAGE ────────────────────────────────────────
 // Real compression, not just a warning: iteratively steps down font
 // size, line height, and section spacing together until content
@@ -1497,7 +1676,7 @@ async function applyGitHubProjects() {
   const selected = getSelectedRepoNames();
   if (selected.length === 0) { alert('Tick at least one repo first.'); return; }
 
-  const key = localStorage.getItem('__gk__');
+  const key = AI_GEMINI_KEY;
   const projSection = document.querySelector('[data-section="projects"]');
   if (!projSection) { alert('Projects section not found on page.'); return; }
 
@@ -1525,7 +1704,7 @@ Line 1: a tools/stack line, 3-6 technologies separated by " · " (middle dot), m
 Line 2: a 1-2 sentence project description in resume style (third person implied, no "I"), approximately ${refWordCount} words, written like a professional resume bullet, specific and concrete, no fluff.`;
 
         const res = await fetch(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key,
+          `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=` + key,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1581,6 +1760,7 @@ Line 2: a 1-2 sentence project description in resume style (third person implied
 
   applyFont(); applyFontSize(); applyColors(); applySpacing();
   buildReorderList();
+  aiAttachListeners(projSection); // new elements need their own AI-button listeners
   scheduleAutoSave();
   updatePageUsage();
 
@@ -1740,6 +1920,7 @@ window.addEventListener('load', () => {
   applyMobileScale();
   initBulletControls();
   syncGitHubRepos();
+  aiInjectButtons();
   setInterval(updatePageUsage, 2000);
   document.getElementById('save-status').textContent = 'Auto-saved';
 });
