@@ -986,7 +986,7 @@ input[type="color"] {
 
 // ── CONSTANTS ───────────────────────────────────────────────
 const A4_HEIGHT_PX = 1122; // A4 at 96dpi
-const STORAGE_KEY = 'vishal_resume_v1';
+const STORAGE_KEY = 'vishal_resume_v3'; // v3: bumped after project link editor restructure
 const SETTINGS_KEY = 'vishal_resume_settings_v1';
 
 const PROFILE_TITLES = {
@@ -1433,6 +1433,8 @@ function saveSettings() {
 }
 
 function loadSaved() {
+  // If old content keys exist under stale version, silently skip them
+  // (bumping STORAGE_KEY handles this — old key simply won't be found)
   const s = localStorage.getItem(SETTINGS_KEY);
   if (!s) return;
   const settings = JSON.parse(s);
