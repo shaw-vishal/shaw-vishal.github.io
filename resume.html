@@ -347,6 +347,59 @@ input[type="color"] {
 .exp-arrow-btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
 .exp-arrow-btn:disabled { opacity: 0.2; cursor: default; }
 
+/* ── PROJECT LINK EDITOR ───────────────────────────────────── */
+.proj-link-editor {
+  display: none; margin-top: 6px;
+  background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 5px;
+  padding: 10px 12px; font-size: 8.5pt;
+}
+.proj-link-editor.open { display: block; }
+.proj-link-editor-title {
+  font-size: 7pt; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #aaa; margin-bottom: 8px;
+}
+.proj-link-row {
+  display: flex; gap: 6px; align-items: center; margin-bottom: 6px;
+}
+.proj-link-label-inp {
+  width: 110px; flex-shrink: 0; font-size: 8pt;
+  border: 1px solid #ddd; border-radius: 3px; padding: 3px 6px;
+  font-family: inherit; outline: none; background: #fff;
+}
+.proj-link-label-inp:focus { border-color: #1a1a1a; }
+.proj-link-url-inp {
+  flex: 1; font-size: 8pt; font-family: 'Courier New', monospace;
+  border: 1px solid #ddd; border-radius: 3px; padding: 3px 6px;
+  outline: none; background: #fff; min-width: 0;
+}
+.proj-link-url-inp:focus { border-color: #1a1a1a; }
+.proj-link-del-btn {
+  background: none; border: none; color: #ccc; cursor: pointer;
+  font-size: 14px; line-height: 1; padding: 0 2px; flex-shrink: 0;
+  transition: color 0.1s;
+}
+.proj-link-del-btn:hover { color: #e74c3c; }
+.proj-link-add-btn {
+  font-size: 8pt; padding: 3px 10px; border: 1px dashed #bbb;
+  border-radius: 3px; background: #fff; cursor: pointer; color: #888;
+  width: 100%; margin-top: 2px; transition: all 0.15s;
+}
+.proj-link-add-btn:hover { border-color: #1a1a1a; color: #1a1a1a; }
+.proj-link-save-btn {
+  font-size: 8pt; padding: 4px 14px; border-radius: 3px;
+  background: #1a1a1a; color: #fff; border: none; cursor: pointer;
+  margin-top: 6px; float: right; transition: background 0.15s;
+}
+.proj-link-save-btn:hover { background: #444; }
+.proj-link-toggle {
+  font-size: 7pt; padding: 1px 8px; border-radius: 3px;
+  border: 1px solid #ddd; background: #fff; color: #888;
+  cursor: pointer; margin-left: 4px; white-space: nowrap;
+  flex-shrink: 0; transition: all 0.15s; vertical-align: middle;
+}
+.proj-link-toggle:hover { border-color: #1a1a1a; color: #1a1a1a; }
+@media print { .proj-link-editor, .proj-link-toggle { display: none !important; } }
+
 /* ── PRINT ─────────────────────────────────────────────────── */
 @media print {
   body { background: white; }
@@ -719,9 +772,10 @@ input[type="color"] {
           <div class="r-section" data-section="projects">
             <div class="r-section-label" contenteditable="true" oninput="scheduleAutoSave()">Projects</div>
 
-            <div class="r-proj">
+            <div class="r-proj" data-repo="Multi-Outlet-Restaurant-Profitability-Dashboard">
               <div class="r-proj-header">
                 <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">Multi-Outlet Restaurant P&L Dashboard</span>
+                <span style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
                 <span class="r-proj-link-group">
                   <a class="r-proj-link" href="https://shaw-vishal-restaurant-dashboard.streamlit.app" target="_blank">Live Demo ↗</a>
                   <a class="r-proj-link" href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a>
@@ -733,9 +787,10 @@ input[type="color"] {
 
             <hr class="r-hr-light r-divider">
 
-            <div class="r-proj">
+            <div class="r-proj" data-repo="Tableau-business-intelligence-portfolio">
               <div class="r-proj-header">
                 <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">Tableau Business Intelligence Portfolio</span>
+                <span style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
                 <span class="r-proj-link-group">
                   <a class="r-proj-link" href="https://public.tableau.com/app/profile/shaw.vishal" target="_blank">Tableau ↗</a>
                   <a class="r-proj-link" href="https://github.com/shaw-vishal" target="_blank">GitHub ↗</a>
@@ -1772,117 +1827,183 @@ function toggleRepoSelect(name) {
   renderRepoList();
 }
 
-// ── Curated metadata for every repo ─────────────────────────────
-// Add new repos here as you create them. repo name must match GitHub exactly.
+// ── Curated metadata — title, stack, desc, default links per repo ──
 const REPO_META = {
   'Multi-Outlet-Restaurant-Profitability-Dashboard': {
     title: 'Multi-Outlet Restaurant P&L Dashboard',
     stack: 'Streamlit · Python · Pandas · Plotly · Tableau',
-    desc: 'Built an interactive Streamlit dashboard to analyze outlet-level P&L, food variance, contribution margin, and EBITDA trends across cloud kitchen operations. Replaced manual Excel reporting with real-time business performance monitoring across 350+ outlets, 5 cities, 6 months.',
-    links: [
-      { label: 'Live Demo ↗', url: 'https://multi-outlet-restaurant-profitability-dashboard.streamlit.app' },
-      { label: 'GitHub ↗',   url: 'https://github.com/shaw-vishal/Multi-Outlet-Restaurant-Profitability-Dashboard' }
-    ]
+    desc:  'Built an interactive Streamlit dashboard to analyze outlet-level P&L, food variance, contribution margin, and EBITDA trends across cloud kitchen operations. Replaced manual Excel reporting with real-time business performance monitoring across 350+ outlets, 5 cities, 6 months.',
+    links: [{ label: 'Live Demo ↗', url: 'https://multi-outlet-restaurant-profitability-dashboard.streamlit.app' },
+            { label: 'GitHub ↗',   url: 'https://github.com/shaw-vishal/Multi-Outlet-Restaurant-Profitability-Dashboard' }]
   },
   'Tableau-business-intelligence-portfolio': {
     title: 'Tableau Business Intelligence Portfolio',
     stack: 'Parameters · Calculated Fields · Forecasting · What-If Analysis · Dashboard Actions · LOD Expressions · Data Blending',
-    desc: 'Developed interactive Tableau workbooks for sales performance, profitability analysis, geographic insights, forecasting, and what-if scenario planning — enabling data-driven business decision making through KPI tracking and trend analysis.',
-    links: [
-      { label: 'Tableau ↗', url: 'https://public.tableau.com/app/profile/vishal.shaw1203/vizzes' },
-      { label: 'GitHub ↗',  url: 'https://github.com/shaw-vishal/Tableau-business-intelligence-portfolio' }
-    ]
+    desc:  'Developed interactive Tableau workbooks for sales performance, profitability analysis, geographic insights, forecasting, and what-if scenario planning — enabling data-driven business decision making through KPI tracking and trend analysis.',
+    links: [{ label: 'Tableau ↗', url: 'https://public.tableau.com/app/profile/vishal.shaw1203/vizzes' },
+            { label: 'GitHub ↗',  url: 'https://github.com/shaw-vishal/Tableau-business-intelligence-portfolio' }]
   },
   'facial-emotion-music': {
     title: 'FaceBeats — Facial Emotion Music Generator',
     stack: 'Python · TensorFlow · Keras · CNN · Bi-LSTM · OpenCV · FluidSynth · HuggingFace Spaces',
-    desc: 'End-to-end deep learning pipeline: face photo in, emotion-matched music out. 15-layer CNN trained on FER2013 (7 emotions); Bi-LSTM generates MIDI conditioned on emotion label. Two models built from scratch — no pre-trained APIs. Live on HuggingFace Spaces.',
-    links: [
-      { label: '🤗 Demo ↗', url: 'https://huggingface.co/spaces/ShawVishal/facebeats' },
-      { label: 'GitHub ↗',  url: 'https://github.com/shaw-vishal/facial-emotion-music' }
-    ]
+    desc:  'End-to-end deep learning pipeline: face photo in, emotion-matched music out. 15-layer CNN trained on FER2013 (7 emotions); Bi-LSTM generates MIDI conditioned on emotion label. Two models built from scratch — no pre-trained APIs. Live on HuggingFace Spaces.',
+    links: [{ label: '🤗 HuggingFace ↗', url: 'https://huggingface.co/spaces/ShawVishal/facebeats' },
+            { label: 'GitHub ↗',         url: 'https://github.com/shaw-vishal/facial-emotion-music' }]
   },
   'Shinkansen-Travel-Experience---ML-Classifier': {
-    title: 'Shinkansen Travel Experience — ML Classifier   🥈 Hackathon Runner-Up',
+    title: 'Shinkansen Travel Experience — ML Classifier 🥈',
     stack: 'Python · CatBoost · XGBoost · LightGBM · Scikit-learn · Pandas',
-    desc: 'Predicted passenger satisfaction using integrated travel and survey datasets. Built ensemble classification models achieving 95.43% accuracy via 5-fold stratified CV and grid-search blend optimization. Placed 2nd in competitive hackathon.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Shinkansen-Travel-Experience---ML-Classifier' }
-    ]
+    desc:  'Predicted passenger satisfaction using integrated travel and survey datasets. Built ensemble classification models achieving 95.43% accuracy via 5-fold stratified CV and grid-search blend optimization. Placed 2nd in competitive hackathon.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Shinkansen-Travel-Experience---ML-Classifier' }]
   },
   'uber-demand-eda': {
     title: 'Uber NYC — Ride Demand Analysis',
     stack: 'EDA · Time Series · MySQL · Tableau · Seaborn · Correlation Analysis',
-    desc: 'Analysed 29K+ hourly ride records across 6 NYC boroughs. Time of day and temperature identified as top demand drivers. Simulated supply reallocation reducing demand gap by 18%.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/uber-demand-eda' }
-    ]
+    desc:  'Analysed 29K+ hourly ride records across 6 NYC boroughs. Time of day and temperature identified as top demand drivers. Simulated supply reallocation reducing demand gap by 18%.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/uber-demand-eda' }]
   },
   'inn-hotels-classification': {
     title: 'INN Hotels — Booking Cancellation Predictor',
-    stack: 'Logistic Regression · Decision Tree · MySQL · Recall Optimisation · Threshold Tuning · Scikit-learn',
-    desc: 'Predicts hotel booking cancellations to minimise revenue loss. Threshold optimisation simulated an overbooking buffer strategy reducing predicted revenue loss from high-risk cancellations. Feature engineering improved signal on lead time and booking channel variables.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/inn-hotels-classification' }
-    ]
+    stack: 'Logistic Regression · Decision Tree · MySQL · Recall Optimisation · Threshold Tuning',
+    desc:  'Predicts hotel booking cancellations to minimise revenue loss. Threshold optimisation simulated an overbooking buffer strategy reducing predicted revenue loss from high-risk cancellations.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/inn-hotels-classification' }]
   },
   'showtime-ott-regression': {
     title: 'ShowTime OTT — Content Performance Prediction',
     stack: 'Linear Regression · VIF Treatment · Stepwise Feature Selection · Power BI · Cross Validation',
-    desc: 'Regression model predicting OTT content performance scores. Identified 3 content attributes driving 60% of performance score variance, providing actionable signal for content commissioning strategy.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/showtime-ott-regression' }
-    ]
-  },
-  'business-statistics-dsga': {
-    title: 'Business Statistics — DSGA Foundation',
-    stack: 'Hypothesis Testing · Confidence Intervals · A/B Testing · Probability Distributions · SciPy',
-    desc: 'Applied inferential statistics to business decision scenarios covering t-tests, chi-square, ANOVA, A/B testing, and probability distributions with real-world business framing.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/business-statistics-dsga' }
-    ]
+    desc:  'Regression model predicting OTT content performance scores. Identified 3 content attributes driving 60% of performance score variance, providing actionable signal for content commissioning strategy.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/showtime-ott-regression' }]
   },
   'U.S.-Visa-Approval-Prediction': {
     title: 'EasyVisa — US Work Visa Approval Prediction',
     stack: 'XGBoost · Bagging · AdaBoost · Gradient Boosting · Stacking · MySQL · Scikit-learn · SMOTE',
-    desc: 'Predicts US work visa approval outcomes by comparing five ensemble methods across three sampling strategies. Stacking model combines base learners for best F1 score on imbalanced class distribution. RandomizedSearchCV tuning applied across all model families.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/U.S.-Visa-Approval-Prediction' }
-    ]
+    desc:  'Predicts US work visa approval outcomes by comparing five ensemble methods. Stacking model combines base learners for best F1 score on imbalanced class distribution.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/U.S.-Visa-Approval-Prediction' }]
   },
   'Employee-Promotion-Predictor-RF-sklearn': {
     title: 'Employee Promotion Predictor',
     stack: 'Random Forest · Scikit-learn · Pandas · Feature Engineering · SMOTE · GridSearchCV',
-    desc: 'Built a Random Forest classifier to predict employee promotion eligibility based on performance metrics, training scores, and tenure. Applied SMOTE for class imbalance and GridSearchCV for hyperparameter tuning.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Employee-Promotion-Predictor-RF-sklearn' }
-    ]
+    desc:  'Random Forest classifier to predict employee promotion eligibility based on performance metrics, training scores, and tenure. Applied SMOTE for class imbalance.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Employee-Promotion-Predictor-RF-sklearn' }]
   },
   'Customer-Segmentation-Unsupervised-ML': {
     title: 'Customer Segmentation — Unsupervised ML',
     stack: 'K-Means · PCA · Silhouette Score · Pandas · Matplotlib · Scikit-learn',
-    desc: 'Segmented customers into actionable clusters using K-Means clustering with PCA for dimensionality reduction. Silhouette score used to determine optimal K. Cluster profiles translated into business targeting strategies.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Customer-Segmentation-Unsupervised-ML' }
-    ]
+    desc:  'Segmented customers into actionable clusters using K-Means with PCA for dimensionality reduction. Cluster profiles translated into business targeting strategies.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Customer-Segmentation-Unsupervised-ML' }]
   },
   'Logistic-Regression-Indian-diabetes': {
     title: 'Indian Diabetes Prediction — Logistic Regression',
     stack: 'Logistic Regression · Scikit-learn · Pandas · ROC-AUC · Recall Optimisation',
-    desc: 'Binary classification model predicting diabetes onset using the PIMA Indian Diabetes dataset. Focused on recall optimisation to minimise false negatives. ROC-AUC and confusion matrix used for model evaluation.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Logistic-Regression-Indian-diabetes' }
-    ]
+    desc:  'Binary classification model predicting diabetes onset. Focused on recall optimisation to minimise false negatives.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Logistic-Regression-Indian-diabetes' }]
   },
   'austo-automobile-eda': {
     title: 'Austo Automobile — EDA & Market Analysis',
     stack: 'EDA · Pandas · Seaborn · Matplotlib · Statistical Analysis',
-    desc: 'Exploratory data analysis on automobile sales data to surface pricing patterns, fuel type preferences, and customer segment behaviours. Insights used to inform product positioning and pricing strategy recommendations.',
-    links: [
-      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/austo-automobile-eda' }
-    ]
+    desc:  'Exploratory data analysis on automobile sales data to surface pricing patterns, fuel type preferences, and customer segment behaviours.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/austo-automobile-eda' }]
+  },
+  'business-statistics-dsga': {
+    title: 'Business Statistics — DSGA Foundation',
+    stack: 'Hypothesis Testing · Confidence Intervals · A/B Testing · Probability Distributions · SciPy',
+    desc:  'Applied inferential statistics to business decision scenarios covering t-tests, chi-square, ANOVA, A/B testing, and probability distributions.',
+    links: [{ label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/business-statistics-dsga' }]
   }
 };
+
+// ── Saved links storage ─────────────────────────────────────────
+const PROJ_LINKS_KEY = 'vishal_proj_links_v1';
+
+function getSavedProjLinks() {
+  try { return JSON.parse(localStorage.getItem(PROJ_LINKS_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+function saveProjLinks(repoName, links) {
+  const all = getSavedProjLinks();
+  all[repoName] = links;
+  localStorage.setItem(PROJ_LINKS_KEY, JSON.stringify(all));
+}
+
+// ── Build link group HTML from array of {label, url} ───────────
+function buildLinkGroupHtml(links) {
+  return links.filter(l => l.url.trim())
+    .map(l => `<a class="r-proj-link" href="${l.url.trim()}" target="_blank">${l.label || 'Link ↗'}</a>`)
+    .join(' ');
+}
+
+// ── Open / close the link editor panel on a project ────────────
+function toggleLinkEditor(btn) {
+  const proj = btn.closest('.r-proj');
+  let editor = proj.querySelector('.proj-link-editor');
+  if (editor) {
+    editor.classList.toggle('open');
+    return;
+  }
+  // First open: build the editor from current links
+  const repoName  = proj.dataset.repo || '';
+  const saved     = getSavedProjLinks();
+  const meta      = REPO_META[repoName];
+  const defLinks  = (saved[repoName] || (meta ? meta.links : null) ||
+    [{ label: 'GitHub ↗', url: proj.querySelector('a.r-proj-link') ? proj.querySelector('a.r-proj-link').href : '' }]);
+
+  editor = document.createElement('div');
+  editor.className = 'proj-link-editor open';
+  editor.innerHTML = '<div class="proj-link-editor-title">Edit Links</div><div class="proj-link-rows"></div>' +
+    '<button class="proj-link-add-btn" onclick="addLinkRow(this)">+ Add link</button>' +
+    '<button class="proj-link-save-btn" onclick="saveLinks(this)">Save Links</button>';
+  proj.appendChild(editor);
+
+  const rowsEl = editor.querySelector('.proj-link-rows');
+  defLinks.forEach(l => addLinkRowData(rowsEl, l.label, l.url));
+}
+
+function addLinkRowData(rowsEl, label, url) {
+  const suggestions = ['GitHub ↗','Live Demo ↗','Tableau ↗','Streamlit ↗','🤗 HuggingFace ↗','Kaggle ↗','Paper ↗','Slides ↗'];
+  const row = document.createElement('div');
+  row.className = 'proj-link-row';
+  row.innerHTML = `
+    <input class="proj-link-label-inp" list="link-label-list" value="${label || ''}" placeholder="Label (e.g. GitHub ↗)">
+    <datalist id="link-label-list">${suggestions.map(s=>`<option value="${s}">`).join('')}</datalist>
+    <input class="proj-link-url-inp" type="url" value="${url || ''}" placeholder="https://...">
+    <button class="proj-link-del-btn" title="Remove" onclick="this.closest('.proj-link-row').remove()">×</button>`;
+  rowsEl.appendChild(row);
+}
+
+function addLinkRow(btn) {
+  const rowsEl = btn.closest('.proj-link-editor').querySelector('.proj-link-rows');
+  addLinkRowData(rowsEl, '', '');
+  rowsEl.lastElementChild.querySelector('.proj-link-label-inp').focus();
+}
+
+function saveLinks(btn) {
+  const editor  = btn.closest('.proj-link-editor');
+  const proj    = editor.closest('.r-proj');
+  const repoName= proj.dataset.repo || '';
+  const rows    = editor.querySelectorAll('.proj-link-row');
+  const links   = [];
+  rows.forEach(row => {
+    const label = row.querySelector('.proj-link-label-inp').value.trim();
+    const url   = row.querySelector('.proj-link-url-inp').value.trim();
+    if (url) links.push({ label: label || 'Link ↗', url });
+  });
+
+  // Save to localStorage
+  saveProjLinks(repoName, links);
+
+  // Update the visible link group in the project header
+  const linkGroup = proj.querySelector('.r-proj-link-group');
+  if (linkGroup) linkGroup.innerHTML = buildLinkGroupHtml(links);
+
+  // Close editor and flash confirmation
+  btn.textContent = '✓ Saved';
+  setTimeout(() => {
+    btn.textContent = 'Save Links';
+    editor.classList.remove('open');
+  }, 900);
+
+  scheduleAutoSave();
+}
 
 function applyGitHubProjects() {
   const selected = getSelectedRepoNames();
@@ -1891,50 +2012,41 @@ function applyGitHubProjects() {
   const projSection = document.querySelector('[data-section="projects"]');
   if (!projSection) { alert('Projects section not found on page.'); return; }
 
-  const newProjectsHTML = [];
+  const savedLinks = getSavedProjLinks();
+  const nodes = [];
+
   for (const repoName of selected) {
-    const repo  = ghRepos.find(r => r.name === repoName);
+    const repo = ghRepos.find(r => r.name === repoName);
     if (!repo) continue;
 
-    // Use curated metadata if available, otherwise fall back to GitHub data
     const meta  = REPO_META[repoName];
     const title = meta ? meta.title : repo.name.replace(/-/g, ' ');
     const stack = meta ? meta.stack : ([repo.language, ...(repo.topics||[])].filter(Boolean).join(' · ') || 'Python');
     const desc  = meta ? meta.desc  : (repo.description || repo.name.replace(/-/g, ' ') + ' — see GitHub repo for full details.');
 
-    // Build link group — curated links if available, else just GitHub
-    let linksHtml = '';
-    if (meta && meta.links.length) {
-      linksHtml = meta.links.map(l =>
-        `<a class="r-proj-link" href="${l.url}" target="_blank">${l.label}</a>`
-      ).join('
-            ');
-    } else {
-      linksHtml = `<a class="r-proj-link" href="${repo.html_url}" target="_blank">GitHub ↗</a>`;
-    }
+    // Use saved links if user customised them, else curated meta, else GitHub URL
+    const links = savedLinks[repoName] || (meta ? meta.links : [{ label: 'GitHub ↗', url: repo.html_url }]);
+    const linksHtml = buildLinkGroupHtml(links);
 
-    newProjectsHTML.push(`
-      <div class="r-proj">
+    const proj = document.createElement('div');
+    proj.className = 'r-proj';
+    proj.dataset.repo = repoName;
+    proj.innerHTML = `
         <div class="r-proj-header">
           <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">${title}</span>
-          <span class="r-proj-link-group">
-            ${linksHtml}
+          <span style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+            <span class="r-proj-link-group">${linksHtml}</span>
+            <button class="proj-link-toggle" onclick="toggleLinkEditor(this)" title="Edit links">✎ links</button>
           </span>
         </div>
         <div class="r-proj-stack" contenteditable="true" oninput="scheduleAutoSave()">${stack}</div>
-        <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">${desc}</div>
-      </div>
-      <hr class="r-hr-light r-divider">`);
-  }
-
-  // Remove trailing divider from last item
-  if (newProjectsHTML.length) {
-    newProjectsHTML[newProjectsHTML.length - 1] = newProjectsHTML[newProjectsHTML.length - 1].replace('<hr class="r-hr-light r-divider">', '');
+        <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">${desc}</div>`;
+    nodes.push(proj);
   }
 
   const labelEl = projSection.querySelector('.r-section-label');
   projSection.innerHTML = '';
-  if (labelEl) projSection.appendChild(labelEl);
+  if (labelEl) { projSection.appendChild(labelEl); }
   else {
     const lbl = document.createElement('div');
     lbl.className = 'r-section-label';
@@ -1943,14 +2055,20 @@ function applyGitHubProjects() {
     lbl.textContent = 'Projects';
     projSection.appendChild(lbl);
   }
-  projSection.insertAdjacentHTML('beforeend', newProjectsHTML.join(''));
+
+  nodes.forEach((proj, i) => {
+    projSection.appendChild(proj);
+    if (i < nodes.length - 1) {
+      const hr = document.createElement('hr');
+      hr.className = 'r-hr-light r-divider';
+      projSection.appendChild(hr);
+    }
+  });
 
   applyFont(); applyFontSize(); applyColors(); applySpacing();
   buildReorderList();
   scheduleAutoSave();
   updatePageUsage();
-
-  if (btn) { btn.disabled = false; btn.textContent = 'Apply Selected to Resume'; }
 }
 
 // ── REORDER SECTIONS ───────────────────────────────────────────
