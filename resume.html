@@ -1772,6 +1772,118 @@ function toggleRepoSelect(name) {
   renderRepoList();
 }
 
+// ── Curated metadata for every repo ─────────────────────────────
+// Add new repos here as you create them. repo name must match GitHub exactly.
+const REPO_META = {
+  'Multi-Outlet-Restaurant-Profitability-Dashboard': {
+    title: 'Multi-Outlet Restaurant P&L Dashboard',
+    stack: 'Streamlit · Python · Pandas · Plotly · Tableau',
+    desc: 'Built an interactive Streamlit dashboard to analyze outlet-level P&L, food variance, contribution margin, and EBITDA trends across cloud kitchen operations. Replaced manual Excel reporting with real-time business performance monitoring across 350+ outlets, 5 cities, 6 months.',
+    links: [
+      { label: 'Live Demo ↗', url: 'https://multi-outlet-restaurant-profitability-dashboard.streamlit.app' },
+      { label: 'GitHub ↗',   url: 'https://github.com/shaw-vishal/Multi-Outlet-Restaurant-Profitability-Dashboard' }
+    ]
+  },
+  'Tableau-business-intelligence-portfolio': {
+    title: 'Tableau Business Intelligence Portfolio',
+    stack: 'Parameters · Calculated Fields · Forecasting · What-If Analysis · Dashboard Actions · LOD Expressions · Data Blending',
+    desc: 'Developed interactive Tableau workbooks for sales performance, profitability analysis, geographic insights, forecasting, and what-if scenario planning — enabling data-driven business decision making through KPI tracking and trend analysis.',
+    links: [
+      { label: 'Tableau ↗', url: 'https://public.tableau.com/app/profile/vishal.shaw1203/vizzes' },
+      { label: 'GitHub ↗',  url: 'https://github.com/shaw-vishal/Tableau-business-intelligence-portfolio' }
+    ]
+  },
+  'facial-emotion-music': {
+    title: 'FaceBeats — Facial Emotion Music Generator',
+    stack: 'Python · TensorFlow · Keras · CNN · Bi-LSTM · OpenCV · FluidSynth · HuggingFace Spaces',
+    desc: 'End-to-end deep learning pipeline: face photo in, emotion-matched music out. 15-layer CNN trained on FER2013 (7 emotions); Bi-LSTM generates MIDI conditioned on emotion label. Two models built from scratch — no pre-trained APIs. Live on HuggingFace Spaces.',
+    links: [
+      { label: '🤗 Demo ↗', url: 'https://huggingface.co/spaces/ShawVishal/facebeats' },
+      { label: 'GitHub ↗',  url: 'https://github.com/shaw-vishal/facial-emotion-music' }
+    ]
+  },
+  'Shinkansen-Travel-Experience---ML-Classifier': {
+    title: 'Shinkansen Travel Experience — ML Classifier   🥈 Hackathon Runner-Up',
+    stack: 'Python · CatBoost · XGBoost · LightGBM · Scikit-learn · Pandas',
+    desc: 'Predicted passenger satisfaction using integrated travel and survey datasets. Built ensemble classification models achieving 95.43% accuracy via 5-fold stratified CV and grid-search blend optimization. Placed 2nd in competitive hackathon.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Shinkansen-Travel-Experience---ML-Classifier' }
+    ]
+  },
+  'uber-demand-eda': {
+    title: 'Uber NYC — Ride Demand Analysis',
+    stack: 'EDA · Time Series · MySQL · Tableau · Seaborn · Correlation Analysis',
+    desc: 'Analysed 29K+ hourly ride records across 6 NYC boroughs. Time of day and temperature identified as top demand drivers. Simulated supply reallocation reducing demand gap by 18%.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/uber-demand-eda' }
+    ]
+  },
+  'inn-hotels-classification': {
+    title: 'INN Hotels — Booking Cancellation Predictor',
+    stack: 'Logistic Regression · Decision Tree · MySQL · Recall Optimisation · Threshold Tuning · Scikit-learn',
+    desc: 'Predicts hotel booking cancellations to minimise revenue loss. Threshold optimisation simulated an overbooking buffer strategy reducing predicted revenue loss from high-risk cancellations. Feature engineering improved signal on lead time and booking channel variables.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/inn-hotels-classification' }
+    ]
+  },
+  'showtime-ott-regression': {
+    title: 'ShowTime OTT — Content Performance Prediction',
+    stack: 'Linear Regression · VIF Treatment · Stepwise Feature Selection · Power BI · Cross Validation',
+    desc: 'Regression model predicting OTT content performance scores. Identified 3 content attributes driving 60% of performance score variance, providing actionable signal for content commissioning strategy.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/showtime-ott-regression' }
+    ]
+  },
+  'business-statistics-dsga': {
+    title: 'Business Statistics — DSGA Foundation',
+    stack: 'Hypothesis Testing · Confidence Intervals · A/B Testing · Probability Distributions · SciPy',
+    desc: 'Applied inferential statistics to business decision scenarios covering t-tests, chi-square, ANOVA, A/B testing, and probability distributions with real-world business framing.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/business-statistics-dsga' }
+    ]
+  },
+  'U.S.-Visa-Approval-Prediction': {
+    title: 'EasyVisa — US Work Visa Approval Prediction',
+    stack: 'XGBoost · Bagging · AdaBoost · Gradient Boosting · Stacking · MySQL · Scikit-learn · SMOTE',
+    desc: 'Predicts US work visa approval outcomes by comparing five ensemble methods across three sampling strategies. Stacking model combines base learners for best F1 score on imbalanced class distribution. RandomizedSearchCV tuning applied across all model families.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/U.S.-Visa-Approval-Prediction' }
+    ]
+  },
+  'Employee-Promotion-Predictor-RF-sklearn': {
+    title: 'Employee Promotion Predictor',
+    stack: 'Random Forest · Scikit-learn · Pandas · Feature Engineering · SMOTE · GridSearchCV',
+    desc: 'Built a Random Forest classifier to predict employee promotion eligibility based on performance metrics, training scores, and tenure. Applied SMOTE for class imbalance and GridSearchCV for hyperparameter tuning.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Employee-Promotion-Predictor-RF-sklearn' }
+    ]
+  },
+  'Customer-Segmentation-Unsupervised-ML': {
+    title: 'Customer Segmentation — Unsupervised ML',
+    stack: 'K-Means · PCA · Silhouette Score · Pandas · Matplotlib · Scikit-learn',
+    desc: 'Segmented customers into actionable clusters using K-Means clustering with PCA for dimensionality reduction. Silhouette score used to determine optimal K. Cluster profiles translated into business targeting strategies.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Customer-Segmentation-Unsupervised-ML' }
+    ]
+  },
+  'Logistic-Regression-Indian-diabetes': {
+    title: 'Indian Diabetes Prediction — Logistic Regression',
+    stack: 'Logistic Regression · Scikit-learn · Pandas · ROC-AUC · Recall Optimisation',
+    desc: 'Binary classification model predicting diabetes onset using the PIMA Indian Diabetes dataset. Focused on recall optimisation to minimise false negatives. ROC-AUC and confusion matrix used for model evaluation.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/Logistic-Regression-Indian-diabetes' }
+    ]
+  },
+  'austo-automobile-eda': {
+    title: 'Austo Automobile — EDA & Market Analysis',
+    stack: 'EDA · Pandas · Seaborn · Matplotlib · Statistical Analysis',
+    desc: 'Exploratory data analysis on automobile sales data to surface pricing patterns, fuel type preferences, and customer segment behaviours. Insights used to inform product positioning and pricing strategy recommendations.',
+    links: [
+      { label: 'GitHub ↗', url: 'https://github.com/shaw-vishal/austo-automobile-eda' }
+    ]
+  }
+};
+
 function applyGitHubProjects() {
   const selected = getSelectedRepoNames();
   if (selected.length === 0) { alert('Tick at least one repo first.'); return; }
@@ -1779,38 +1891,43 @@ function applyGitHubProjects() {
   const projSection = document.querySelector('[data-section="projects"]');
   if (!projSection) { alert('Projects section not found on page.'); return; }
 
-  const btn = event ? event.target : null;
-  if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
-
   const newProjectsHTML = [];
   for (const repoName of selected) {
-    const repo = ghRepos.find(r => r.name === repoName);
+    const repo  = ghRepos.find(r => r.name === repoName);
     if (!repo) continue;
 
-    // Pulled directly from GitHub — no AI call. Stack line uses the
-    // repo's primary language plus any topics; description uses the
-    // repo's own GitHub description, or a simple fallback if none set.
-    const stackParts = [repo.language, ...(repo.topics || [])].filter(Boolean);
-    const toolsLine = stackParts.length ? stackParts.join(' · ') : 'Python';
-    const descLine = repo.description
-      ? repo.description
-      : `${repo.name.replace(/-/g, ' ')} — see GitHub repo for full details.`;
+    // Use curated metadata if available, otherwise fall back to GitHub data
+    const meta  = REPO_META[repoName];
+    const title = meta ? meta.title : repo.name.replace(/-/g, ' ');
+    const stack = meta ? meta.stack : ([repo.language, ...(repo.topics||[])].filter(Boolean).join(' · ') || 'Python');
+    const desc  = meta ? meta.desc  : (repo.description || repo.name.replace(/-/g, ' ') + ' — see GitHub repo for full details.');
+
+    // Build link group — curated links if available, else just GitHub
+    let linksHtml = '';
+    if (meta && meta.links.length) {
+      linksHtml = meta.links.map(l =>
+        `<a class="r-proj-link" href="${l.url}" target="_blank">${l.label}</a>`
+      ).join('
+            ');
+    } else {
+      linksHtml = `<a class="r-proj-link" href="${repo.html_url}" target="_blank">GitHub ↗</a>`;
+    }
 
     newProjectsHTML.push(`
       <div class="r-proj">
         <div class="r-proj-header">
-          <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">${repo.name.replace(/-/g, ' ')}</span>
+          <span class="r-proj-title" contenteditable="true" oninput="scheduleAutoSave()">${title}</span>
           <span class="r-proj-link-group">
-            <a class="r-proj-link" href="${repo.html_url}" target="_blank">GitHub ↗</a>
+            ${linksHtml}
           </span>
         </div>
-        <div class="r-proj-stack" contenteditable="true" oninput="scheduleAutoSave()">${toolsLine}</div>
-        <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">${descLine}</div>
+        <div class="r-proj-stack" contenteditable="true" oninput="scheduleAutoSave()">${stack}</div>
+        <div class="r-proj-desc" contenteditable="true" oninput="scheduleAutoSave()">${desc}</div>
       </div>
       <hr class="r-hr-light r-divider">`);
   }
 
-  // remove trailing divider from last item
+  // Remove trailing divider from last item
   if (newProjectsHTML.length) {
     newProjectsHTML[newProjectsHTML.length - 1] = newProjectsHTML[newProjectsHTML.length - 1].replace('<hr class="r-hr-light r-divider">', '');
   }
